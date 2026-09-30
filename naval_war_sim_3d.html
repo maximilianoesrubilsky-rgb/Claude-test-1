@@ -1720,7 +1720,7 @@ function subAI(S,s){let best=null,bd=1e9;
   if(!best){s.vx=s.vy=0;return;}
   if(s.det||S.t-s.datum<120){const L=bd||1;s.vx=(s.x-best.x)/L*.005;s.vy=(s.y-best.y)/L*.005;return;}
   if((s.mags.TORP||0)>0&&s.torpIn<2&&bd<25&&S.t-(s.last.T??-99)>60){fireTorp(S,s,best);return;}
-  if(bd>18&&bd<90&&(s.mags.TORP||0)>0&&s.cls!=='DRK'){const L=bd;s.vx=(best.x-s.x)/L*.005;s.vy=(best.y-s.y)/L*.005;}else{s.vx=s.vy=0;}}
+  if(bd>18&&bd<90&&(s.mags.TORP||0)>0&&s.cls!=='DRK'&&s.cls!=='DKR'){const L=bd;s.vx=(best.x-s.x)/L*.005;s.vy=(best.y-s.y)/L*.005;}else{s.vx=s.vy=0;}}
 function asw(S){for(const sb of S.subs){if(!sb.alive)continue;
     if(sb.pros){if(S.t>=sb.pros.t){const by=sb.pros.by;sb.pros=null;if(!S.hl)S.fx.push({x:sb.x,y:sb.y,t:performance.now(),k:'asw'});
         if(S.R()<SUBC[sb.cls].kp){sb.alive=false;sb.sunkT=S.t;S.st.subLost[sb.side]++;S.st.cost[sb.side]+=COST[sb.cls]||0;log(S,sb.name+' sunk by '+by,sb.side==='IL'?'bad':'good');}
@@ -3713,6 +3713,7 @@ function buildAddable(){const out=[];
     for(const [cls,,w] of nav.subs){if(out.some(a=>a[0]===cls&&a[1]==='sub'))continue;out.push([cls,'sub',nav.n+': '+SUBC[cls].n,{TORP:12,[w]:6},{w,n:6}]);}
     for(const [ty] of nav.air){if(out.some(a=>a[0]===ty&&a[1]==='air'))continue;out.push([ty,'air',nav.n+': '+AIRC[ty].n,AIRC[ty].load,{w:null,n:0}]);}}
   for(const cls in CLS){const C=CLS[cls];if(!C.big||C.fixed||cls==='MER')continue;if(out.some(a=>a[0]===cls&&a[1]==='ship'))continue;out.push([cls,'ship','Other: '+C.n,C.mags||{},shipPlan(cls)]);}
+  if(!out.some(a=>a[0]==='DKR'))out.push(['DKR','sub','Israel: '+SUBC.DKR.n,{TORP:10,SLBM:8},{w:'SLBM',n:8}]);   /* Dakar: 8 SLBMs in the long sail */
   for(const cls in SUBC){if(out.some(a=>a[0]===cls&&a[1]==='sub'))continue;out.push([cls,'sub','Other: '+SUBC[cls].n,{TORP:10,HP:4},{w:'HP',n:4}]);}
   for(const ty in AIRC){if(out.some(a=>a[0]===ty&&a[1]==='air'))continue;out.push([ty,'air','Other: '+AIRC[ty].n,AIRC[ty].load,{w:null,n:0}]);}
   out.sort((a,b)=>a[2].localeCompare(b[2]));return out;}
