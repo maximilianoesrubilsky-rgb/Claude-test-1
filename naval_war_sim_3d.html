@@ -279,7 +279,7 @@ const WCOST={DDG51:2200,CG47:1800,CVN78:13000,T45:1500,T26:1600,QE:4500,FREMM:90
  TLAM:1.9,GZN:2,ZRC:10,LRASM:3.5,NSM:2.2,EXO:1.5,YJ18:2,P800:2.5,KLB:1.8,BRH:3.5,ASM3:2.5,DF21:11,
  A260:2.6,MAL:2,PL17:2.2,R37:1.4,AMR:1.1,MTR:2.5,PL15:1.3,R77:.6,AIM9:.4,R73:.3,PL10:.5};
 const COST={PNT:.3,YJ83:1,YJ15:3,JSM:2.5,MRT:1,KSH:.15,SHTL:.8,KSAAM:1,T17:1.6,HSG:1.2,NOOR:.5,B8:3,CD:.4,B1:.5,ES:1.6,SS:.4,SM1:.6,HD:1,HRF:1.2,RAM:1,HQ10:.7,SPR:4,SPR3:5,
- GV:2.6,HP:1.4,AT:1.5,SPK:.3,LORA:1.6,SLBM:5,TLC:1.6,CRT:.15,KMK:.5,SKY:2.2,GKD:1.2,AKD:1.6,BOZ:.8,TORP:3.5,
+ GV:2.6,HP:1.4,AT:1.5,SPK:.3,LORA:1.6,SLBM:5,CPS:40,TLC:1.6,CRT:.15,KMK:.5,SKY:2.2,GKD:1.2,AKD:1.6,BOZ:.8,TORP:3.5,
  S6:550,S5:260,S45:90,RSF:230,SDV:8,SHD:8,PRT:3,RIG:1400,MER:45,
  IST:500,BAR:350,GAB:250,GAO:200,YAV:250,ADA:300,KIL:60,YIL:50,TF2:1500,CVN:4000,ALB:1.5,ULQ:3,
  D1:500,D2:700,DRK:900,DKR:1100,T209:400,T214:700,
@@ -488,6 +488,7 @@ Object.assign(ASM,{
  T17:{n:'Type 17 SSM',spd:.29,rng:400,dmg:1.1,seek:25,cls:'modern',col:'#9fd0ff',atr:1,link:1,turn:18,evade:.3,wv:.4},
  HSG:{n:'SSM-700K Haeseong',spd:.29,rng:180,dmg:1,seek:20,cls:'modern',col:'#9fd0ff',atr:1,link:1,turn:16,evade:.3,wv:.35},
  NOOR:{n:'Noor (C-802)',spd:.27,rng:120,dmg:.9,seek:15,cls:'modern',col:'#ffb07a',atr:0,link:0,turn:12},
+ CPS:{n:'Conventional Prompt Strike',spd:2.3,rng:2775,dmg:1.6,seek:30,cls:'bm',col:'#9fd8ff',atr:1,link:1,turn:26,hitP:.5,cep:1},
  TLAM:{n:'Tomahawk',spd:.25,rng:1600,dmg:1.5,seek:15,cls:'modern',col:'#9ec5ff',atr:1,link:1,turn:14,evade:.2,wv:.25},
  LRASM:{lo:.55,n:'LRASM',spd:.27,rng:560,dmg:1.5,seek:40,cls:'modern',col:'#8fd0ff',atr:1,link:1,turn:22,ecm:.5,evade:.5,wv:.55},
  NSM:{lo:.6,n:'Naval Strike Missile',spd:.31,rng:185,dmg:1.1,seek:25,cls:'modern',col:'#a8e0d0',atr:1,link:1,turn:24,ecm:.6,evade:.5,wv:.5},
@@ -941,7 +942,7 @@ const FIXED_W={RAM:1,HQ10:1,KSH:1,PNT:1};
 /* seconds a cold-launched round hangs between the gas ejection and motor ignition: HQ-16 lights 15–20 m up, the S-300F at
    the top of a ~20 m rise, 9M96 and CAMM are thrown ~30 m (≈1.8–2.4 s). YJ-18 is hot-launched (its booster bursts the
    cell cover), so it has no hang. */
-const EJECT={HQ9:1.4,HQ9C:1.4,HQ16:1.8,RDT:2.2,SEA:1.8,YJ21:1.2,SLBM:1.6};
+const EJECT={CPS:1.6,HQ9:1.4,HQ9C:1.4,HQ16:1.8,RDT:2.2,SEA:1.8,YJ21:1.2,SLBM:1.6};
 function engage(S,s){if(s.mkill)return;const en=s.side==='IL'?'TR':'IL';const cands=[];
   const chs=s.ch||CLS[s.cls].ch||{};let reach=20;
   for(const w in chs)if(SAM[w]&&(s.mags[w]||0)>0)reach=Math.max(reach,SAM[w].rMax);
@@ -2077,6 +2078,9 @@ function buildWorld(S){const R=S.R;const qf=f=>(n=>Math.max(1,Math.round(n*f)));
         const ws=toWater(cx+Math.cos(ang)*rad,cy+Math.sin(ang)*rad,6);
         mkSub(S,side,cls,SUBC[cls].n+' '+(k+1),ws[0],ws[1],{TORP:12,[w]:w==='SLBM'?6:6},
           {group:side==='IL'?BS:RS,plan:[{w,grp:foeGrp,n:6,tot:1,exp:10500}]});}}
+    /* the US Navy brings an Ohio-class SSGN (154 Tomahawks) to naval battles too */
+    if(nav===NAVY.US){const ang=2.1+j*1.3,rad=60+j*12,ws=toWater(cx+Math.cos(ang)*rad,cy+Math.sin(ang)*rad,6);
+      mkSub(S,side,'OHIO','USS Ohio (SSGN-726)',ws[0],ws[1],{TORP:12,TLAM:154},{group:side==='IL'?BS:RS,plan:[{w:'TLAM',grp:foeGrp,n:154,tot:1,exp:10500}]});}
     if(S.opts.air!==false){let m=0;const dk=[];for(const [ty,cnt] of nav.air){const n=Math.max(1,Math.round(cnt*sz));
       for(let k=0;k<n;k++){m++;
         /* only carrier-capable types go to sea; bombers, patrol aircraft and land fighters fly from bases well behind the fleet */
@@ -3538,7 +3542,7 @@ function estSubZ(s){
   /* a missile boat comes up to launch depth (about 35 m) while it still has rounds in its tubes, and goes deep again
      a minute after the last one has gone */
   if(!SUB_VLS[s.cls])return z;
-  if((s.mags&&s.mags.SLBM>0)||(s._bmT!=null&&SIM&&SIM.t-s._bmT<60))z=-0.035;
+  if((s.mags&&Object.keys(SUB_VLS_W).some(w=>s.mags[w]>0))||(s._bmT!=null&&SIM&&SIM.t-s._bmT<60))z=-0.035;
   return zRate(s,z,SIM?SIM.t:0,.004);
 }
 /* Heights are visual (the engine is 2-D). Every estimate goes through a vertical-rate limiter so a change of
@@ -3693,14 +3697,14 @@ function mslDisplay(m,t){const a=t-(m.t0??t),z=estMslZ(m,t);if(m.land){if(m.tr&&
    round leaves its own tube) */
 const SUBL={open:.35,broach:1.25,ign:1.6,tpo:9,close:9};
 function subLaunchDisplay(m,t,z){const s=m.sh,C=subMeshOf(s.cls,1).vls;if(!C||!C.length)return null;
-  const a=t-(m.t0??t);if(s._bmT==null||m.t0>s._bmT)s._bmT=m.t0;if(a>=SUBL.ign+SUBL.tpo)return null;
-  const c=C[((m.vc||1)-1)%C.length],h=headingOf(s),ch=Math.cos(h),sh=Math.sin(h);
+  const a=t-(m.t0??t),PW=sublW(m.w);if(s._bmT==null||m.t0>s._bmT)s._bmT=m.t0;if(a>=SUBL.ign+PW.tpo)return null;
+  const c=subTube(s.cls,C,m.vc,m.w),h=headingOf(s),ch=Math.cos(h),sh=Math.sin(h);
   const lx=s.x+c.x*ch-c.z*sh,ly=s.y+c.x*sh+c.z*ch,z0=Math.min(-.004,estSubZ(s)+c.y),ub=SUBL.broach-SUBL.open,s0=-z0*.7/ub;
   if(a<SUBL.open)return{x:lx,y:ly,z:z0-.003};
   if(a<SUBL.broach){const u=(a-SUBL.open)/ub;return{x:lx,y:ly,z:z0*(1-u*(1.3-.3*u))};}   /* thrown out fast, slowed by the water */
   const T=SUBL.ign-SUBL.broach;
   if(a<SUBL.ign){const b=a-SUBL.broach;return{x:lx,y:ly,z:s0*b-.0049*b*b};}   /* clear of the surface, coasting under gravity */
-  const b=a-SUBL.ign,u=Math.min(1,b/SUBL.tpo),hs=u*u*(3-2*u),zUp=s0*T-.0049*T*T+(s0-.0098*T)*b+.0175*b*b,g=Math.max(0,(u-.3)/.7),hx=g*g*(3-2*g);
+  const b=a-SUBL.ign,u=Math.min(1,b/PW.tpo),hs=u*u*(3-2*u),zUp=s0*T-.0049*T*T+(s0-.0098*T)*b+.5*PW.acc*b*b,g=Math.max(0,(u-.3)/.7),hx=g*g*(3-2*g);
   return{x:lx+(m.x-lx)*hx,y:ly+(m.y-ly)*hx,z:zUp*(1-hs)+z*hs};}
 function estTorpZ(){return -0.018;}
 function estHeloZ(){return 0.16;}
@@ -3737,6 +3741,7 @@ function buildAddable(){const out=[];
     for(const [cls,,w] of nav.subs){if(out.some(a=>a[0]===cls&&a[1]==='sub'))continue;out.push([cls,'sub',nav.n+': '+SUBC[cls].n,{TORP:12,[w]:6},{w,n:6}]);}
     for(const [ty] of nav.air){if(out.some(a=>a[0]===ty&&a[1]==='air'))continue;out.push([ty,'air',nav.n+': '+AIRC[ty].n,AIRC[ty].load,{w:null,n:0}]);}}
   for(const cls in CLS){const C=CLS[cls];if(!C.big||C.fixed||cls==='MER')continue;if(out.some(a=>a[0]===cls&&a[1]==='ship'))continue;out.push([cls,'ship','Other: '+C.n,C.mags||{},shipPlan(cls)]);}
+  if(!out.some(a=>a[0]==='OHIO'))out.push(['OHIO','sub','United States: '+SUBC.OHIO.n,{TORP:12,TLAM:154},{w:'TLAM',n:154}]);
   if(!out.some(a=>a[0]==='DKR'))out.push(['DKR','sub','Israel: '+SUBC.DKR.n,{TORP:10,SLBM:8},{w:'SLBM',n:8}]);   /* Dakar: 8 SLBMs in the long sail */
   for(const cls in SUBC){if(out.some(a=>a[0]===cls&&a[1]==='sub'))continue;out.push([cls,'sub','Other: '+SUBC[cls].n,{TORP:10,HP:4},{w:'HP',n:4}]);}
   for(const ty in AIRC){if(out.some(a=>a[0]===ty&&a[1]==='air'))continue;out.push([ty,'air','Other: '+AIRC[ty].n,AIRC[ty].load,{w:null,n:0}]);}
@@ -3816,6 +3821,9 @@ function applyRoster(S){
   {const byCv={};for(const a of S.air)if(a.deck&&a.host){(byCv[a.host.name]=byCv[a.host.name]||[]).push(a);}
    for(const k in byCv){const cv=S.ships.find(s=>s.name===k);const li=cv?(CLS[cv.cls].lint||25):25;
      byCv[k].sort((x,y)=>(x.ord||0)-(y.ord||0)||x.launchT-y.launchT).forEach((a,i)=>{a.launchT=20+i*li;});}}
+  for(const nm in roster.load){const sb=S.subs.find(s=>s.name===nm&&SUB_FITS[s.cls]);if(!sb)continue;const L=roster.load[nm];   /* a submarine's chosen fit */
+    sb.mags=Object.assign({},L);sb.mag0=Object.assign({},L);const ws=Object.keys(L).filter(w=>ASM[w]&&L[w]>0).sort((p,q)=>ASM[q].rng-ASM[p].rng);
+    const p0=(sb.plan&&sb.plan[0])||{grp:foeGrp(S,sb.side),tot:1,wv:0,exp:S.world?10500:3200};sb.plan=ws.map(w=>Object.assign({},p0,{w,n:L[w]}));}
   for(const nm in roster.load){const u=S.ships.find(s=>s.name===nm);if(!u)continue;const L=roster.load[nm];
     u.mags={};u.mag0={};u.ch=Object.assign({},CLS[u.cls].ch);
     for(const w in L){u.mags[w]=L[w];u.mag0[w]=L[w];
@@ -4103,11 +4111,18 @@ function infoCard(o){if(o.gk)return gndCard(o);const S=SIM;let kind,name,col,row
 const WFAM={area:['SM6','SM6B','SM2','SM2L','SM3A','SM3B','AST','AST1','RDT','HQ9','HQ9C','BRK','SPR','SPR3','B8'],
  point:['ESM2','ES1','ES','AS15','SEA','HQ16','CD','HRF','HD','B1','SS','NW'],
  aam:['A260','MAL','PL17','R37','MTR','SKY','AMR','PL15','R77','AKD','GKD','AIM9','PY5','BOZ','PL10','R73'],
- asm:['LRASM','TLAM','GZN','ZRC','YJ21','NSM','EXO','YJ18','P800','KLB','BRH','ASM3','AT','GV','HP','SLBM','TLC','DF21'],
+ asm:['LRASM','TLAM','GZN','ZRC','YJ21','NSM','EXO','YJ18','P800','KLB','BRH','ASM3','AT','GV','HP','SLBM','CPS','TLC','DF21'],
  torp:['TORP']};
 function famOf(w){for(const f in WFAM)if(WFAM[f].includes(w))return f;return null;}
 const cells=(w,n)=>Math.ceil(n/((typeof QUAD!=='undefined'&&QUAD[w])||1));
 function usedCells(m){let t=0;for(const w in m){if(w==='TORP'||FIXED_W[w])continue;if(ASM[w]&&ASM[w].aam)continue;if(SAM[w]&&QUAD[w]===0)continue;if(!SAM[w]&&!ASM[w])continue;t+=cells(w,m[w]);}return t;}
+/* Ohio SSGN fits, conventional only (the sim carries no nuclear weapons, so no Trident): the SSGN's 154 Tomahawks, a
+   hypothetical all-CPS fit (three per tube), or a mix */
+const SUB_FITS={OHIO:[['Tomahawk Block V: 154 (7 per tube)',{TORP:12,TLAM:154}],['Conventional Prompt Strike: 66 (3 per tube, hypothetical)',{TORP:12,CPS:66}],
+  ['Mixed: 112 Tomahawk + 18 CPS',{TORP:12,TLAM:112,CPS:18}]]};
+function subFitPanel(o){const F=o&&o.sub&&SUB_FITS[o.cls];if(!F)return '';const live=!!(SIM&&SIM.t>0);
+  return '<div class="grp" style="border:0"><b style="font-size:13px">Weapons</b><div style="color:var(--dim);margin:2px 0 6px;font-size:11.5px">'+(live?'Locked while the battle runs.':'Pick a fit before you press Start battle.')+'</div>'+
+    F.map(([lab,L],i)=>{const on=Object.keys(L).every(w=>(o.mag0[w]||0)===L[w])&&Object.keys(o.mag0).every(w=>w in L);return '<button class="subFit" data-i="'+i+'"'+(live?' disabled':'')+' aria-pressed="'+on+'" style="display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px">'+lab+'</button>';}).join('')+'</div>';}
 function loadPanel(o){if(!o||o.air||o.w||!CLS[o.cls]||!CLS[o.cls].big||CLS[o.cls].fixed||o.side==='N')return '';
   const live=!!(SIM&&SIM.t>0),fixedW=Object.keys(o.mag0).filter(w=>FIXED_W[w]),nmW=w=>(SAM[w]&&SAM[w].n)||(ASM[w]&&ASM[w].n)||w;
   const lock=(w,tag)=>'<div style="display:grid;grid-template-columns:1fr 62px;gap:5px;margin-bottom:4px"><div style="border:1px dashed var(--line);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--ink)">'+nmW(w)+(tag?' <span style="color:var(--dim)">· '+tag+'</span>':'')+'</div>'+
@@ -4202,7 +4217,7 @@ function renderPanels(force){if(!SIM)return;const _ct=(PLAY.mode==='scrub')?PLAY
   const si=$('selinfo');
   if(sel&&sel.alive){si.hidden=false;si.classList.toggle('mini',infoMini);if(!editing){
     const mb='<button class="minU" aria-label="'+(infoMini?'Restore':'Minimize')+' card" title="'+(infoMini?'Restore':'Minimize')+'">'+(infoMini?'▢':'–')+'</button>';
-    const nh='<button class="close" aria-label="Close">×</button>'+mb+(infoMini?miniCard(sel):(SIM.msl.includes(sel)||SIM.icp.includes(sel)||sel.gk?'':'<button class="rmUnit" title="Remove this unit (Delete key)">Remove</button>')+infoCard(sel)+(sel.gk?'':cvPanel(sel)+loadPanel(sel)));
+    const nh='<button class="close" aria-label="Close">×</button>'+mb+(infoMini?miniCard(sel):(SIM.msl.includes(sel)||SIM.icp.includes(sel)||sel.gk?'':'<button class="rmUnit" title="Remove this unit (Delete key)">Remove</button>')+infoCard(sel)+(sel.gk?'':cvPanel(sel)+loadPanel(sel)+subFitPanel(sel)));
     if(nh!==lastSel){lastSel=nh;si.innerHTML=nh;if(!infoMini)drawUnitPreview(si.querySelector('.uprev'),sel);}}}else{si.hidden=true;lastSel='';editing=false;}
   if(force||SIM.logV!==logSeen&&(!SIM.land||nowP-(renderPanels.lT||0)>700)){renderPanels.lT=nowP;logSeen=SIM.logV;let h='';const L=SIM.log;for(let i=L.length-1;i>=Math.max(0,L.length-160);i--){const e=L[i];h+='<div class="'+e.c+'"><span class="ts">'+fmt(e.t)+'</span> '+e.m+'</div>';}$('log').innerHTML=h;}}
 
@@ -4285,7 +4300,8 @@ $('selinfo').addEventListener('click',e=>{
     roster.squads=roster.squads.filter(r=>!(r.carrier===sel.name&&(r.name+'|'+r.role)===k));
     SIM.air=SIM.air.filter(a=>!(a.host===sel&&(a.sqd||('Embarked '+a.type+'|'+(a.role==='strike'?'strike':a.role)))===k));
     lastSel='';renderPanels(true);return;}
-  if((e.target.closest('#ldReset')||e.target.closest('#ldApply'))&&SIM&&SIM.t>0)return;   /* no rearming mid-battle */
+  if((e.target.closest('#ldReset')||e.target.closest('#ldApply')||e.target.closest('.subFit'))&&SIM&&SIM.t>0)return;   /* no rearming mid-battle */
+  {const b=e.target.closest('.subFit');if(b&&sel&&sel.sub&&SUB_FITS[sel.cls]){roster.load[sel.name]=Object.assign({},SUB_FITS[sel.cls][+b.dataset.i][1]);const nm=sel.name;build(seed,true);sel=SIM.subs.find(s=>s.name===nm)||null;lastSel='';renderPanels(true);return;}}
   if(e.target.closest('#ramFit')&&sel&&!(SIM&&SIM.t>0)){const load=Object.assign({},roster.load[sel.name]||sel.mag0);if(e.target.checked)load.RAM=11;else delete load.RAM;
     roster.load[sel.name]=load;const nm=sel.name;build(seed,true);sel=SIM.ships.find(s=>s.name===nm)||null;lastSel='';renderPanels(true);return;}
   if(e.target.closest('#ldReset')&&sel){delete roster.load[sel.name];const nm=sel.name;build(seed,true);sel=SIM.ships.find(s=>s.name===nm)||null;lastSel='';renderPanels(true);return;}
@@ -5598,7 +5614,13 @@ function subRad(t){
   return Math.max(0.12,0.74-(t-0.93)/0.07*0.62);}
 /* SLBM tubes in the sail: how many, and the hatch radius (m). Drakon's six stand in a row along its fin; Dakar's eight
    run the length of its unusually long sail (the "large missile tubes" the Covert Shores render reads into it). */
-const SUB_VLS={DRK:{n:6,r:.42},DKR:{n:8,r:.5}},SUB_VLS_W={SLBM:1};
+const SUB_VLS={DRK:{n:6,r:.42},DKR:{n:8,r:.5},OHIO:{n:22,r:1.15,per:{TLAM:7,CPS:3}}},SUB_VLS_W={SLBM:1,CPS:1,TLAM:1};
+/* which tube a round leaves: the boat's launches in turn, several to a tube where multiple all-up-round canisters share one
+   (the SSGN's seven Tomahawks, three CPS rounds) */
+const subTube=(cls,C,vc,w)=>{const V=SUB_VLS[cls],per=(V&&V.per&&V.per[w])||1;return C[Math.floor(((vc||1)-1)/per)%C.length];};
+/* launch timing after the motor lights: a ballistic round climbs hard for 9 s; a Tomahawk's booster lifts it a few hundred
+   metres before it noses over for cruise */
+const SUBLW={TLAM:{acc:.012,tpo:6}},sublW=w=>SUBLW[w]||{acc:.035,tpo:9};
 /* a row of round hatches along a sail top, numbered from the front: closed covers in the mesh, cell centres for the launch */
 function subHatches(m,dt,x0,x1,yT,n,hr){const cells=[],pitch=(x1-x0)/Math.max(1,n-1);
   for(let i=0;i<n;i++){const x=x1-i*pitch;cells.push({x,y:yT+.00006,z:0,s:hr});
@@ -5640,9 +5662,43 @@ function buildDakar(m,L,B,r,dt){const n=dt?16:8;
   mLoft(m,[{x:d0,pts:ringPtsYZ(n,dr*.97,dr*.97,0)},{x:(d0+d1)/2,pts:ringPtsYZ(n,dr*1.03,dr*1.03,0)},{x:d1,pts:ringPtsYZ(n,dr,dr,0)}],.85,false,false,true);
   if(dt)for(let k=0;k<4;k++){const a=Math.PI/4+k*Math.PI/2,cy=Math.sin(a),cz=Math.cos(a);   /* stator struts holding the duct */
     mPlate(m,[[xe+.002*L,cy*r*.3,cz*r*.3],[xe-.006*L,cy*r*.22,cz*r*.22],[xe-.006*L,cy*dr,cz*dr],[xe+.002*L,cy*dr,cz*dr]],.8);}}
+/* Ohio class SSGN (after the Seattle Times, Smithsonian and Covert Shores / Naval News cutaways): 171 m, 12.8 m hull with a
+   rounded bow and a long tapering stern; the sail well forward with its big fairwater planes; behind it the missile deck, a
+   flat-topped turtleback over 24 tubes in two rows of twelve: the first pair are lock-out chambers (a Dry Deck Shelter
+   for the SEAL delivery vehicle rides over them), the other 22 each hold seven Tomahawks (or, hypothetically, three CPS
+   rounds); cruciform stern planes, the horizontals with end plates, and a seven-bladed screw. */
+function ohioRad(t){if(t>=.93){const u=(t-.93)/.07;return Math.max(.12,Math.sqrt(Math.max(0,1-u*u)));}if(t>=.22)return 1;return .16+.84*Math.sin(t/.22*Math.PI/2);}
+function buildOhio(m,L,B,r,dt){const n=dt?16:8,K=.001;
+  const ts=dt?[0,.02,.05,.09,.14,.22,.35,.5,.65,.8,.9,.93,.955,.972,.986,.995,1]:[0,.08,.22,.6,.93,.975,1];
+  mLoft(m,ts.map(t=>({x:(t-.5)*L,pts:ringPtsYZ(n,r*ohioRad(t),r*ohioRad(t),0)})),.95,true,true,true);
+  /* missile deck: the turtleback over the tubes, in sections */
+  const x0=(.38-.5)*L,x1=(.72-.5)*L,nS=6,sl=(x1-x0)/nS,yT=r*1.13;
+  for(let i=0;i<nS;i++){const e=i===0||i===nS-1;mBlock(m,{x:x0+sl*(i+.5),z:0,y0:r*.72,h:yT-r*.72,l:sl,w:B*.56,lt:e?.82:1,wt:.9,dx:e?(i?-1:1)*sl*.09:0,sf:1.02});}
+  /* 24 tubes, two rows from the front: tubes 1-2 are the lock-out chambers, 3-24 the missiles */
+  const hr=SUB_VLS.OHIO.r*K,pit=(x1-x0-4*K)/11,cells=[];
+  for(let i=0;i<12;i++)for(const sg of[-1,1]){const x=x1-2*K-i*pit,z=sg*2.3*K;
+    if(dt){mCylV(m,x,z,yT,yT+.06*K,hr,hr*.97,14,.8);mCircleLines(m,x,yT+.07*K,z,hr*.8,14,.55);}
+    if(i>0)cells.push({x,y:yT+.07*K,z,s:hr});}
+  m.vls=cells;
+  /* Dry Deck Shelter over the lock-out chambers */
+  {const xd=x1-2*K;mLoft(m,[{x:xd+6*K,pts:ringPtsYZ(n,.3*K,.3*K,yT+1.6*K)},{x:xd+5.2*K,pts:ringPtsYZ(n,1.4*K,1.4*K,yT+1.6*K)},{x:xd-5.5*K,pts:ringPtsYZ(n,1.4*K,1.4*K,yT+1.6*K)},{x:xd-6.3*K,pts:ringPtsYZ(n,1.2*K,1.2*K,yT+1.6*K)}],.9,false,true,true);
+   for(const o of[-3.5,0,3.5])mBlock(m,{x:xd+o*K,z:0,y0:yT,h:.5*K,l:.6*K,w:1.6*K,sf:.8});}
+  /* the sail and its fairwater planes, masts on top */
+  const sx=(.775-.5)*L,sl2=L*.085,sh=r*1.25;const sb=mBlock(m,{x:sx,z:0,y0:r*.8,h:sh,l:sl2,w:B*.2,lt:.9,wt:.88,dx:-sl2*.04,sf:1.08});
+  mCylV(m,sx+sl2/2-B*.1,0,r*.8,r*.8+sh,B*.1,B*.088,dt?12:6,1.08);
+  for(const sg of[-1,1])mPlate(m,[[sx-sl2*.05,r*.8+sh*.62,sg*B*.1],[sx+sl2*.3,r*.8+sh*.62,sg*B*.1],[sx+sl2*.2,r*.8+sh*.64,sg*B*.52],[sx-sl2*.02,r*.8+sh*.64,sg*B*.52]],.98);
+  if(dt)for(const [o,hh] of[[-.25,.5],[-.1,.7],[.05,.6],[.2,.4]]){const a=mAdd(m,sx+o*sl2,sb.yTop,0),b=mAdd(m,sx+o*sl2,sb.yTop+r*hh,0);mLine(m,a,b,1.4,1.3);}
+  /* stern: cruciform planes, the horizontals with end plates, and the screw */
+  const tx=(.07-.5)*L;for(let k=0;k<4;k++){const a=k*Math.PI/2,cy=Math.sin(a),cz=Math.cos(a),r0=r*.3,r1=r*(k%2?1.55:1.75);
+    mPlate(m,[[tx-L*.035,cy*r0,cz*r0],[tx+L*.04,cy*r0,cz*r0],[tx+L*.015,cy*r1,cz*r1],[tx-L*.035,cy*r1,cz*r1]],.92);
+    if(k%2===0)mPlate(m,[[tx-L*.035,-r*.45,cz*r1],[tx+L*.012,-r*.45,cz*r1],[tx+L*.012,r*.45,cz*r1],[tx-L*.035,r*.45,cz*r1]],.9);}
+  const xe=-.5*L;mLoft(m,[{x:xe,pts:ringPtsYZ(n,r*.16,r*.16,0)},{x:xe-.01*L,pts:ringPtsYZ(n,r*.08,r*.08,0)},{x:xe-.014*L,pts:ringPtsYZ(n,r*.02,r*.02,0)}],.8,false,true,true);
+  for(let k=0;k<7;k++){const a=k/7*Math.PI*2,c=Math.cos(a),q=Math.sin(a),c2=Math.cos(a+.4),q2=Math.sin(a+.4),xp=xe-.006*L;
+    mPlate(m,[[xp+.002*L,q*r*.12,c*r*.12],[xp-.002*L,q2*r*.12,c2*r*.12],[xp-.003*L,q2*r*.62,c2*r*.62],[xp+.001*L,q*r*.6,c*r*.6]],.7);}}
 function buildSubMesh(cls,dt){const [Lm,Bm]=subDims(cls),L=Lm/1000,B=Bm/1000,r=B/2;
   const m=newMesh(),n=dt?8:6;
   if(cls==='DKR'){buildDakar(m,L,B,r,dt);m.length=L;m.beam=B;return m;}
+  if(cls==='OHIO'){buildOhio(m,L,B,r,dt);m.length=L;m.beam=B;return m;}
   const ts=dt?[0,0.05,0.13,0.26,0.45,0.64,0.80,0.90,0.97,1]:[0,0.1,0.3,0.6,0.85,1];
   mLoft(m,ts.map(t=>({x:(t-0.5)*L,pts:ringPtsYZ(n,r*subRad(t),r*subRad(t)*0.99,0)})),0.95,true,true);
   /* sail */
@@ -6174,7 +6230,7 @@ const WSPEC={
  P800:{L:8.9,d:.70,k:'ramjet'}, BRH:{L:8.4,d:.60,k:'ramjet'}, ASM3:{L:6.0,d:.35,k:'ramjet'},
  SPK:{L:1.7,d:.17,k:'aam'}, CRT:{L:1.8,d:.16,k:'aam'},
  /* ballistic */
- SLBM:{L:9.6,d:.9,k:'bm'}, DF21:{L:10.7,d:1.4,k:'bm'}, YJ21:{L:8.5,d:.75,k:'bm'}, ZRC:{L:9,d:.6,k:'ramjet'}, GZN:{L:6.5,d:.53,k:'cruise'}, LORA:{L:5.2,d:.62,k:'bm'},
+ SLBM:{L:9.6,d:.9,k:'bm'}, CPS:{L:10.4,d:.87,k:'bm'}, DF21:{L:10.7,d:1.4,k:'bm'}, YJ21:{L:8.5,d:.75,k:'bm'}, ZRC:{L:9,d:.6,k:'ramjet'}, GZN:{L:6.5,d:.53,k:'cruise'}, LORA:{L:5.2,d:.62,k:'bm'},
  /* air-to-air */
  SKY:{L:4.0,d:.20,k:'aam'}, A260:{L:4.0,d:.18,k:'aam'}, AMR:{L:3.7,d:.18,k:'aam'},
  PL15:{L:4.0,d:.20,k:'aam'}, PL17:{L:6.0,d:.30,k:'aam'}, R37:{L:4.06,d:.38,k:'aam'},
@@ -6265,6 +6321,7 @@ const WX={
  SPK:{nose:'blunt',mw:[.05,.15,3.2,.2,.7],mwr:Q4,tf:[-.38,.1,2.4,.3,.5],tfr:0,noz:1},
  CRT:{nose:'blunt',mw:[.05,.12,2.4,.2,.7],mwr:Q4,tf:[-.4,.09,2.2,.3,.5],tfr:Q4,noz:1},
  /* ballistic and hypersonic */
+ CPS:{nose:'cone',nl:.3,bst:[1.0,.55],rvf:[.18,.07,1.5]},   /* two-stage booster under the Common Hypersonic Glide Body */
  SLBM:{nose:'rv',nl:.24,bst:[1.15,.46]},
  DF21:{nose:'rv',nl:.26,bst:[1.2,.45],rvf:[.2,.05,1.45],tf:[-.45,.06,1.35,.3,.6],tfr:Q4},
  YJ21:{nose:'cone',nl:.36,bst:[1.35,.44],bf:[.07,2.2],rvf:[.16,.06,1.5],bfr:Q4},
@@ -6663,11 +6720,11 @@ function airMeshOf(ty,dt,ld,bo){bo=dt&&bo&&JBAY[ty]?1:0;ld=dt&&ld&&(JSTORE[ty]||
    and anti-ship missiles, ramjets that eject their booster, and the ballistic rounds. YJ-18 and Kalibr
    also shed the cruise body when the terminal dart lights (stage 'sprint'). */
 const STG={SM6:[6],SM6B:[7],SPR3:[8],SM3A:[10,40],SM3B:[12,55],HQ9:[8],HQ9C:[8],AST:[4],AST1:[4],AS15:[2.5],
- HP:[2.5],GV:[2.5],AT:[2.5],EXO:[2.5],NSM:[2],LRASM:[2],TLAM:[2],TLC:[2],GZN:[2],KLB:[2],YJ18:[2],P800:[2.5],BRH:[2.5],ZRC:[6],YJ21:[35,1e9],DF21:[50],SLBM:[5,1e9],BRK:[4]};
+ HP:[2.5],GV:[2.5],AT:[2.5],EXO:[2.5],NSM:[2],LRASM:[2],TLAM:[2],TLC:[2],GZN:[2],KLB:[2],YJ18:[2],P800:[2.5],BRH:[2.5],ZRC:[6],YJ21:[35,1e9],DF21:[50],SLBM:[5,1e9],CPS:[5,1e9],BRK:[4]};
 /* ballistic rounds stage by how far along their arc they are: the YJ-21 drops its booster at burnout and
    lets the glide vehicle go a little past apogee, which then flies the rest of the way on its own */
 Object.assign(STG,{PNT:[1.4],YJ83:[2.5],KH35:[2],KSH:[1.2],T17:[2.5],HSG:[2.5],NOOR:[2.5]});
-const STGF={YJ21:.3,SLBM:.3};
+const STGF={YJ21:.3,SLBM:.3,CPS:.25};
 const bmFr=m=>{if(m.cls!=='bm'||!ASM[m.w])return 0;const fl=Math.max(0,ASM[m.w].rng-m.left),g=m.tgt||(m.ax!=null?{x:m.ax,y:m.ay}:null);if(!g)return 0;return fl/Math.max(1,fl+Math.hypot(m.x-g.x,m.y-g.y));};
 function stageOf(w,fl,sprint,fr){const st=STG[w];if(!st)return 0;if(sprint&&WX[w]&&WX[w].fwd)return 'sprint';let k=0;for(const d of st)if((fl||0)>=d)k++;
   if(STGF[w]!=null&&(fr||0)>=STGF[w]&&k>=1)k=st.length;return k;}
@@ -8138,7 +8195,7 @@ let _subLB=null;
 function drawSubVLSFx(v,pos,list,Lk){const dep=vDot(vSub(pos,CAM.eye),CAM.fwd);if(dep<CAM.near||Lk*CAM.focal/dep<45)return;
   const C=subMeshOf(v.cls,1).vls;if(!C||!C.length)return;const h=v.h||0,now=performance.now()/1000;
   const W=p=>localToWorld(p,pos,h,0,0),poly=(pts,fill)=>{const q=pts.map(p=>proj(W(p)));if(q.some(p=>!p||p.depth<CAM.near))return;ctx.fillStyle=fill;ctx.beginPath();q.forEach((p,k)=>k?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill();};
-  for(const L of list){const a=L.ag;if(a<0||a>SUBL.close+1.3)continue;const c=C[((L.vc||1)-1)%C.length],r=c.s,y=c.y+.00002,hx=c.x-r,ring=[];
+  for(const L of list){const a=L.ag;if(a<0||a>SUBL.close+1.3)continue;const c=subTube(v.cls,C,L.vc,L.w),r=c.s,y=c.y+.00002,hx=c.x-r,ring=[];
     const op=a<SUBL.open?a/SUBL.open:a<SUBL.close?1:Math.max(0,1-(a-SUBL.close)/1.2),th=op*1.9;
     for(let k=0;k<14;k++){const f=k/14*TAU;ring.push([c.x+Math.cos(f)*r,y,c.z+Math.sin(f)*r]);}
     if(op>0){poly(ring,'rgba(6,9,12,.96)');   /* the open tube */
@@ -8274,7 +8331,7 @@ function drawFlame(pos,h,p,Lkm,scale,tail){const cx=Math.cos(p)*Math.cos(h),cy=M
 function drawMslUnit(v,TR){const pos=toWorld(v.x,v.y,v.z||0),col=mslColor(v);
   const tr=TR['m'+v.key];if(tr)drawTrail(tr,col,0.62,1.7,true,SIM&&SIM.land);
   if(v.al===0)return;   /* a round that has hit or been killed leaves only its fading trail; the blast is drawn by the effects */
-  const subL=!!(v.ls&&SUB_VLS_W[v.w]&&isSubV(v));   /* an SLBM leaving a sail tube */
+  const subL=!!(v.ls&&SUB_VLS_W[v.w]&&isSubV(v)&&(v.w!=='TLAM'||SUB_VLS[lsCls(v)]));   /* an SLBM leaving a sail tube */
   if(subL){const a=v.ag||0;if(a<SUBL.open)return;if(a>SUBL.broach-.15&&a<SUBL.broach+6)drawBroach(v,a-SUBL.broach);}
   const vcell=v.ls&&!v.cn&&VLS_ASM[v.w],coldM=COLD_L[v.w]&&v.ls&&!v.cn,hlM=vcell&&!coldM?vlsLead(v.w,lsCls(v)):0;
   if(vcell&&(v.ag||0)<hlM)return;   /* still down in its cell while the hatch (UKSK: the armoured cover) opens */
@@ -8292,7 +8349,7 @@ function drawMslUnit(v,TR){const pos=toWorld(v.x,v.y,v.z||0),col=mslColor(v);
   if(v.cn){if(ag<CAN_OPEN)return;   /* still in the canister while the cover opens */
     const A=ag<CAN_OPEN+2.6?canAtt(v):null;if(A){const k=Math.max(0,Math.min(1,(ag-CAN_OPEN-2)/.6));pit=A.p+(pit-A.p)*k;hd=A.h+wrap(hd-A.h)*k;if(_pitMem['m'+v.key])_pitMem['m'+v.key].p=pit;}}
   /* upright out of the tube and through the first seconds of the climb, then pitched over onto the arc as the path leans */
-  if(subL&&ag<SUBL.ign+SUBL.tpo){const tp=tgtPos(v),b=ag-SUBL.ign,k0=Math.max(0,Math.min(1,(b-2.7)/(SUBL.tpo-2.7))),k=k0*k0*(3-2*k0);
+  const sTP=sublW(v.w).tpo;if(subL&&ag<SUBL.ign+sTP){const tp=tgtPos(v),b=ag-SUBL.ign,k0=Math.max(0,Math.min(1,(b-2.7*sTP/9)/(sTP*.7))),k=k0*k0*(3-2*k0);
     const pT=att&&isFinite(att.p)&&att.p>.05?att.p:.9,hT=tp?Math.atan2(tp[1]-v.y,tp[0]-v.x):hd;
     pit=Math.PI/2-.002+(pT-Math.PI/2)*k;hd=att&&k>0?hT+wrap(att.h-hT)*k:hT;
     const M=_attMem['m'+v.key];if(M&&k<1){M.res={h:hd,p:pit};M.d=[Math.cos(pit)*Math.cos(hd),Math.cos(pit)*Math.sin(hd),Math.sin(pit)];}}
@@ -8619,6 +8676,7 @@ const SND={
  BRH:{L:'ukskc',ej:1.3,turn:'jets',low:1,M:[[7,.6,1.5]],ml:1.6,C:['rj','BRJ'],pr:'al',wh:250,wk:'sap',len:8.4},
  ZRC:{L:'uksk',M:[[6,.6,1.8]],ml:2,C:['sj','SCR'],pr:'al',wh:100,wk:'kin',len:9},   /* ~100 kg warhead; the rest is kinetic energy */
  TLC:{L:'sub',M:[[5,.53,.6]],ml:.9,sep:[0],C:['tj','PPT'],pr:'al',wh:200,wk:'he',len:6.25},
+ CPS:{L:'sub',ej:1.7,turn:'vane',M:[[8,.85,2.2],[10,.6,1.2]],ml:[3,2.4],sep:[0],C:['gl'],pr:'al',tv:'jv',wh:300,wk:'kin',len:8.3},
  SLBM:{L:'sub',ej:1.7,turn:'vane',M:[[8,.85,2.2],[10,.6,1.2]],ml:[3,2.4],sep:[0],C:['gl'],pr:'al',tv:'jv',wh:300,wk:'kin',len:8.3},
  DF21:{L:'cold',ej:2,turn:'vane',M:[[40,1.4,2.2]],ml:5,C:['gl'],pr:'al',wh:600,wk:'kin',len:10.7},
  /* air-launched */
@@ -9047,7 +9105,7 @@ const LAB_L={mk41:'Mk 41',mk41q:'Mk 41, quad pack',mk48:'Mk 48',sylver:'Sylver',
   ram:'Mk 49 / SeaRAM',hq10:'HHQ-10 launcher',kash:'Kashtan mount',pant:'Pantsir-M mount',air:'from a jet',aam:'from a jet',sub:'from a submarine',uav:'from a drone'};
 const LAB_SAM=['SM2','SM2L','SM6','SM6B','SM3A','SM3B','ESM2','ES1','ES1@HYDRA','AST','AST1','AS15','B8','BRK','B1','CD','SPR','SPR3','HRF','HD','KSAAM','SS','SM1','SHTL',
   'RAM','HQ10','KSH','PNT','SEA','RDT','RDT@SLAVA','HQ9','HQ9C','HQ16'];
-const LAB_ASM=['HP','EXO','NSM','AT','GV','YJ83','NOOR','T17','HSG','KH35','SPK','CRT','TLAM','TLAM@FREMM','LRASM','GZN','KLB','YJ18','YJ21','P800','P800@SLAVA','BRH','ZRC','TLC','SLBM','DF21'];
+const LAB_ASM=['HP','EXO','NSM','AT','GV','YJ83','NOOR','T17','HSG','KH35','SPK','CRT','TLAM','TLAM@FREMM','LRASM','GZN','KLB','YJ18','YJ21','P800','P800@SLAVA','BRH','ZRC','TLC','SLBM','CPS','DF21'];
 const LAB_AIR=['YJ83K','JSM','MRT','ASM3','YJ15','LORA','KMK','AMR','A260','PL15','PL17','R77','R37','AIM9','PY5','R73','PL10','BOZ','GKD','SKY','MTR','AKD','MAL'];
 function labOptions(){const out=[],push=(g,w,n)=>out.push([g,w,n]);
   const nm=w=>{const [k,c]=w.split('@');const b=(SAM[k]||ASM[k]||{}).n||k,P=sndOf(k,c||''),l=LAB_L[P.L]||'';
@@ -9181,7 +9239,7 @@ function render3D(){ctx.setTransform(DPR,0,0,DPR,0,0);BAT.on=false;BAT.m.clear()
   /* underwater contacts go down first so the translucent sea reads over them */
   const under=[],above=[];
   const enq=(arr,v,fn)=>{const rel=vSub(toWorld(v.x,v.y,v.z||0),CAM.eye);arr.push({d:vDot(rel,CAM.fwd),fn});};
-  _subLB={};for(const v of mslV)if(v.ls&&SUB_VLS_W[v.w]&&(v.ag||0)<SUBL.close+1.3&&isSubV(v))(_subLB[v.ls]=_subLB[v.ls]||[]).push({vc:v.vc,ag:v.ag||0});
+  _subLB={};for(const v of mslV)if(v.ls&&SUB_VLS_W[v.w]&&(v.ag||0)<SUBL.close+1.3&&isSubV(v)&&(v.w!=='TLAM'||SUB_VLS[lsCls(v)]))(_subLB[v.ls]=_subLB[v.ls]||[]).push({vc:v.vc,ag:v.ag||0,w:v.w});
   for(const v of subsV)enq((v.z||0)<-0.004&&!eyeUnder?under:above,v,()=>drawSubUnit(v,TR));
   const mUW=v=>(v.z||0)<-0.001&&!eyeUnder;   /* a round still under water is drawn beneath the sea surface, like the boats */
   for(const v of mslV)if(mUW(v))enq(under,v,()=>drawMslUnit(v,TR));
