@@ -278,7 +278,7 @@ const WCOST={DDG51:2200,CG47:1800,CVN78:13000,T45:1500,T26:1600,QE:4500,FREMM:90
  SM2L:1.8,SM6B:6,ES1:1.2,AST1:3,HQ9C:2.6,YJ21:9,SM3A:12,SM3B:28,SM2:2.2,SM6:4.3,AST:2.5,AS15:1.6,RDT:1.5,HQ9:2,HQ16:1,SEA:1.2,ESM2:1.7,BRK:3,
  TLAM:1.9,GZN:2,ZRC:10,LRASM:3.5,NSM:2.2,EXO:1.5,YJ18:2,P800:2.5,KLB:1.8,BRH:3.5,ASM3:2.5,DF21:11,
  A260:2.6,MAL:2,PL17:2.2,R37:1.4,AMR:1.1,MTR:2.5,PL15:1.3,R77:.6,AIM9:.4,R73:.3,PL10:.5};
-const COST={PNT:.3,YJ83:1,YJ15:3,JSM:2.5,MRT:1,KSH:.15,SHTL:.8,KSAAM:1,T17:1.6,HSG:1.2,NOOR:.5,B8:3,CD:.4,B1:.5,ES:1.6,SS:.4,SM1:.6,HD:1,HRF:1.2,RAM:1,HQ10:.7,SPR:4,
+const COST={PNT:.3,YJ83:1,YJ15:3,JSM:2.5,MRT:1,KSH:.15,SHTL:.8,KSAAM:1,T17:1.6,HSG:1.2,NOOR:.5,B8:3,CD:.4,B1:.5,ES:1.6,SS:.4,SM1:.6,HD:1,HRF:1.2,RAM:1,HQ10:.7,SPR:4,SPR3:5,
  GV:2.6,HP:1.4,AT:1.5,SPK:.3,LORA:1.6,SLBM:5,TLC:1.6,CRT:.15,KMK:.5,SKY:2.2,GKD:1.2,AKD:1.6,BOZ:.8,TORP:3.5,
  S6:550,S5:260,S45:90,RSF:230,SDV:8,SHD:8,PRT:3,RIG:1400,MER:45,
  IST:500,BAR:350,GAB:250,GAO:200,YAV:250,ADA:300,KIL:60,YIL:50,TF2:1500,CVN:4000,ALB:1.5,ULQ:3,
@@ -325,6 +325,7 @@ B1:{n:'Barak-1',spd:.68,rMax:10,rMin:.5,cd:1.5,col:'#ffe45c',seek:0,pk:{skim:.55
 ES:{tb:3,n:'ESSM Block 2',spd:1.4,rMax:50,rMin:1.5,cd:.8,col:'#ff8fb8',seek:1,pk:{skim:.8,drone:.9,modern:.74,uav:.85,bm:.1,air:0.8}},
 SS:{n:'Sea Sparrow',spd:.85,rMax:16,rMin:1.5,cd:2.5,col:'#ffb3cf',seek:0,pk:{skim:.5,drone:.72,modern:.5,uav:.75,bm:0,air:0.6}},
 SM1:{n:'SM-1MR',spd:.68,rMax:40,rMin:3,cd:6,col:'#ff7aa8',seek:0,pk:{skim:.35,drone:.7,modern:.38,uav:.85,bm:.05,air:0.6}},
+SPR3:{tb:6,n:'Siper Block 3',spd:2.0,rMax:250,rMin:4,cd:1,col:'#ff4fae',seek:1,pk:{skim:.9,drone:.95,modern:.84,uav:.95,bm:.5,air:0.92}},
 SPR:{tb:5,n:'Siper Block 2',spd:1.7,rMax:150,rMin:3,cd:1,col:'#ff6fbe',seek:1,pk:{skim:.88,drone:.94,modern:.8,uav:.94,bm:.4,air:0.9}},
 HRF:{n:'Hisar-RF',spd:1.2,rMax:40,rMin:1,cd:.6,col:'#ff9ad0',seek:1,pk:{skim:.84,drone:.92,modern:.76,uav:.9,bm:.18,air:0.85}},
 HD:{n:'Hisar-D',spd:.85,rMax:25,rMin:1,cd:1.5,col:'#ff9ad0',seek:1,pk:{skim:.76,drone:.88,modern:.7,uav:.85,bm:.08,air:0.8}},
@@ -672,7 +673,7 @@ function aimCluster(S,s,g,R){let b=null,bv=-1;for(const o of S.ships){if(!o.aliv
    round from another section follows half a second later, and near-simultaneous fore-and-aft launches happen
    only when a threat is about to hit. Order = the model's launcher blocks, bow first as drawn; c = the
    section's cycle (s); w = rounds tied to particular sections (dedicated launchers); d = sections the rest use. */
-const VLS_ASM={KLBL:1,TLAM:1,TLC:1,KLB:1,YJ18:1,YJ21:1,ZRC:1,P800:1,BRH:1,LRASM:1,GZN:1,SPR:1,HRF:1,HD:1};
+const VLS_ASM={SPR3:1,KLBL:1,TLAM:1,TLC:1,KLB:1,YJ18:1,YJ21:1,ZRC:1,P800:1,BRH:1,LRASM:1,GZN:1,SPR:1,HRF:1,HD:1};
 const VLS_NO={RAM:1,SS:1,SM1:1,HQ10:1,KSH:1,PNT:1,SHTL:1,CD:1};
 const VSEC={DDG51:{n:2,c:1},CG47:{n:2,c:1},T055:{n:2,c:1.4},T052:{n:2,c:1.4},T45:{n:1,c:1.1},T26:{n:3,c:1.1,w:{SEA:[1,2]},d:[0]},
  FREMM:{n:1,c:1.1},HORZ:{n:1,c:1.1},GORSH:{n:2,c:1.5,w:{RDT:[0]},d:[1]},SLAVA:{n:1,c:1.6},KIROV:{n:3,c:1.6,w:{RDT:[0,2]},d:[1]},
@@ -2156,7 +2157,7 @@ Object.assign(SAM.SM3A,{bm:{r:700,h:[70,500],d:900}});Object.assign(SAM.SM3B,{bm
 Object.assign(SAM.SM6,{bm:{r:90,h:[3,33],d:60}});Object.assign(SAM.SM6B,{bm:{r:120,h:[3,35],d:80}});
 Object.assign(SAM.AST,{bm:{r:30,h:[3,20],d:25}});Object.assign(SAM.AST1,{bm:{r:40,h:[3,25],d:35}});
 Object.assign(SAM.HQ9,{bm:{r:30,h:[3,27],d:30}});Object.assign(SAM.HQ9C,{bm:{r:50,h:[3,30],d:40}});
-Object.assign(SAM.RDT,{bm:{r:20,h:[3,20],d:15}});Object.assign(SAM.SPR,{bm:{r:30,h:[3,25],d:25}});Object.assign(SAM.BRK,{bm:{r:25,h:[3,20],d:20}});
+Object.assign(SAM.RDT,{bm:{r:20,h:[3,20],d:15}});Object.assign(SAM.SPR,{bm:{r:30,h:[3,25],d:25}});Object.assign(SAM.SPR3,{bm:{r:45,h:[3,35],d:35}});Object.assign(SAM.BRK,{bm:{r:25,h:[3,20],d:20}});
 
 /* ---- land-attack weapons ----
    tr: flight profile — bal (ballistic: boost, exo-atmospheric arc, re-entry), qb (quasi-ballistic: flattened
@@ -3618,9 +3619,13 @@ function ramDisplay(i,t,z,a){let x0=i.lx,y0=i.ly,z0=.012;const sh=i.sh;
       return{x:px+(i.x-px)*k2,y:py+(i.y-py)*k2,z:pz+(z-pz)*k2};}}
   const u=Math.min(1,a/1.6),hs=u*u*(3-2*u);return{x:x0+(i.x-x0)*hs,y:y0+(i.y-y0)*hs,z:z0+(z-z0)*hs};}
 /* the VLS cell a round leaves from: the ship's cells are used in turn (vc counts its launches) */
-const NOCELL={RAM:1,SS:1,SM1:1,CD:1,HQ10:1,KSH:1,PNT:1,SHTL:1};
+const NOCELL={RAM:1,SS:1,SM1:1,HQ10:1,KSH:1,PNT:1,SHTL:1};
+/* C-Dome is not a sectioned VLS round in the engine, so its rounds are given the cells of the ship's C-Dome block
+   (the VLS section it sits in), taken in turn; a ship with one shared launcher uses all its cells */
+const CDSEC={S6:2};
+function cellFor(cls,cells,vc,w){if(w==='CD'&&CDSEC[cls]!=null){const C=cells._cd||(cells._cd=cells.filter(c=>c.sec===CDSEC[cls]));if(C.length)return C[(vc*7)%C.length];}return cellOf(cells,vc);}
 function vlsCell(sh,vc,w){if(!sh||!vc||NOCELL[w]||(ASM[w]&&!VLS_ASM[w]))return null;const cls=sh.cls||sh.c;if(!cls||!SHIPX[cls])return null;
-  const cells=shipMesh(cls,1).vls;if(!cells||!cells.length)return null;return cellOf(cells,vc);}
+  const cells=shipMesh(cls,1).vls;if(!cells||!cells.length)return null;return cellFor(cls,cells,vc,w);}
 /* a round's cell: section-coded rounds (1000 + 8n + section) come out of their own section, taking its cells in
    turn spread across the block; older counters just walk the ship's cells */
 function cellOf(cells,vc){if(vc>=1000){const k=(vc-1000)%8,n=Math.floor((vc-1000)/8),C=cells._sec||(cells._sec=[]);
@@ -3645,7 +3650,7 @@ const COLD_P={SEA:.18,RDT:.32,HQ16:1.3,HQ9:1.2,HQ9C:1.2,YJ21:1.3,P800:.06,BRH:.0
    turn it within about 1.5 s: ESSM, Aster, Barak; tail fins alone take longer: SM-2 IIIA), and how high a surface-launched
    cruise or anti-ship round climbs before settling to its cruise height (Tomahawk: 300–400 m, then down to 15–60 m
    about a minute after launch; Exocet: 30 m on average, 75 m at most, over a 4 km acceleration run; others estimated) */
-const TPO={ES:1.6,ESM2:1.6,ES1:1.6,SM2:2.2,SM2L:3.2,SM6:2.6,SM6B:2.6,SM3A:4,SM3B:4,AST:1.8,AST1:1.8,AS15:1.6,B8:2,BRK:2.2,B1:1.6,CD:1.6,KSAAM:2,
+const TPO={SPR3:2.8,ES:1.6,ESM2:1.6,ES1:1.6,SM2:2.2,SM2L:3.2,SM6:2.6,SM6B:2.6,SM3A:4,SM3B:4,AST:1.8,AST1:1.8,AS15:1.6,B8:2,BRK:2.2,B1:1.6,CD:1.6,KSAAM:2,
   SPR:2.6,HRF:2.2,HD:2,TLAM:4.5,LRASM:3.6,KLB:4.2,YJ18:3.8,GZN:4};
 const lpTpo=(w,d)=>TPO[w]||d;
 const LPZ={TLAM:{ap:.35,tu:14,td:60},LRASM:{ap:.2,tu:8,td:30},GZN:{ap:.25,tu:10,td:40},KLB:{ap:.15,tu:8,td:30},YJ18:{ap:.12,tu:7,td:25},
@@ -3988,7 +3993,7 @@ $('oob').addEventListener('pointerdown',e=>{const row=e.target.closest('.ship');
 
 /* ---- panels ---- */
 const BARKEYS=[['B8','Barak-8','var(--b8)'],['CD','C-Dome','var(--cd)'],['B1','Barak-1','var(--b1)'],['GV','Gabriel Mk5','#a8d4ff'],
-  ['SPR','Siper','#ff6fbe'],['HRF','Hisar-RF','#ff9ad0'],['ES','ESSM','#ff8fb8'],['SS','Sea Sparrow','#ffb3cf'],['SM1','SM-1MR','#ff7aa8'],['HD','Hisar-D','#ff9ad0'],['RAM','RAM','#ffc2e0'],['AT','Atmaca','#ff7b4a'],['HP','Harpoon','#8fc0ff']];
+  ['SPR','Siper','#ff6fbe'],['SPR3','Siper Blk 3','#ff4fae'],['HRF','Hisar-RF','#ff9ad0'],['ES','ESSM','#ff8fb8'],['SS','Sea Sparrow','#ffb3cf'],['SM1','SM-1MR','#ff7aa8'],['HD','Hisar-D','#ff9ad0'],['RAM','RAM','#ffc2e0'],['AT','Atmaca','#ff7b4a'],['HP','Harpoon','#8fc0ff']];
 function shipRow(s){const c=CLS[s.cls];const tag=!s.alive?'<span class="tag dead">'+(c.fixed?'Knocked out':'Sunk')+'</span>':!s.radarOk?'<span class="tag">Radar out</span>':s.dmg?'<span class="tag">Damaged</span>':'';let b='';
   for(const [k,lab,col0] of BARKEYS){const m0=s.mag0[k];if(!m0)continue;const v=s.mags[k]||0;const col=k==='HP'&&s.side==='TR'?'#ff7b4a':col0;
     b+='<span>'+lab+'</span><span class="bar"><i style="width:'+(v/m0*100)+'%;background:'+col+'"></i></span><em>'+v+'/'+m0+'</em>';}
@@ -4095,7 +4100,7 @@ function infoCard(o){if(o.gk)return gndCard(o);const S=SIM;let kind,name,col,row
       ...(o.gl&&o.pl&&!o.coast?[['Time to intercept',Math.max(0,Math.round(o.t0+o.tf-S.t))+' s']]:[]),
       ['Distance flown',Math.round(o.fl)+' km']];}
   return card(kind,name,col,rows,o);}
-const WFAM={area:['SM6','SM6B','SM2','SM2L','SM3A','SM3B','AST','AST1','RDT','HQ9','HQ9C','BRK','SPR','B8'],
+const WFAM={area:['SM6','SM6B','SM2','SM2L','SM3A','SM3B','AST','AST1','RDT','HQ9','HQ9C','BRK','SPR','SPR3','B8'],
  point:['ESM2','ES1','ES','AS15','SEA','HQ16','CD','HRF','HD','B1','SS','NW'],
  aam:['A260','MAL','PL17','R37','MTR','SKY','AMR','PL15','R77','AKD','GKD','AIM9','PY5','BOZ','PL10','R73'],
  asm:['LRASM','TLAM','GZN','ZRC','YJ21','NSM','EXO','YJ18','P800','KLB','BRH','ASM3','AT','GV','HP','SLBM','TLC','DF21'],
@@ -5171,7 +5176,8 @@ function kRHIB(G,x,y0,y,z){const {m,K,dt}=G;
   mCylAx(m,[x+1.7*K,y+.5*K,z],[1,0,0],1.0*K,.95*K,.2*K,dt?8:6,.7,false,true);                       /* bow */
   if(dt)mBlock(m,{x:x-.2*K,z,y0:y+.45*K,h:.75*K,l:.8*K,w:.65*K,lt:.8,sf:1.1});}                      /* console */
 function kSaar6(G,H){const {m,K,dt}=G,f=H.f;if(!f)return;
-  for(const s of[-1,1]){const t=.776;kTyphoon(G,G.X(t),G.D(t),s*(G.HW(t)-1.3*K));}
+  G.gp=[[G.X(.868),G.D(.868)+2.2*K,0]];
+  for(const s of[-1,1]){const t=.776;kTyphoon(G,G.X(t),G.D(t),s*(G.HW(t)-1.3*K));G.gp.push([G.X(t)+.6*K,G.D(t)+1.45*K,s*(G.HW(t)-1.3*K)]);}
   if(!dt)return;
   const rz=h=>Math.max(...h.T.map(q=>Math.abs(q[1])));
   for(const s of[-1,1]){kDeseaver(G,G.X(.705),f.y1,s*(rz(f)-1.2*K));if(H.hg)kDeseaver(G,G.X(.25),H.hg.y1,s*(rz(H.hg)-1.2*K));}
@@ -5445,7 +5451,7 @@ function addWarshipTop3(m,L,B,F,o,dt){const lay=SHIPX[o.cls];if(!lay)return fals
     mOrientFrom(m,f1,0,F*.2,0);
     /* anchor hawse pipes on the bow */
     for(const sg of[-1,1]){const t=.93,x=G.X(t),y=G.D(t)*.7,z=sg*G.HW(t)*1.01;mPlate(m,[[x+.9*K,y+.5*K,z],[x-.9*K,y+.5*K,z],[x-.9*K,y-.5*K,z],[x+.9*K,y-.5*K,z]],.35);}}
-  m.vls=G.vls;m.ram=G.ram||[];m.gmt=G.gmt||[];m.can=G.can||[];m.rot=G.rot||[];return true;}
+  m.vls=G.vls;m.ram=G.ram||[];m.gmt=G.gmt||[];m.can=G.can||[];m.rot=G.rot||[];if(G.gp)m.gp=G.gp;return true;}
 
 /* flat-deck carrier: full flight deck overhanging the hull, ski jump on the ramp ships and an
    angled landing area on the catapult ships. Queen Elizabeth carries two islands, which is the
@@ -6157,7 +6163,7 @@ const WSPEC={
  ES1:{L:3.66,d:.25,k:'sam'}, SS:{L:3.66,d:.20,k:'sam'},
  B8:{L:4.5,d:.225,k:'sam'}, BRK:{L:6.0,d:.225,k:'sam'}, B1:{L:2.1,d:.17,k:'sam'},
  CD:{L:3.0,d:.16,k:'sam'}, RAM:{L:2.79,d:.127,k:'aamc'}, HQ10:{L:2.0,d:.12,k:'aamc'}, SEA:{L:3.2,d:.166,k:'sam'},
- SPR:{L:6.3,d:.42,k:'boost'}, HRF:{L:4.6,d:.185,k:'sam'}, HD:{L:3.95,d:.185,k:'sam'},
+ SPR:{L:6.3,d:.42,k:'boost'}, SPR3:{L:7.6,d:.42,k:'boost'}, HRF:{L:4.6,d:.185,k:'sam'}, HD:{L:3.95,d:.185,k:'sam'},
  AST:{L:4.9,d:.18,k:'boost'}, AST1:{L:4.9,d:.18,k:'boost'}, AS15:{L:4.2,d:.18,k:'boost'},
  RDT:{L:5.65,d:.24,k:'boost'}, HQ9:{L:6.8,d:.56,k:'boost'}, HQ9C:{L:6.8,d:.5,k:'boost'},
  HQ16:{L:5.2,d:.34,k:'sam'},
@@ -6224,6 +6230,7 @@ const WX={
  RAM:{nose:'blunt',can:[.36,.05,1.9,.2,.7],canN:2,tf:[-.4,.08,2.6,.3,.6],tfr:Q4,noz:1},
  HQ10:{nose:'blunt',can:[.34,.06,1.9,.25,.6],tf:[-.4,.1,2.4,.3,.55],tfr:Q4,noz:1},
  SEA:{nose:'cone',nl:.16,str:[.1,.45,1.35],tf:[-.37,.12,2.4,.35,.4],tfr:Q4,noz:1},
+ SPR3:{nose:'cone',nl:.14,bst:[1.25,.3],bf:[.1,2.4],str:[.2,.45,1.25],tf:[-.02,.08,2.1,.3,.5],tfr:Q4,noz:1},   /* Block 3: Block 2 on a booster */
  SPR:{bst:null,bf:null,nose:'cone',nl:.16,str:[.2,.55,1.25],tf:[-.37,.1,2.2,.3,.5],tfr:Q4,noz:1},   /* Block 2: one 420 mm stage */
  HRF:{nose:'ogive',nl:.15,str:[.2,.48,1.32],tf:[-.37,.12,2.5,.3,.4],tfr:0,noz:1},
  HD:{nose:'blunt',str:[.2,.48,1.32],tf:[-.37,.12,2.5,.3,.4],tfr:0,noz:1},
@@ -6655,7 +6662,7 @@ function airMeshOf(ty,dt,ld,bo){bo=dt&&bo&&JBAY[ty]?1:0;ld=dt&&ld&&(JSTORE[ty]||
    stage: tandem-boosted SAMs (Standard SM-6/SM-3, HHQ-9, Aster, Siper), boosted ship/sub-launched cruise
    and anti-ship missiles, ramjets that eject their booster, and the ballistic rounds. YJ-18 and Kalibr
    also shed the cruise body when the terminal dart lights (stage 'sprint'). */
-const STG={SM6:[6],SM6B:[7],SM3A:[10,40],SM3B:[12,55],HQ9:[8],HQ9C:[8],AST:[4],AST1:[4],AS15:[2.5],
+const STG={SM6:[6],SM6B:[7],SPR3:[8],SM3A:[10,40],SM3B:[12,55],HQ9:[8],HQ9C:[8],AST:[4],AST1:[4],AS15:[2.5],
  HP:[2.5],GV:[2.5],AT:[2.5],EXO:[2.5],NSM:[2],LRASM:[2],TLAM:[2],TLC:[2],GZN:[2],KLB:[2],YJ18:[2],P800:[2.5],BRH:[2.5],ZRC:[6],YJ21:[35,1e9],DF21:[50],SLBM:[5,1e9],BRK:[4]};
 /* ballistic rounds stage by how far along their arc they are: the YJ-21 drops its booster at burnout and
    lets the glide vehicle go a little past apogee, which then flies the rest of the way on its own */
@@ -7947,7 +7954,7 @@ function drawVLSFx(v,pos,roll,pitch,list,Lk){const dep=vDot(vSub(pos,CAM.eye),CA
         const al=.34*(1-f/2)*Math.min(1,(4-a)/1.5);ctx.fillStyle='rgba(228,228,222,'+al.toFixed(3)+')';ctx.beginPath();ctx.arc(Q.x,Q.y,px*(.3+f*.65),0,TAU);ctx.fill();}
       continue;}
     if(NOCELL[L.w]||!cells.length)continue;
-    const c=cellOf(cells,L.vc),a0=L.ag,s=c.s;if(a0<-UKSK_HATCH-.05||a0>6)continue;
+    const c=cellFor(v.cls,cells,L.vc,L.w),a0=L.ag,s=c.s;if(a0<-UKSK_HATCH-.05||a0>6)continue;
     /* the hatch opens before the motor lights (Mk 41 / Sylver / K-VLS / MİDLAS: its drive motor, a third of a second;
        UKSK: the armoured cover on hydraulics, 2.5 s while the round waits); a is the time since ignition */
     const cold=COLD_L[L.w],hl=cold?0:vlsLead(L.w,v.cls),a=a0-hl;
@@ -8093,7 +8100,9 @@ function drawTracers(t,scrub){const now=performance.now();let list;
   if(!list.length)return;ctx.lineCap='round';
   for(const [r,age] of list){let mx,my,mz;
     if(r.sh){const s=r.sh,L=(LEN_SHIP[s.cls]?LEN_SHIP[s.cls][0]:60)/1000,h=headingOf(s),off=r.gi===0?.3:r.gi===1?-.32:.06;
-      mx=s.x+Math.cos(h)*L*off;my=s.y+Math.sin(h)*L*off;mz=CLS[s.cls].big?.017:.005;}
+      const gp=SHIPX[s.cls]?shipMesh(s.cls,1).gp:null,g=gp&&gp[r.gi];   /* the mount itself, where the model has one */
+      if(g){mx=s.x+g[0]*Math.cos(h)-g[2]*Math.sin(h);my=s.y+g[0]*Math.sin(h)+g[2]*Math.cos(h);mz=g[1];}
+      else{mx=s.x+Math.cos(h)*L*off;my=s.y+Math.sin(h)*L*off;mz=CLS[s.cls].big?.017:.005;}}
     else{mx=r.x1;my=r.y1;mz=.015;}
     const shell=!!SHELL_G[r.gk],M=toWorld(mx,my,mz),T=toWorld(r.x2,r.y2,r.z2||.01);
     const col=r.sd==='IL'?'255,224,140':'255,168,120';
@@ -8570,6 +8579,7 @@ const SND={
  BRK:{L:'b8',M:[[4,.54,1.5],[4,.225,.6]],ml:[1.5,1.9],sep:[0],pr:'rs',tv:'fn',wh:60,len:6},   /* 0.54 m booster */
  B1:{L:'b1',M:[[2.2,.17,.5]],ml:1,pr:'rs',tv:'jv',wh:22,len:2.1},   /* turns on thrust-vector vanes straight out of the canister */
  CD:{L:'cdome',M:[[3.5,.16,.42]],ml:1.9,pr:'rs',wh:11,len:3},
+ SPR3:{L:'midl',hl:.35,M:[[4,.52,1.8],[8,.42,.5]],ml:3.2,sep:[0],pr:'al',tv:'fn',wh:60,len:7.6},
  SPR:{L:'midl',hl:.35,M:[[5,.42,1.2],[8,.42,.4]],ml:3.2,pr:'al',tv:'fn',wh:60,len:6.3},   /* Block 2: single stage, 420 mm */
  HRF:{L:'midl',hl:.35,M:[[3,.185,.55],[5,0,0],[3,.185,.4]],ml:2.2,pr:'rs',wh:20,len:4.6},   /* Hisar: dual pulse */
  HD:{L:'midl',hl:.35,M:[[2.5,.185,.5],[4,0,0],[2.5,.185,.35]],ml:1.9,pr:'rs',wh:20,len:3.95},
@@ -9035,7 +9045,7 @@ const LAB_L={mk41:'Mk 41',mk41q:'Mk 41, quad pack',mk48:'Mk 48',sylver:'Sylver',
   b8:'canister VLS',b1:'canister launcher',cdome:'10-round launcher',mk141:'Mk 141 canisters',exo:'container',nsm:'canister',atm:'canister',gv:'canister',
   c802:'box launcher',t17:'canister',hsg:'canister',kt:'KT-184 container',spk:'canister',tube:'inclined tubes',box:'Mk 29 box',rail:'arm launcher',
   ram:'Mk 49 / SeaRAM',hq10:'HHQ-10 launcher',kash:'Kashtan mount',pant:'Pantsir-M mount',air:'from a jet',aam:'from a jet',sub:'from a submarine',uav:'from a drone'};
-const LAB_SAM=['SM2','SM2L','SM6','SM6B','SM3A','SM3B','ESM2','ES1','ES1@HYDRA','AST','AST1','AS15','B8','BRK','B1','CD','SPR','HRF','HD','KSAAM','SS','SM1','SHTL',
+const LAB_SAM=['SM2','SM2L','SM6','SM6B','SM3A','SM3B','ESM2','ES1','ES1@HYDRA','AST','AST1','AS15','B8','BRK','B1','CD','SPR','SPR3','HRF','HD','KSAAM','SS','SM1','SHTL',
   'RAM','HQ10','KSH','PNT','SEA','RDT','RDT@SLAVA','HQ9','HQ9C','HQ16'];
 const LAB_ASM=['HP','EXO','NSM','AT','GV','YJ83','NOOR','T17','HSG','KH35','SPK','CRT','TLAM','TLAM@FREMM','LRASM','GZN','KLB','YJ18','YJ21','P800','P800@SLAVA','BRH','ZRC','TLC','SLBM','DF21'];
 const LAB_AIR=['YJ83K','JSM','MRT','ASM3','YJ15','LORA','KMK','AMR','A260','PL15','PL17','R77','R37','AIM9','PY5','R73','PL10','BOZ','GKD','SKY','MTR','AKD','MAL'];
