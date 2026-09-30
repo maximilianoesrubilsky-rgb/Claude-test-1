@@ -6596,6 +6596,14 @@ IX.SM2L=IX.SM2;IX.ESM2=IX.ES;IX.ES1=IX.ES;IX.AST1=IX.AST;
    manoeuvring warhead with its own small control fins, stacked on a 0.9 m first stage; 9.6 m overall, so it stands in a
    tube that runs down through the sail into the pressure hull. The first stage drops at burnout, the warhead section
    separates from the LORA body about a third of the way along the arc. */
+/* Trident II D5 (conventional warhead, hypothetical CTM), after the Seattle Times cutaway: 13.4 m, 2.11 m, no fins; the
+   blunt nose fairing carries the extendable aerospike that cuts its drag; under the fairing the third-stage motor and the
+   post-boost bus with the re-entry body; then the second stage and the long first-stage motor on a single nozzle. The
+   first stage drops at burnout, the fairing and upper stages later, leaving the re-entry body to fly the rest alone. */
+IX.TRD={L:13.4,segs:[
+   {from:2,kv:1,prof:[[1.3,.02],[1.9,.17],[2.5,.3],[2.7,.32],[2.8,.3]],bands:[2.5]},
+   {drop:2,prof:[[0,.025],[.95,.045],[1.0,.2],[1.3,.55],[1.8,.8],[2.6,1.0],[3.3,1.055],[7.4,1.055]],bands:[.98,3.3,5.9],race:[3.5,7.2]},
+   {drop:1,prof:[[7.4,1.055],[13.3,1.055],[13.4,.95]],bands:[7.5,9.4,11.4,13.1],race:[7.6,13.1],noz:1}]};
 IX.SLBM={L:9.6,segs:[
    {prof:[[0,.02],[.3,.085],[.8,.17],[1.4,.26],[1.85,.325],[2.05,.33]],bands:[.62,1.5],fins:[{x:1.55,c:.42,s:.12,sb:.26,tc:.14,roll:Q4}]},
    {drop:2,prof:[[2.05,.33],[5.55,.33]],bands:[2.4,3.6,4.7],fins:[{x:4.85,c:.62,s:.3,sb:.36,tc:.24,roll:Q4}],race:[2.2,4.8],noz:1},
