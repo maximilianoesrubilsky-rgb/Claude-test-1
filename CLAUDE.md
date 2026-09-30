@@ -17,11 +17,18 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
 - Israel: 4 Sa'ar 6, 5 Reshef (replacing 5 of the Sa'ar 4.5s), 3 Sa'ar 4.5, Sa'ar 5s, patrol craft.
 - Sa'ar 6: 16 Barak-8, 40 C-Dome, 16 Gabriel Mk5 (4 quad launchers). NO Harpoon. Model per the NavalAnalyses
   model photo: 76 mm Super Rapid, 40-cell C-Dome VLS forward, integrated MF-STAR mast, Gabriel well amidships,
-  2 x 8-cell Barak-8 on the aft block, enclosed aft tower with twin SATCOM domes, hangar + flight deck.
+  2 x 8-cell Barak-8 (the only rear cells) on the aft roof, enclosed aft tower with twin SATCOM domes, hangar +
+  flight deck. Fine detail lives in kSaar6(): Typhoons, Deseavers, ESM ring, lattice topmast with IRST and
+  COMINT/DF, EO directors, RHIBs, torpedo doors, flight-deck nets. VLS parts must come after the houses they
+  stand on (yr:'a'), Barak-8 first so they are VLS sections 0 and 1.
 - Gabriel = the Mk5 (newest, beyond Blue Spear): 400 km, weaving terminal.
 - Dolphin I/II: Popeye Turbo SLCM, conventional (not nuclear). INS Drakon: 6 VLS SLBMs (hypothetical),
-  stays far back. Dakar class: 8 SLBMs (hypothetical); per the Covert Shores render: long sail set aft, X stern,
-  ring-shrouded propeller, capped bow planes, larger under-casing.
+  stays far back. Dakar class: 8 SLBMs (hypothetical); per the Covert Shores render: long low sail with a rounded
+  vertical leading edge and sloping tail, no sail planes, casing, capped bow planes, larger under-casing, X rudders,
+  ducted 7-blade propeller. Tubes in the sail (Drakon 6, Dakar 8) whose hatches open at launch (SUB_VLS).
+- Drakon/Dakar SLBM = "LORA-ER": stretched two-stage Naval LORA, 9.6 m, 0.9 m booster, 2,500 km, spd 2.7.
+  Launch: hatch opens, underwater ejection, broach at 1.25 s, ignition 1.6 s (engine holds it via EJECT like the
+  YJ-21's cold launch), then the standard 'bm' arc. Sound = the YJ-21 profile. Boat rides at 35 m while it has SLBMs.
 - Aircraft: F-35I Adir (not F-35A) with 6 Sky Sting + 2 Python-5; F-15I with Air LORA. Turkey: TF-2000 with
   Siper Block 2 / ESSM Block 2 / Hisar-RF, MUGEM carrier (30 aircraft), 10 KAAN with ramjet BVR missile.
 - World mode: realistic theatres per matchup (US vs China in the Philippine Sea, etc.), per-ship loadout editor
@@ -36,5 +43,7 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
 - Subs: `SAILSPEC`, `XPLANE_SUB`, `buildSubMesh()`, `LEN_SUB`.
 
 ## Verifying
+Check models in the sim's own renderer (render3D with CAM set on the unit), not only a custom preview — the
+preview's painter sorting shows glitches the game doesn't.
 Headless Chromium via Playwright (`NODE_PATH=$(npm root -g)`): load the file, check `pageerror`, click `#start`,
 and for models call `shipMesh(cls,1)` / `buildSubMesh(cls,1)` and draw them to a canvas to compare with the photos.

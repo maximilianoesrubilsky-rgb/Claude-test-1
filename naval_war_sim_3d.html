@@ -168,7 +168,7 @@ canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
     <svg width="16" height="16" aria-hidden="true"><path d="M3 5H13L8 13Z" fill="none" stroke="#5aa9ff" stroke-width="1.5"/></svg><span>Israeli submarine (filled with a ring = detected by the enemy)</span>
     <svg width="16" height="16" aria-hidden="true"><path d="M3 5H13L8 13Z" fill="none" stroke="#ff5b4e" stroke-width="1.5"/></svg><span>Turkish submarine</span>
     <svg width="16" height="16" aria-hidden="true"><line x1="1" y1="12" x2="15" y2="4" stroke="#e8f1f5" stroke-width="1.3" stroke-dasharray="1 3"/></svg><span>Torpedo track</span>
-    <svg width="16" height="16" aria-hidden="true"><line x1="1" y1="13" x2="11" y2="5" stroke="#d9a3ff" stroke-width="1.2" opacity=".6"/><circle cx="12" cy="4.5" r="2.8" fill="#d9a3ff"/></svg><span>Drakon SLBM (hypothetical)</span>
+    <svg width="16" height="16" aria-hidden="true"><line x1="1" y1="13" x2="11" y2="5" stroke="#d9a3ff" stroke-width="1.2" opacity=".6"/><circle cx="12" cy="4.5" r="2.8" fill="#d9a3ff"/></svg><span>Drakon / Dakar SLBM (hypothetical Naval LORA derivative)</span>
     <svg width="16" height="16" aria-hidden="true"><path d="M2 8H14M8 4V12M5 13H11" stroke="#ff8a80" stroke-width="1.6"/></svg><span>Bayraktar TB3 drone (spotter)</span>
     <svg width="16" height="16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" fill="rgba(199,194,179,.25)" stroke="#c7c2b3" stroke-width="1.5"/></svg><span>Neutral or support ship</span>
     <svg width="16" height="16" aria-hidden="true"><line x1="1" y1="12" x2="11" y2="6" stroke="#ff5a36" stroke-width="1.2" opacity=".6"/><circle cx="12" cy="5.5" r="2.4" fill="#ff5a36"/></svg><span>Turkish anti-ship missile (faint = not yet on Israeli radar)</span>
@@ -180,7 +180,7 @@ canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
     <svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="2.2" fill="#a8d4ff"/></svg><span>Israeli Gabriel V, Harpoon or Spike</span>
     <svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="#f2b33d" stroke-dasharray="2 2"/></svg><span>Damaged</span>
   </div>
-  <p class="note" id="fleetNote">Fleets are as of September 2026, with your two changes. The five Reshef corvettes are still under construction in reality (first delivery around 2028), so their loadout here is my estimate. Which three Sa'ar 4.5s stay is also my pick. INS Lahav is in the shipyard and TCG İzmir isn't commissioned, so both are left out. Turkey commits about two-thirds of its surface fleet and 6 of its 12 submarines, holding the rest for the Aegean and Black Sea. Israel also gets three coastal radar sites (Rosh HaNikra, Mount Carmel, Ashdod) feeding its datalink, plus shore-based jammers that degrade Turkish missile seekers and TB3 data links near the coast. No land-based aircraft or missiles are used. Drakon's missiles are hypothetical and given a terminal seeker so they can hit moving ships. The TF-2000 carries a modern layered fit: 32 Siper Block 2 (150 km) outer, 64 quad-packed ESSM Block 2 (active seeker, 50 km) middle, and 32 Hisar-RF (40 km) inner, across 32 fire-control channels, plus 16 Atmaca and two Gökdeniz guns. Siper, Hisar-RF and the Akdoğan ramjet missile are Turkish programs still in development, so their values are estimates. Dolphin submarines here carry the conventional Popeye Turbo cruise missile, not the nuclear version. World mode lets you pick any two navies and a force size; the fleets, air wings and submarines are generated from a catalogue of real classes, with weapon fits from public sources. Ballistic missiles (Drakon's SLBMs and Air LORA) are not guaranteed hits: successive defensive layers each get a shot, every interceptor has only a small chance against them, and a leaker can still miss in the terminal dive. Aircraft use cruise or dash speeds (F-15I about Mach 1.6, F-35I about Mach 1.2, Kızılelma about Mach 0.9). Warships treat aircraft as a last-resort target: they only engage them inside about 25 km, with short-range cells, and never while missiles are inbound. The F-35I is the Israeli-modified Adir rather than a standard F-35A: its Israeli electronic warfare and mission systems are modelled as a lower radar signature and much stronger self-protection jamming. Each hit picks an impact point (waterline, machinery, magazine, superstructure, deck or a glancing blow) and scales with the weapon's impact speed, so a Mach 5 ballistic strike does far more than a subsonic sea-skimmer. Waterline hits start progressive flooding, machinery hits cripple speed, superstructure hits take the radar out, and magazine hits usually finish the ship. Damage is otherwise modelled by hull size: one hit destroys any small craft, about one hit in six causes a magazine or engine-room fire that doubles the damage, a ballistic warhead does roughly double the harm of a sea-skimmer against a large hull, and a ship below 45% hull is mission-killed (weapons offline, barely making way). A carrier's flight deck is wrecked by any ballistic hit. Costs are rough public-domain unit prices in US dollars and are only meant to give a sense of scale. Interceptor hit rates are best against subsonic sea-skimmers and drones and much worse against evasive or ballistic targets. Modern sea-skimmers (Gabriel Mk5, Atmaca and Popeye Turbo) fly a weaving terminal approach, which makes them harder to intercept in the last few kilometres. Each F-35I also carries two Python-5 short-range missiles for close combat, inside its bays with four Sky Sting (six internal stations; internal Python-5 carriage is an assumption). Fighters fly a beyond-visual-range game: they hold CAP stations and commit on threats, shoot at doctrine ranges set by their missile's real envelope (closer in against a jet that can turn and run), crank off the nose to keep supporting the shot, and pump cold to beat a threat. Against an incoming missile they drag it at full power, then beam it with chaff, then break at the last moment; a missile fired from long range bleeds speed and can be outrun, and it loses accuracy if its launching aircraft is shot down or turns away before it goes active. Inside about 15 km, fighters carrying short-range missiles merge and turn with the enemy. Jets watch their fuel and go home at joker or bingo. Turkey's MUGEM carrier and the Kızılelma fighter are future programs, and the forces here are a guess: a 30-aircraft carrier wing (18 Kızılelma, 8 Hürjet, 4 TB3) plus 10 land-based TF KAAN fifth-generation fighters, each with 6 Gökdoğan and 2 short-range Bozdoğan missiles. Sky Sting is a hypothetical Israeli long-range air-to-air missile and Air LORA is an air-launched ballistic missile; both use estimated values. The Dakar class and its 8 SLBMs are also hypothetical. The TF-2000 destroyer is a future Turkish design and is not in service; its fit here (8-channel Siper long-range SAMs, Hisar-D, Atmaca, two Gökdeniz guns) is an estimate. Missile speeds use published figures (Barak-8 about Mach 2, ESSM about Mach 4, Harpoon and Atmaca about Mach 0.85). Salvo rates reflect each system: C-Dome fires a cell every quarter second and guides many rounds at once, while illuminator-guided systems like SM-1 and Sea Sparrow are limited to a few targets at a time. Kill probabilities are notional open-source estimates, and every run rolls the dice again. Drag any ship or submarine to reposition it, before the battle or during it. Moving units before you press Start also recalculates each side's coordinated strike timing.</p>
+  <p class="note" id="fleetNote">Fleets are as of September 2026, with your two changes. The five Reshef corvettes are still under construction in reality (first delivery around 2028), so their loadout here is my estimate. Which three Sa'ar 4.5s stay is also my pick. INS Lahav is in the shipyard and TCG İzmir isn't commissioned, so both are left out. Turkey commits about two-thirds of its surface fleet and 6 of its 12 submarines, holding the rest for the Aegean and Black Sea. Israel also gets three coastal radar sites (Rosh HaNikra, Mount Carmel, Ashdod) feeding its datalink, plus shore-based jammers that degrade Turkish missile seekers and TB3 data links near the coast. No land-based aircraft or missiles are used. Drakon's missiles are hypothetical and given a terminal seeker so they can hit moving ships. The TF-2000 carries a modern layered fit: 32 Siper Block 2 (150 km) outer, 64 quad-packed ESSM Block 2 (active seeker, 50 km) middle, and 32 Hisar-RF (40 km) inner, across 32 fire-control channels, plus 16 Atmaca and two Gökdeniz guns. Siper, Hisar-RF and the Akdoğan ramjet missile are Turkish programs still in development, so their values are estimates. Dolphin submarines here carry the conventional Popeye Turbo cruise missile, not the nuclear version. World mode lets you pick any two navies and a force size; the fleets, air wings and submarines are generated from a catalogue of real classes, with weapon fits from public sources. Ballistic missiles (Drakon's SLBMs and Air LORA) are not guaranteed hits: successive defensive layers each get a shot, every interceptor has only a small chance against them, and a leaker can still miss in the terminal dive. Aircraft use cruise or dash speeds (F-15I about Mach 1.6, F-35I about Mach 1.2, Kızılelma about Mach 0.9). Warships treat aircraft as a last-resort target: they only engage them inside about 25 km, with short-range cells, and never while missiles are inbound. The F-35I is the Israeli-modified Adir rather than a standard F-35A: its Israeli electronic warfare and mission systems are modelled as a lower radar signature and much stronger self-protection jamming. Each hit picks an impact point (waterline, machinery, magazine, superstructure, deck or a glancing blow) and scales with the weapon's impact speed, so a Mach 5 ballistic strike does far more than a subsonic sea-skimmer. Waterline hits start progressive flooding, machinery hits cripple speed, superstructure hits take the radar out, and magazine hits usually finish the ship. Damage is otherwise modelled by hull size: one hit destroys any small craft, about one hit in six causes a magazine or engine-room fire that doubles the damage, a ballistic warhead does roughly double the harm of a sea-skimmer against a large hull, and a ship below 45% hull is mission-killed (weapons offline, barely making way). A carrier's flight deck is wrecked by any ballistic hit. Costs are rough public-domain unit prices in US dollars and are only meant to give a sense of scale. Interceptor hit rates are best against subsonic sea-skimmers and drones and much worse against evasive or ballistic targets. Modern sea-skimmers (Gabriel Mk5, Atmaca and Popeye Turbo) fly a weaving terminal approach, which makes them harder to intercept in the last few kilometres. Each F-35I also carries two Python-5 short-range missiles for close combat, inside its bays with four Sky Sting (six internal stations; internal Python-5 carriage is an assumption). Fighters fly a beyond-visual-range game: they hold CAP stations and commit on threats, shoot at doctrine ranges set by their missile's real envelope (closer in against a jet that can turn and run), crank off the nose to keep supporting the shot, and pump cold to beat a threat. Against an incoming missile they drag it at full power, then beam it with chaff, then break at the last moment; a missile fired from long range bleeds speed and can be outrun, and it loses accuracy if its launching aircraft is shot down or turns away before it goes active. Inside about 15 km, fighters carrying short-range missiles merge and turn with the enemy. Jets watch their fuel and go home at joker or bingo. Turkey's MUGEM carrier and the Kızılelma fighter are future programs, and the forces here are a guess: a 30-aircraft carrier wing (18 Kızılelma, 8 Hürjet, 4 TB3) plus 10 land-based TF KAAN fifth-generation fighters, each with 6 Gökdoğan and 2 short-range Bozdoğan missiles. Sky Sting is a hypothetical Israeli long-range air-to-air missile and Air LORA is an air-launched ballistic missile; both use estimated values. The Dakar class and its 8 SLBMs are also hypothetical. Both boats' SLBMs are modelled as a stretched two-stage Naval LORA (about 9.6 m, some 2,500 km reach), fired from tubes in the sail: the hatch opens, the round is thrown up through the water, broaches, lights just above the surface and climbs away. The TF-2000 destroyer is a future Turkish design and is not in service; its fit here (8-channel Siper long-range SAMs, Hisar-D, Atmaca, two Gökdeniz guns) is an estimate. Missile speeds use published figures (Barak-8 about Mach 2, ESSM about Mach 4, Harpoon and Atmaca about Mach 0.85). Salvo rates reflect each system: C-Dome fires a cell every quarter second and guides many rounds at once, while illuminator-guided systems like SM-1 and Sea Sparrow are limited to a few targets at a time. Kill probabilities are notional open-source estimates, and every run rolls the dice again. Drag any ship or submarine to reposition it, before the battle or during it. Moving units before you press Start also recalculates each side's coordinated strike timing.</p>
   <h2>3D view &amp; controls</h2>
   <p class="note" id="worldNote" hidden><b>World battles.</b> Theatres use real coastlines (Natural Earth), so fleets route around land, and the starting distance is as far as open water along the theatre allows. Each task group sails in a screen around its carrier or flagship: it closes until its main anti-ship missile is in reach and holds there on slow legs across the threat axis; once its anti-ship cells are empty it opens the range, and if the flagship is badly hurt the group turns for home. A ship with a missile in its terminal run turns end-on to it at flank speed, and a badly damaged escort falls out and heads for port. A group does not empty its cells at first contact: it fires a raid sized to beat the enemy group's air defences, waits until every round of it has hit, been shot down or run dry, takes a minute to assess the damage, then re-attacks whatever is still afloat. Each raid is spread across the ships' VLS sections, so two rounds never leave the same section together. Fighters hold CAP stations and commit on threats, shoot at doctrine ranges set by their missile's real envelope, crank to keep supporting the shot and pump cold to beat a threat; against an incoming missile they drag it, beam it with chaff, then break, and a long-range shot bleeds speed and can be outrun. Jets watch their fuel and go home at joker or bingo. Radar cross-section is modelled by aspect: each type has a nose-on, beam and tail figure in m² (the F-35 is about 0.005 m² nose-on but around 0.3 from the side, a Flanker 12–15 head-on), blended by the angle the radar sees, so cranking or running away shows a much bigger target. Stealth fighters carry their missiles in their bays (F-35: six stations, J-35: four PL-15, Su-57: four R-77M in the tandem main bays and two R-74M2 in the side bays), the doors open briefly for each shot and light the jet up while they are open, and anything hung outside (a J-35's YJ-83K, an Su-57's Kh-35U) adds to its signature until it is fired. At 800 km only long-range missiles, aircraft and submarines can reach at first: fleets close at about 25 knots, so a pairing of short-range navies can take the full three hours.</p>
   <p class="note">This is a Tacview-style 3D view of the same engagement engine as the 2D simulator: the underlying math (positions, detection, weapons, damage) is unchanged — altitude and depth are not simulated by the engine, so heights for aircraft, missiles and submarines shown here are a plausible visual estimate from each unit's type and current phase, not a modelled flight or dive profile. Hull and airframe proportions come from each class's published length and beam, and selecting a unit shows a lit view of that class's own model. The file is entirely self-contained: it loads no fonts, images or data from the network, so it runs the same offline as online.</p>
@@ -340,7 +340,7 @@ AT:{n:'Atmaca',spd:.3,rng:250,dmg:1.1,seek:18,cls:'modern',col:'#ff5a36',atr:1,l
 CRT:{n:'L-UMTAS',spd:.35,rng:9,dmg:.25,seek:4,cls:'skim',col:'#ff8a5a',turn:25},
 KMK:{n:'Kemankeş drone',spd:.055,rng:130,dmg:.35,seek:6,cls:'drone',col:'#ffae42',turn:6},
 TLC:{n:'Popeye Turbo SLCM',spd:.25,rng:320,dmg:1.15,seek:15,cls:'modern',col:'#9ec5ff',atr:1,link:0,turn:16,evade:.4,wv:.45},
-SLBM:{n:'Drakon SLBM',spd:2.1,rng:420,dmg:1.6,seek:25,cls:'bm',col:'#d9a3ff',atr:1,link:1,turn:25,hitP:.45,cep:1.05},
+SLBM:{n:'LORA-ER SLBM',spd:2.7,rng:2500,dmg:1.6,seek:25,cls:'bm',col:'#d9a3ff',atr:1,link:1,turn:25,hitP:.45,cep:1.05},
 SKY:{n:'Sky Sting',spd:1.6,rng:200,dmg:1,seek:0,cls:'aam',col:'#7fe3ff',aam:1,turn:45,pk:.82},
 GKD:{n:'Gökdoğan',spd:1.25,rng:65,dmg:1,seek:0,cls:'aam',col:'#ffa0c8',aam:1,turn:42,pk:.68},
 AKD:{n:'Akdoğan (ramjet)',spd:1.3,rng:130,dmg:1,seek:0,cls:'aam',col:'#ff7ab0',aam:1,turn:44,pk:.75},
@@ -940,7 +940,7 @@ const FIXED_W={RAM:1,HQ10:1,KSH:1,PNT:1};
 /* seconds a cold-launched round hangs between the gas ejection and motor ignition: HQ-16 lights 15–20 m up, the S-300F at
    the top of a ~20 m rise, 9M96 and CAMM are thrown ~30 m (≈1.8–2.4 s). YJ-18 is hot-launched (its booster bursts the
    cell cover), so it has no hang. */
-const EJECT={HQ9:1.4,HQ9C:1.4,HQ16:1.8,RDT:2.2,SEA:1.8,YJ21:1.2};
+const EJECT={HQ9:1.4,HQ9C:1.4,HQ16:1.8,RDT:2.2,SEA:1.8,YJ21:1.2,SLBM:1.6};
 function engage(S,s){if(s.mkill)return;const en=s.side==='IL'?'TR':'IL';const cands=[];
   const chs=s.ch||CLS[s.cls].ch||{};let reach=20;
   for(const w in chs)if(SAM[w]&&(s.mags[w]||0)>0)reach=Math.max(reach,SAM[w].rMax);
@@ -3533,8 +3533,12 @@ function estSubZ(s){
   if(!s.alive)return -0.09;
   if(s.pros)return -0.07;
   if(s.det)return -0.018;
-  const c=SUBC[s.cls]||{q:.7};
-  return -(0.055+c.q*0.085);
+  const c=SUBC[s.cls]||{q:.7};let z=-(0.055+c.q*0.085);
+  /* a missile boat comes up to launch depth (about 35 m) while it still has rounds in its tubes, and goes deep again
+     a minute after the last one has gone */
+  if(!SUB_VLS[s.cls])return z;
+  if((s.mags&&s.mags.SLBM>0)||(s._bmT!=null&&SIM&&SIM.t-s._bmT<60))z=-0.035;
+  return zRate(s,z,SIM?SIM.t:0,.004);
 }
 /* Heights are visual (the engine is 2-D). Every estimate goes through a vertical-rate limiter so a change of
    mode — a jet dropping into a notch or heading home, a missile switching targets, a skimmer's terminal dip —
@@ -3670,7 +3674,7 @@ function icpDisplay(i,t){const W=SAM[i.w],z=estIcpZ(i,t),a=t-(i.t0??t);if(i.gl)r
   if(ae<0)return{x:lx,y:ly,z:z0};
   const tg=i.tgt,hd=tg?Math.atan2(tg.y-ly,tg.x-lx):null;return launchPath(lx,ly,z0,i.x,i.y,z,ae,Tpo,i.w,hd);}
 /* the same for anti-ship and land-attack rounds fired from a VLS: out of the cell, up, and over */
-function mslDisplay(m,t){const a=t-(m.t0??t),z=estMslZ(m,t);if(m.land){if(m.tr&&m.tr!=='cm'&&m.tr!=='dr'&&!(m.z0>1)&&!m.rv&&a<25&&m.lx!=null){const k=Math.max(0,Math.min(1,a/25)),s=k*k*(3-2*k);return{x:m.lx+(m.x-m.lx)*s,y:m.ly+(m.y-m.ly)*s,z};}return null;}if(isCanM(m)){const D=canDisplay(m,t,z);if(D)return D;return null;}if(!m.vc||!VLS_ASM[m.w]||!m.sh||m.sh.air)return null;
+function mslDisplay(m,t){const a=t-(m.t0??t),z=estMslZ(m,t);if(m.land){if(m.tr&&m.tr!=='cm'&&m.tr!=='dr'&&!(m.z0>1)&&!m.rv&&a<25&&m.lx!=null){const k=Math.max(0,Math.min(1,a/25)),s=k*k*(3-2*k);return{x:m.lx+(m.x-m.lx)*s,y:m.ly+(m.y-m.ly)*s,z};}return null;}if(isCanM(m)){const D=canDisplay(m,t,z);if(D)return D;return null;}if(m.sh&&m.sh.sub&&SUB_VLS_W[m.w])return subLaunchDisplay(m,t,z);if(!m.vc||!VLS_ASM[m.w]||!m.sh||m.sh.air)return null;
   /* ae: time since the motor lit or the gas threw it out; before that the round waits in its cell while the hatch (UKSK:
      the armoured cover, 2.5 s, held by the engine too) opens */
   const hl=COLD_L[m.w]?0:vlsLead(m.w,m.sh.cls),ae=a-hl,Tpo=lpTpo(m.w,m.cls==='bm'?3:3.6);if(ae>=Tpo+(COLD_L[m.w]?COLD_T(m.w):0))return null;const c=vlsCell(m.sh,m.vc,m.w);if(!c)return null;
@@ -3678,6 +3682,21 @@ function mslDisplay(m,t){const a=t-(m.t0??t),z=estMslZ(m,t);if(m.land){if(m.tr&&
   const lx=m.sh.x+c.x*ch-c.z*sh,ly=m.sh.y+c.x*sh+c.z*ch,tx=m.tgt?m.tgt.x:m.ax,ty=m.tgt?m.tgt.y:m.ay,hd=tx!=null?Math.atan2(ty-ly,tx-lx):m.h;
   if(ae<0)return{x:lx,y:ly,z:c.y};
   return launchPath(lx,ly,c.y,m.x,m.y,z,ae,Tpo,m.w,hd);}   /* smoothstep blend: no kink in the climb when the display hands over to the flight path */
+/* an SLBM out of a sail tube: the lid swings open (0.35 s), a gas charge throws the round up the tube and through some
+   30 m of water — it broaches at 1.25 s, when the splash is heard — coasts a few metres clear of the surface, the motor
+   lights at 1.6 s, and it climbs straight up before pitching over onto its arc (m.vc numbers the boat's launches, so each
+   round leaves its own tube) */
+const SUBL={open:.35,broach:1.25,ign:1.6,tpo:9,close:9};
+function subLaunchDisplay(m,t,z){const s=m.sh,C=subMeshOf(s.cls,1).vls;if(!C||!C.length)return null;
+  const a=t-(m.t0??t);if(s._bmT==null||m.t0>s._bmT)s._bmT=m.t0;if(a>=SUBL.ign+SUBL.tpo)return null;
+  const c=C[((m.vc||1)-1)%C.length],h=headingOf(s),ch=Math.cos(h),sh=Math.sin(h);
+  const lx=s.x+c.x*ch-c.z*sh,ly=s.y+c.x*sh+c.z*ch,z0=Math.min(-.004,estSubZ(s)+c.y),ub=SUBL.broach-SUBL.open,s0=-z0*.7/ub;
+  if(a<SUBL.open)return{x:lx,y:ly,z:z0-.003};
+  if(a<SUBL.broach){const u=(a-SUBL.open)/ub;return{x:lx,y:ly,z:z0*(1-u*(1.3-.3*u))};}   /* thrown out fast, slowed by the water */
+  const T=SUBL.ign-SUBL.broach;
+  if(a<SUBL.ign){const b=a-SUBL.broach;return{x:lx,y:ly,z:s0*b-.0049*b*b};}   /* clear of the surface, coasting under gravity */
+  const b=a-SUBL.ign,u=Math.min(1,b/SUBL.tpo),hs=u*u*(3-2*u),zUp=s0*T-.0049*T*T+(s0-.0098*T)*b+.0175*b*b,g=Math.max(0,(u-.3)/.7),hx=g*g*(3-2*g);
+  return{x:lx+(m.x-lx)*hx,y:ly+(m.y-ly)*hx,z:zUp*(1-hs)+z*hs};}
 function estTorpZ(){return -0.018;}
 function estHeloZ(){return 0.16;}
 let opts={wmode:'naval',allies:'1',coord:'two',ilc:'tot',tq:'uav',doc:'ss',link:'1',helo:'1',land:'1',air:'1',mag:'100',mag2:'100',size:'md',range:'mid',blue:'US',red:'CN',theatre:'emed',addSide:'IL'};
@@ -5106,12 +5125,12 @@ function kWindows(G,H,hv){const {m,K}=G,n=H.P.length,f=hv||.82;
    hull knuckle line, the ship's boats and a few ESM pods on the mast */
 function kDetails(G,H){const {m,K,dt}=G;if(!dt)return;const F=G.F;
   const f=H.f,a=H.a;
-  if(a){for(const sg of[-1,1])kDome(G,{x:a.cx-(a.P[0][0])*.35,y:(a.y1/K)+1.5,z:sg*Math.min(3.2,Math.abs(a.P[1][1])/K*.55),r:1.25});}
+  if(G.noDome){}else if(a){for(const sg of[-1,1])kDome(G,{x:a.cx-(a.P[0][0])*.35,y:(a.y1/K)+1.5,z:sg*Math.min(3.2,Math.abs(a.P[1][1])/K*.55),r:1.25});}
   else if(f){for(const sg of[-1,1])kDome(G,{x:f.cx-(f.P[0][0])*.55,y:(f.y1/K)+1.4,z:sg*2.4,r:1.05});}
   /* whip antennas at the deck edge abreast the superstructure */
   for(const t of[.36,.44,.62])for(const sg of[-1,1]){const x=G.X(t),y=G.D(t),z=sg*(G.HW(t)-.6*K);mBlock(m,{x,z,y0:y,h:9*K,l:.14*K,w:.14*K,sf:1.1});}
   /* decoy launchers (Mk 36 / Nulka class) beside the bridge */
-  if(f)for(const sg of[-1,1])for(let i=0;i<2;i++){const x=f.cx+(f.P[0][0])*.9-i*1.6*K,z=sg*(G.HW(.6)-1.8*K);
+  if(f&&!G.noDecoy)for(const sg of[-1,1])for(let i=0;i<2;i++){const x=f.cx+(f.P[0][0])*.9-i*1.6*K,z=sg*(G.HW(.6)-1.8*K);
     mBoxAxis(m,[x,G.D(.6)+.7*K,z],[0,Math.cos(.8),Math.sin(.8)*sg],[1,0,0],1.4*K,1.1*K,1.1*K,.88);}
   /* life-raft canisters in racks along both sides of the deckhouses */
   for(const h of[f,a])if(h){const n=6,x0=h.cx+h.P[0][0]*.7,x1=h.cx-h.P[0][0]*.7;
@@ -5126,6 +5145,60 @@ function kDetails(G,H){const {m,K,dt}=G;if(!dt)return;const F=G.F;
     mFace(m,[mAdd(m,G.X(t0),y0,sg*w0),mAdd(m,G.X(t1),y1,sg*w1),mAdd(m,G.X(t1),y1+.35*K,sg*w1),mAdd(m,G.X(t0),y0+.35*K,sg*w0)],.72);}mOrientFrom(m,f0,0,F*.4,0);}
   /* ESM pods and small arrays on the mast */
   if(H._mast){const x=H._mast.x,y=H._mast.y;for(const sg of[-1,1])mBlock(m,{x,z:sg*1.3*K,y0:y-2.2*K,h:.9*K,l:.9*K,w:.9*K,sf:1.18});}}
+/* Sa'ar 6 fittings, after the NavalAnalyses model photo and the builder's renders: two Rafael Typhoon 25 mm mounts
+   abreast ahead of the bridge, four Elbit Deseaver decoy launchers (two on the bridge roof, two on the hangar), the
+   integrated mast's ESM ring, top platform and lattice topmast with the long-range IRST and the NATACS COMINT/DF array,
+   EO directors on the mast face and on the aft tower, the two RHIBs in the waist, the torpedo-tube doors in the hull
+   side, and the flight deck's safety nets and landing grid. */
+function kTyphoon(G,x,y,z){const {m,K,dt}=G;
+  mCylV(m,x,z,y,y+1.1*K,.5*K,.42*K,dt?10:6,.9);                                                    /* pedestal */
+  mBlock(m,{x,z,y0:y+1.1*K,h:.62*K,l:1.3*K,w:.95*K,lt:.78,wt:.84,dx:-.08*K,sf:1.04});              /* the mount */
+  mCylAx(m,[x+.45*K,y+1.42*K,z],[1,0,0],2.2*K,.06*K,.05*K,6,.75,false,true);                      /* 25 mm barrel */
+  if(dt)mBlock(m,{x:x-.1*K,z:z+(z>0?-1:1)*.6*K,y0:y+1.28*K,h:.42*K,l:.55*K,w:.26*K,sf:.62});}      /* day/night sight */
+function kDeseaver(G,x,y,z){const {m,K,dt}=G,sg=z<0?-1:1,ax=[0,Math.cos(.72),Math.sin(.72)*sg],up=[1,0,0];
+  mCylV(m,x,z,y,y+.55*K,.36*K,.3*K,dt?8:6,.9);
+  const c=[x,y+1.15*K,z+.25*K*sg];mBoxAxis(m,c,ax,up,1.1*K,1.05*K,1.3*K,.96);
+  if(dt>1){const sd=[ax[1]*up[2]-ax[2]*up[1],ax[2]*up[0]-ax[0]*up[2],ax[0]*up[1]-ax[1]*up[0]],f=[c[0]+ax[0]*.56*K,c[1]+ax[1]*.56*K,c[2]+ax[2]*.56*K],e=.1*K;
+    for(let i=0;i<4;i++)for(let j=0;j<3;j++){const a=(i-1.5)*.3*K,b=(j-1)*.3*K,P=(u,v)=>[f[0]+up[0]*(a+u)+sd[0]*(b+v),f[1]+up[1]*(a+u)+sd[1]*(b+v),f[2]+up[2]*(a+u)+sd[2]*(b+v)];
+      mPlate(m,[P(-e,-e),P(-e,e),P(e,e),P(e,-e)],.22);}}}   /* the rocket tube mouths */
+function kEO(G,x,y,z){const {m,K,dt}=G;mCylV(m,x,z,y,y+.5*K,.16*K,.16*K,6,.95);
+  mBlock(m,{x,z,y0:y+.5*K,h:.55*K,l:.6*K,w:.62*K,lt:.8,wt:.9,sf:1.15});
+  if(dt)mPlate(m,[[x+.31*K,y+.62*K,z-.18*K],[x+.31*K,y+.62*K,z+.18*K],[x+.31*K,y+.92*K,z+.18*K],[x+.31*K,y+.92*K,z-.18*K]],.2);}
+function kRHIB(G,x,y0,y,z){const {m,K,dt}=G;
+  for(const o of[-1.5,1.5])mBlock(m,{x:x+o*K,z,y0,h:y-y0,l:.3*K,w:1.6*K,sf:.8});                   /* cradles */
+  mBlock(m,{x,z,y0:y,h:.45*K,l:5.2*K,w:1.5*K,lt:1.04,wt:1.15,sf:.95});                                /* hull */
+  for(const s of[-1,1])mCylAx(m,[x-2.5*K,y+.5*K,z+s*.86*K],[1,0,0],4.2*K,.3*K,.26*K,dt?8:6,.7,true,true);   /* collar tubes */
+  mCylAx(m,[x+1.7*K,y+.5*K,z],[1,0,0],1.0*K,.95*K,.2*K,dt?8:6,.7,false,true);                       /* bow */
+  if(dt)mBlock(m,{x:x-.2*K,z,y0:y+.45*K,h:.75*K,l:.8*K,w:.65*K,lt:.8,sf:1.1});}                      /* console */
+function kSaar6(G,H){const {m,K,dt}=G,f=H.f;if(!f)return;
+  for(const s of[-1,1]){const t=.776;kTyphoon(G,G.X(t),G.D(t),s*(G.HW(t)-1.3*K));}
+  if(!dt)return;
+  const rz=h=>Math.max(...h.T.map(q=>Math.abs(q[1])));
+  for(const s of[-1,1]){kDeseaver(G,G.X(.705),f.y1,s*(rz(f)-1.2*K));if(H.hg)kDeseaver(G,G.X(.25),H.hg.y1,s*(rz(H.hg)-1.2*K));}
+  /* the integrated mast above the MF-STAR faces: ESM ring, top platform, EO director on its face */
+  const mx=G.X(.645),yb=f.y1,H2=9.8*.8*K,w=6.4*K,tp=.58,wAt=q=>w*(1-(1-tp)*q),yt=yb+H2,wt=wAt(1);
+  mBlock(m,{x:mx,z:0,y0:yb+H2*.8,h:.55*K,l:wAt(.83)+.3*K,w:wAt(.83)+.3*K,lt:.98,wt:.98,sf:1.2});
+  mBlock(m,{x:mx,z:0,y0:yt,h:.14*K,l:wt+1.1*K,w:wt+1.1*K,sf:1.05});
+  kEO(G,mx+wAt(.62)/2+.15*K,yb+H2*.62,0);
+  /* lattice topmast: four legs and their bracing, the IRST on the front, the COMINT/DF array on top */
+  const Lh=6.2*K,b0=.95*K,b1=.3*K,y1=yt+.14*K,lvl=[0,.25,.5,.75,1],cn=[[1,1],[1,-1],[-1,-1],[-1,1]];
+  const P=(q,sx,sz)=>{const b=b0+(b1-b0)*q;return mAdd(m,mx+sx*b,y1+Lh*q,sz*b);};
+  for(const [sx,sz] of cn)mLine(m,P(0,sx,sz),P(1,sx,sz),1.6,1.05);
+  for(let i=0;i<lvl.length;i++){const q=cn.map(([sx,sz])=>P(lvl[i],sx,sz));for(let k=0;k<4;k++)mLine(m,q[k],q[(k+1)%4],1,1);
+    if(i+1<lvl.length){const q2=cn.map(([sx,sz])=>P(lvl[i+1],sx,sz));for(let k=0;k<4;k++)mLine(m,q[k],q2[(k+1)%4],.8,.95);}}
+  mCylV(m,mx,0,y1+Lh,y1+Lh+1.2*K,.3*K,.26*K,8,1.18);
+  mBlock(m,{x:mx,z:0,y0:y1+Lh+1.2*K,h:1.6*K,l:.08*K,w:.08*K,sf:1.1});
+  mCylV(m,mx+.95*K,0,yt+2.3*K,yt+3.2*K,.4*K,.4*K,10,1.15);
+  kRot(G,{x:mx-wt/2-.2*K,y:yt/K+.5,w:1.8,h:.3,rpm:26});
+  if(H.at)kEO(G,G.X(.3),H.at.y1,0);
+  for(const s of[-1,1]){const t=.562,dy=G.D(t);kRHIB(G,G.X(t),dy,dy+1.5*K,s*(G.HW(t)-2.1*K));}
+  /* torpedo-tube doors in the hull side, abreast the aft superstructure */
+  for(const s of[-1,1]){const t=.41,x=G.X(t),d=G.D(t),z=s*G.B*.5*hullBW(t)*1.012;
+    mPlate(m,[[x-1.5*K,d*.38,z],[x+1.5*K,d*.38,z],[x+1.5*K,d*.66,z],[x-1.5*K,d*.66,z]],.3);}
+  /* flight deck: safety nets round the edge and the landing grid on the spot */
+  for(const s of[-1,1])for(let i=0;i<4;i++){const t0=.012+i*.04,t1=t0+.04;
+    mPlate(m,[[G.X(t0),G.D(t0),s*G.HW(t0)],[G.X(t1),G.D(t1),s*G.HW(t1)],[G.X(t1),G.D(t1)-.35*K,s*(G.HW(t1)+1.2*K)],[G.X(t0),G.D(t0)-.35*K,s*(G.HW(t0)+1.2*K)]],.55);}
+  {const t=.085,x=G.X(t),y=G.D(t)+.035*K,e=1.3*K;mPlate(m,[[x-e,y,-e],[x+e,y,-e],[x+e,y,e],[x-e,y,e]],.4);}}
 /* the layout of each class: a list of components run in order */
 const SHIPX={
  DDG51:[['gun',{t:.87,type:'mk45'}],['vls',{t:.785,cols:8,rows:4,p:.64,gx:4,gz:2}],
@@ -5268,12 +5341,16 @@ const SHIPX={
  ADA:[['gun',{t:.86,type:'oto76'}],['house',{id:'f',t0:.54,t1:.71,w:12,h:7,plan:'oct',ch:2.4,top:.82,rake:1.8,win:.86}],['mast',{t:.6,type:'tower',yb:'f',h:10,w:4.8,tp:.5}],
    ['rot',{t:.6,yr:'f+14.5',w:3.2,h:1.6}],['can',{t:.5,y:.6,z:2.4,n:4,yaw:75,ty:'at'}],['ciws',{t:.34,type:'ram',y:6}],['house',{id:'a',t0:.33,t1:.54,w:11,h:5.5,plan:'rect',top:.86}],
    ['funnel',{t:.46,w:5,l:5,h:3.5,y:5.5,lt:.85,wt:.7}],['hangar',{t0:.2,t1:.32,w:11,h:5.5,fd:.1}]],
- S6:[['gun',{t:.87,type:'oto76'}],
-   ['vls',{t:.44,base:5.5,cols:4,rows:2,p:.56,gx:4,gz:2}],['vls',{t:.34,base:5.5,cols:4,rows:2,p:.56,gx:4,gz:2}],
-   ['vls',{t:.765,cols:4,rows:10,p:.5,gx:4,gz:5}],
-   ['house',{id:'f',t0:.57,t1:.72,w:11.5,h:7.5,plan:'oct',ch:2.4,top:.82,rake:1.6,win:.86}],['mast',{t:.63,type:'tower',yb:'f',h:12,w:6.4,tp:.66,arrays:1.9,ahv:.5}],
-   ['can',{t:.54,y:.6,z:2.2,n:4,yaw:75,ty:'gv',pairs:2,step:5}],['house',{id:'a',t0:.3,t1:.47,w:11,h:5.5,plan:'rect',top:.86}],
-   ['mast',{t:.375,type:'pyr',yb:'a',h:7,w:4.2,tp:.7}],['dome',{t:.38,yr:'a+6.1',z:1.1,r:1}],['dome',{t:.37,yr:'a+6.1',z:-1.1,r:1}],['hangar',{t0:.17,t1:.29,w:11,h:5.5,fd:.09}]],
+ S6:[['gun',{t:.868,type:'oto76'}],
+   ['house',{id:'f',t0:.595,t1:.75,w:12.6,h:6.7,plan:'oct',ch:2.2,top:.86,rake:1.9,win:.84}],
+   ['mast',{t:.645,type:'tower',yb:'f',h:9.8,w:6.4,tp:.58,arrays:2.4,ahv:.45}],['rot',{t:.7,yr:'f+.2',w:2.2,h:.35,rpm:24}],
+   ['can',{t:.52,y:.6,z:3.1,n:4,yaw:75,ty:'gv',pairs:2,step:2.6}],
+   ['hangar',{t0:.17,t1:.29,w:11,h:5.8,fd:.085}],['house',{id:'a',t0:.29,t1:.445,w:11.6,h:6.2,plan:'rect',top:.93}],
+   ['house',{id:'a2',t0:.445,t1:.475,w:10.6,h:3,plan:'rect',top:.95}],['house',{id:'at',t0:.293,t1:.35,w:6.6,h:5.6,base:6.2,plan:'oct',ch:1.6,top:.84}],
+   ['dome',{t:.322,yr:'at',z:1.35,r:1}],['dome',{t:.322,yr:'at',z:-1.35,r:1}],['rot',{t:.297,yr:'at+.1',w:1.6,h:.3,rpm:26}],
+   /* after the deckhouses so the Barak-8 modules can stand on the aft roof; Barak-8 first (VLS sections 0 and 1), C-Dome third */
+   ['vls',{t:.405,yr:'a',cols:2,rows:4,p:.56,gx:2,gz:4,z:-1.75}],['vls',{t:.405,yr:'a',cols:2,rows:4,p:.56,gx:2,gz:4,z:1.75}],
+   ['vls',{t:.782,cols:4,rows:10,p:.5,gx:4,gz:5,plat:.8}]],
  S5:[['gun',{t:.86,type:'oto76'}],['vls',{t:.77,cols:4,rows:8,p:.56,gx:4,gz:4}],['house',{id:'f',t0:.54,t1:.7,w:10,h:7,plan:'rect',top:.88,rake:1.2,win:.84}],
    ['mast',{t:.6,type:'quad',yb:'f',h:12,w:2.6,rk:1.5,yard:8}],['can',{t:.49,y:.6,z:2.2,n:4,yaw:75,ty:'gv'}],['house',{id:'a',t0:.32,t1:.5,w:9.5,h:5,plan:'rect',top:.88}],
    ['funnel',{t:.43,w:4.5,l:5,h:4,y:5}],['ciws',{t:.36,type:'phalanx',y:5}],['hangar',{t0:.18,t1:.3,w:10,h:5.5,fd:.1}]],
@@ -5338,7 +5415,7 @@ function kRBU(G,p){const {m,K,dt}=G,x=G.X(p.t),y=G.D(p.t)+(p.y||0)*K,z=(p.z||0)*
 function kArm(G,p){const {m,K}=G,x=G.X(p.t),y=G.D(p.t);mLoft(m,[{x,pts:ringPtsYZ(10,.01*K,2.2*K,y,0)}],1,false,false);
   mBlock(m,{x,z:0,y0:y,h:2*K,l:2.4*K,w:2.4*K,lt:.7,wt:.7,sf:1});mBoxAxis(m,[x+1.2*K,y+2.6*K,0],[Math.cos(.5),Math.sin(.5),0],[-Math.sin(.5),Math.cos(.5),0],4.4*K,.45*K,.5*K,.9);}
 function addWarshipTop3(m,L,B,F,o,dt){const lay=SHIPX[o.cls];if(!lay)return false;
-  const G=shipKit(m,L,B,F,dt,o.spec.form),K=G.K,H={};G.rv=o.rv;G.spans=[];
+  const G=shipKit(m,L,B,F,dt,o.spec.form),K=G.K,H={};G.rv=o.rv;G.spans=[];if(o.cls==='S6'){G.noDome=1;G.noDecoy=1;}
   const yref=v=>{if(typeof v==='number')return v;const mm=String(v).match(/^([a-z0-9]+)(?:\+([\d.]+))?$/);const h=H[mm[1]];return h?h.y1+(mm[2]?+mm[2]*K:0):0;};
   for(const [k,p0] of lay){const p=Object.assign({},p0),pf0=m.faces.length;try{
     if(k==='house'){const h=kHouse(G,p);if(p.id)H[p.id]=h;H._last=h;G.spans.push({t0:p.t0,t1:p.t1,y1:h.y1});
@@ -5346,12 +5423,14 @@ function addWarshipTop3(m,L,B,F,o,dt){const lay=SHIPX[o.cls];if(!lay)return fals
       if(p.arrays)for(const [a,sh,r] of p.arrays)kArray(G,h,a,{r,shape:sh,hv:.58,sf:1.36});continue;}
     if(k==='mast'){if(typeof p.yb==='string'){p.yb=H[p.yb]?H[p.yb].y1:undefined;}H._mast=kMast(G,p);continue;}
     if(k==='rot'){const onM=H._mast&&Math.abs(H._mast.x-G.X(p.t))<4*K;p.y=(onM?H._mast.y:yref(p.yr))/K+.9;if(onM)p.x=H._mast.x;kRot(G,p);continue;}
+    if(k==='vls'&&p.yr!=null)p.base=(yref(p.yr)-G.D(p.t))/K;
     if(k==='gun')kGun(G,p);else if(k==='vls')kVLS(G,p);else if(k==='ciws')kCIWS(G,p);else if(k==='dish')kDish(G,p);
     else if(k==='funnel')kFunnel(G,p);else if(k==='hangar'){H.hg=kHangar(G,p);G.spans.push({t0:p.t0,t1:p.t1,y1:H.hg.y1});}else if(k==='can')kCan(G,p);else if(k==='boat')kBoat(G,p);
     else if(k==='torp')kTorp(G,p);else if(k==='arm')kArm(G,p);
     else if(k==='dome')kDome(G,{x:G.X(p.t),y:yref(p.yr)/K+(p.r||1.5)*.9,z:p.z||0,r:p.r||1.5});
     else if(k==='box')mBlock(m,{x:G.X(p.t),z:(p.z||0)*K,y0:(p.yr!=null?yref(p.yr):G.D(p.t)+(p.y||0)*K),h:p.h*K,l:p.l*K,w:p.w*K,lt:p.lt??.9,wt:p.wt??.9,dx:(p.dx||0)*K,sf:p.sf||1});
     else if(k==='rbu')kRBU(G,p);else if(k==='bulw')kBulw(G,p);}finally{tagPart(m,pf0,k==='house'||k==='hangar'||k==='vls');}}
+  if(o.cls==='S6')kSaar6(G,H);
   kDetails(G,H);
   /* guard rails round the forecastle, from abreast the gun to the stem */
   if(dt>1&&!G.noRail)for(const sg of[-1,1]){const pts=[];for(let t=.73;t<=.976;t+=.022)pts.push([G.X(t),sg*G.HW(t)*.97,G.D(t)]);kRail(G,pts,0,false);}
@@ -5500,7 +5579,7 @@ const XPLANE_SUB={T214:1,D2:1,DRK:1,DKR:1,AST_S:1,COL:1,SOR:1};
    well forward are the quickest way to tell submarines apart on the surface. */
 const SAILSPEC={
  D1:{x:.64,l:.125,h:1.9,w:.22}, D2:{x:.64,l:.125,h:1.9,w:.22}, DRK:{x:.63,l:.13,h:1.9,w:.23},
- DKR:{x:.48,l:.26,h:1.6,w:.25,lt:.8,dx:.024}, T209:{x:.68,l:.10,h:2.2,w:.20}, T214:{x:.68,l:.10,h:2.1,w:.20},
+ DKR:{x:.46,l:.28,h:1.14,w:.25,lt:.82}, T209:{x:.68,l:.10,h:2.2,w:.20}, T214:{x:.68,l:.10,h:2.1,w:.20},
  VA:{x:.72,l:.13,h:1.6,w:.28},  AST_S:{x:.70,l:.11,h:2.3,w:.22}, SUF:{x:.71,l:.11,h:2.1,w:.22},
  YAS:{x:.74,l:.12,h:1.7,w:.24}, KILO:{x:.66,l:.15,h:1.8,w:.24},  T093:{x:.71,l:.12,h:2.0,w:.23},
  T039:{x:.67,l:.13,h:2.0,w:.23}, SOR:{x:.67,l:.12,h:2.1,w:.22},  SCOR:{x:.69,l:.10,h:2.1,w:.20},
@@ -5511,17 +5590,64 @@ function subRad(t){
   if(t<0.72)return 0.94+Math.sin((t-0.22)/0.5*Math.PI)*0.06;
   if(t<0.93)return 0.94-(t-0.72)/0.21*0.20;
   return Math.max(0.12,0.74-(t-0.93)/0.07*0.62);}
+/* SLBM tubes in the sail: how many, and the hatch radius (m). Drakon's six stand in a row along its fin; Dakar's eight
+   run the length of its unusually long sail (the "large missile tubes" the Covert Shores render reads into it). */
+const SUB_VLS={DRK:{n:6,r:.42},DKR:{n:8,r:.5}},SUB_VLS_W={SLBM:1};
+/* a row of round hatches along a sail top, numbered from the front: closed covers in the mesh, cell centres for the launch */
+function subHatches(m,dt,x0,x1,yT,n,hr){const cells=[],pitch=(x1-x0)/Math.max(1,n-1);
+  for(let i=0;i<n;i++){const x=x1-i*pitch;cells.push({x,y:yT+.00006,z:0,s:hr});
+    if(dt){mCylV(m,x,0,yT,yT+.00005,hr,hr*.97,12,.8);mCircleLines(m,x,yT+.00006,0,hr*.78,12,.55);}}
+  return cells;}
+/* Dakar class, after the Covert Shores render (H I Sutton): a hull of the Dolphin-II's diameter with a long parallel
+   mid-body, a blunt rounded bow like the Dolphin-II's and a long tapering stern; a flat casing along the back; an
+   unusually long, low sail with a rounded, near-vertical leading edge and a long sloping tail, carrying the missile
+   tubes; no fairwater planes, but bow planes high on the hull with Type 214 style end-caps; a larger under-casing than
+   Dolphin-II (AIP section); the new X-rudder shape; and a ring (duct) round the propeller. */
+function dkrRad(t){if(t>=.9){const u=(t-.9)/.1;return Math.max(.14,Math.sqrt(Math.max(0,1-u*u)));}
+  if(t>=.25)return 1;if(t>=.045)return .42+.58*Math.sin((t-.045)/.205*Math.PI/2);return .3+.12*t/.045;}
+function buildDakar(m,L,B,r,dt){const n=dt?16:8;
+  const ts=dt?[0,.02,.045,.08,.12,.17,.25,.4,.55,.7,.82,.9,.93,.955,.972,.985,.994,1]:[0,.045,.15,.25,.6,.9,.955,1];
+  mLoft(m,ts.map(t=>({x:(t-.5)*L,pts:ringPtsYZ(n,r*dkrRad(t),r*dkrRad(t),0)})),.95,true,true,true);
+  /* the casing along the back, and the larger under-casing along the keel */
+  for(let i=0;i<8;i++)mBlock(m,{x:(-.35+.0925*(i+.5))*L,z:0,y0:r*.8,h:r*.27,l:L*.0925,w:B*.34,lt:1,wt:.9,sf:1.02});
+  for(let i=0;i<5;i++){const e=i===0||i===4;mBlock(m,{x:(-.28+.1*(i+.5))*L,z:0,y0:-r*1.06,h:r*.36,l:L*.1,w:B*.48,lt:e?.8:1,wt:.84,dx:e?(i?-.01:.01)*L:0,sf:.88,bot:1});}
+  if(dt)for(const sg of[-1,1])for(let i=0;i<24;i++){const x=(-.3+i*.027)*L;   /* free-flood holes along the casing sides */
+    mPlate(m,[[x,r*.9,sg*B*.167],[x+.012*L,r*.9,sg*B*.167],[x+.012*L,r*.98,sg*B*.167],[x,r*.98,sg*B*.167]],.35);}
+  /* the sail: a block with its leading edge rounded by a half-cylinder, the top held level to the front, the tail sloping */
+  const sp=SAILSPEC.DKR,sl=L*sp.l,sw=B*sp.w,sh=r*sp.h,y0=r*.75,xb0=(sp.x-.5)*L-sl/2,xb1=xb0+sl,rr=sw/2,wt=.86,xt0=xb1-sl*sp.lt;
+  const bl=xb1-rr-xb0,tl=xb1-rr-xt0,bc=(xb0+xb1-rr)/2;
+  mBlock(m,{x:bc,z:0,y0,h:sh,l:bl,w:sw,lt:tl/bl,wt,dx:(xt0+xb1-rr)/2-bc,sf:1.08});
+  mCylV(m,xb1-rr,0,y0,y0+sh,rr,rr*wt,dt?14:6,1.08);
+  m.vls=subHatches(m,dt,xt0+.0012,xb1-rr-.0002,y0+sh,SUB_VLS.DKR.n,SUB_VLS.DKR.r/1000);
+  /* bow planes high on the hull, each with its end-cap */
+  const bx=(.765-.5)*L,yb=r*.55,zr=r*.83;
+  for(const sg of[-1,1]){mPlate(m,[[bx-L*.018,yb,sg*zr],[bx+L*.02,yb,sg*zr],[bx+L*.012,yb+r*.02,sg*r*1.55],[bx-L*.016,yb+r*.02,sg*r*1.55]],.95);
+    mPlate(m,[[bx-L*.017,yb-r*.16,sg*r*1.55],[bx+L*.013,yb-r*.16,sg*r*1.55],[bx+L*.013,yb+r*.3,sg*r*1.55],[bx-L*.017,yb+r*.3,sg*r*1.55]],.9);}
+  /* X rudders: squared-off, with a vertical trailing edge */
+  const tx=(.06-.5)*L;for(let k=0;k<4;k++){const a=Math.PI/4+k*Math.PI/2,cy=Math.sin(a),cz=Math.cos(a),r0=r*.42,r1=r*2.05;
+    mPlate(m,[[tx-L*.045,cy*r0,cz*r0],[tx+L*.042,cy*r0,cz*r0],[tx+L*.018,cy*r1,cz*r1],[tx-L*.045,cy*r1,cz*r1]],.92);}
+  /* propulsor: hub cone, a seven-bladed skewed screw and the duct round it */
+  const xe=-.5*L;mLoft(m,[{x:xe,pts:ringPtsYZ(n,r*.3,r*.3,0)},{x:xe-.012*L,pts:ringPtsYZ(n,r*.14,r*.14,0)},{x:xe-.018*L,pts:ringPtsYZ(n,r*.03,r*.03,0)}],.8,false,true,true);
+  if(dt)for(let k=0;k<7;k++){const a=k/7*Math.PI*2,c=Math.cos(a),q=Math.sin(a),c2=Math.cos(a+.35),q2=Math.sin(a+.35),xp=xe-.009*L;
+    mPlate(m,[[xp+.003*L,q*r*.18,c*r*.18],[xp-.003*L,q2*r*.18,c2*r*.18],[xp-.004*L,q2*r*.6,c2*r*.6],[xp+.002*L,q*r*.6,c*r*.6]],.7);}
+  const d0=xe+.004*L,d1=xe-.026*L,dr=r*.66;
+  mLoft(m,[{x:d0,pts:ringPtsYZ(n,dr*.97,dr*.97,0)},{x:(d0+d1)/2,pts:ringPtsYZ(n,dr*1.03,dr*1.03,0)},{x:d1,pts:ringPtsYZ(n,dr,dr,0)}],.85,false,false,true);
+  if(dt)for(let k=0;k<4;k++){const a=Math.PI/4+k*Math.PI/2,cy=Math.sin(a),cz=Math.cos(a);   /* stator struts holding the duct */
+    mPlate(m,[[xe+.002*L,cy*r*.3,cz*r*.3],[xe-.006*L,cy*r*.22,cz*r*.22],[xe-.006*L,cy*dr,cz*dr],[xe+.002*L,cy*dr,cz*dr]],.8);}}
 function buildSubMesh(cls,dt){const [Lm,Bm]=subDims(cls),L=Lm/1000,B=Bm/1000,r=B/2;
   const m=newMesh(),n=dt?8:6;
+  if(cls==='DKR'){buildDakar(m,L,B,r,dt);m.length=L;m.beam=B;return m;}
   const ts=dt?[0,0.05,0.13,0.26,0.45,0.64,0.80,0.90,0.97,1]:[0,0.1,0.3,0.6,0.85,1];
   mLoft(m,ts.map(t=>({x:(t-0.5)*L,pts:ringPtsYZ(n,r*subRad(t),r*subRad(t)*0.99,0)})),0.95,true,true);
   /* sail */
   const sp=SAILSPEC[cls]||{x:.66,l:.115,h:2.0,w:.22};
   const sx=(sp.x-0.5)*L,sh=r*sp.h;
-  mBlock(m,{x:sx,z:0,y0:r*0.75,h:sh,l:L*sp.l,w:B*sp.w,lt:sp.lt??0.78,wt:0.85,dx:L*(sp.dx??-0.008),sf:1.08});
+  const sb=mBlock(m,{x:sx,z:0,y0:r*0.75,h:sh,l:L*sp.l,w:B*sp.w,lt:sp.lt??0.78,wt:0.85,dx:L*(sp.dx??-0.008),sf:1.08});
   if(dt){for(const s of[-1,1])mPlate(m,[[sx-L*0.012,r*0.75+sh*0.62,s*B*sp.w*0.5],[sx+L*0.022,r*0.75+sh*0.62,s*B*sp.w*0.5],
       [sx+L*0.016,r*0.75+sh*0.66,s*B*0.58],[sx-L*0.006,r*0.75+sh*0.66,s*B*0.58]],0.98);
-    const pa=mAdd(m,sx-L*0.03,r*0.75+sh,0),pb=mAdd(m,sx-L*0.03,r*0.75+sh+r*1.1,0);mLine(m,pa,pb,1.2,1.35);}
+    const mx=SUB_VLS[cls]?sb.x-sb.l/2+.0004:sx-L*0.03;   /* on a missile boat the masts stand aft of the tubes */
+    const pa=mAdd(m,mx,r*0.75+sh,0),pb=mAdd(m,mx,r*0.75+sh+r*1.1,0);mLine(m,pa,pb,1.2,1.35);}
+  if(SUB_VLS[cls])m.vls=subHatches(m,dt,sb.x-sb.l/2+.0011,sb.x+sb.l/2-.0005,sb.yTop,SUB_VLS[cls].n,SUB_VLS[cls].r/1000);
   /* stern control surfaces */
   const tx=(0.075-0.5)*L,tr=r*0.86;
   const ang=XPLANE_SUB[cls]?[Math.PI/4,3*Math.PI/4,5*Math.PI/4,7*Math.PI/4]:[0,Math.PI/2,Math.PI,3*Math.PI/2];
@@ -5529,14 +5655,6 @@ function buildSubMesh(cls,dt){const [Lm,Bm]=subDims(cls),L=Lm/1000,B=Bm/1000,r=B
     mPlate(m,[[tx-L*0.03,cy*tr*0.5,cz*tr*0.5],[tx+L*0.05,cy*tr*0.5,cz*tr*0.5],
       [tx+L*0.035,cy*tr*2.0,cz*tr*2.0],[tx-L*0.018,cy*tr*2.0,cz*tr*2.0]],0.92);}
   if(dt){const h0=mAdd(m,-L*0.5,0,0),h1=mAdd(m,-L*0.5-L*0.02,0,0);mLine(m,h0,h1,2,1.1);}
-  if(cls==='DKR'){
-    /* shrouded propulsor: a ring around the screw */
-    const px=-L*0.5+L*0.004,pr=r*0.42;mLoft(m,[{x:px-L*0.012,pts:ringPtsYZ(10,pr,pr,0)},{x:px+L*0.012,pts:ringPtsYZ(10,pr*1.04,pr*1.04,0)}],0.9,false,false);
-    /* bow dive planes on the upper hull with the Type 214 style end-caps */
-    const bx=(0.8-0.5)*L;for(const s of[-1,1]){mPlate(m,[[bx-L*0.02,r*0.7,s*r*0.6],[bx+L*0.02,r*0.7,s*r*0.6],[bx+L*0.015,r*0.72,s*r*1.35],[bx-L*0.015,r*0.72,s*r*1.35]],0.95);
-      mPlate(m,[[bx-L*0.015,r*0.72,s*r*1.35],[bx+L*0.015,r*0.72,s*r*1.35],[bx+L*0.015,r*1.0,s*r*1.35],[bx-L*0.015,r*1.0,s*r*1.35]],0.95);}
-    /* enlarged under-casing along the keel (AIP section) */
-    mBlock(m,{x:-L*0.04,z:0,y0:-r*0.99,h:r*0.3,l:L*0.46,w:B*0.44,lt:0.9,wt:0.8,sf:0.9});}
   m.length=L;m.beam=B;return m;}
 
 /* ================= aircraft =================
@@ -6050,7 +6168,7 @@ const WSPEC={
  P800:{L:8.9,d:.70,k:'ramjet'}, BRH:{L:8.4,d:.60,k:'ramjet'}, ASM3:{L:6.0,d:.35,k:'ramjet'},
  SPK:{L:1.7,d:.17,k:'aam'}, CRT:{L:1.8,d:.16,k:'aam'},
  /* ballistic */
- SLBM:{L:10,d:1.35,k:'bm'}, DF21:{L:10.7,d:1.4,k:'bm'}, YJ21:{L:8.5,d:.75,k:'bm'}, ZRC:{L:9,d:.6,k:'ramjet'}, GZN:{L:6.5,d:.53,k:'cruise'}, LORA:{L:5.2,d:.62,k:'bm'},
+ SLBM:{L:9.6,d:.9,k:'bm'}, DF21:{L:10.7,d:1.4,k:'bm'}, YJ21:{L:8.5,d:.75,k:'bm'}, ZRC:{L:9,d:.6,k:'ramjet'}, GZN:{L:6.5,d:.53,k:'cruise'}, LORA:{L:5.2,d:.62,k:'bm'},
  /* air-to-air */
  SKY:{L:4.0,d:.20,k:'aam'}, A260:{L:4.0,d:.18,k:'aam'}, AMR:{L:3.7,d:.18,k:'aam'},
  PL15:{L:4.0,d:.20,k:'aam'}, PL17:{L:6.0,d:.30,k:'aam'}, R37:{L:4.06,d:.38,k:'aam'},
@@ -6409,6 +6527,15 @@ IX.HQ10={L:2.0,segs:[
     fins:[{x:.2,c:.16,s:.085,sb:.08,tc:.07,roll:0},{x:1.7,c:.26,s:.14,sb:.12,tc:.12,roll:0}],noz:1}]};
 IX.SEA.segs[0].gdu=1.55;IX.HQ16.segs[0].gdu=.95;
 IX.SM2L=IX.SM2;IX.ESM2=IX.ES;IX.ES1=IX.ES;IX.AST1=IX.AST;
+/* Drakon / Dakar SLBM (hypothetical): IAI's Naval LORA stretched into a two-stage round. The LORA itself (long cone
+   nose, cylindrical body, four clipped-delta tail fins, cable raceway) grows to a 0.66 m upper stage whose nose is the
+   manoeuvring warhead with its own small control fins, stacked on a 0.9 m first stage; 9.6 m overall, so it stands in a
+   tube that runs down through the sail into the pressure hull. The first stage drops at burnout, the warhead section
+   separates from the LORA body about a third of the way along the arc. */
+IX.SLBM={L:9.6,segs:[
+   {prof:[[0,.02],[.3,.085],[.8,.17],[1.4,.26],[1.85,.325],[2.05,.33]],bands:[.62,1.5],fins:[{x:1.55,c:.42,s:.12,sb:.26,tc:.14,roll:Q4}]},
+   {drop:2,prof:[[2.05,.33],[5.55,.33]],bands:[2.4,3.6,4.7],fins:[{x:4.85,c:.62,s:.3,sb:.36,tc:.24,roll:Q4}],race:[2.2,4.8],noz:1},
+   {drop:1,prof:[[5.55,.33],[5.95,.45],[9.52,.45],[9.6,.42]],bands:[6.1,7.4,8.8],race:[6.1,9.3],noz:1}]};
 function ixSegOn(g,stage){const st=stage==='sprint'?0:stage||0;return(g.drop===undefined||g.drop>st)&&(g.from===undefined||st>=g.from);}
 /* one segment's geometry into mesh m; X maps nose-relative metres to mesh km */
 function ixSeg(m,g,X,dt){const n=dt?12:6,K=.001;
@@ -6529,11 +6656,11 @@ function airMeshOf(ty,dt,ld,bo){bo=dt&&bo&&JBAY[ty]?1:0;ld=dt&&ld&&(JSTORE[ty]||
    and anti-ship missiles, ramjets that eject their booster, and the ballistic rounds. YJ-18 and Kalibr
    also shed the cruise body when the terminal dart lights (stage 'sprint'). */
 const STG={SM6:[6],SM6B:[7],SM3A:[10,40],SM3B:[12,55],HQ9:[8],HQ9C:[8],AST:[4],AST1:[4],AS15:[2.5],
- HP:[2.5],GV:[2.5],AT:[2.5],EXO:[2.5],NSM:[2],LRASM:[2],TLAM:[2],TLC:[2],GZN:[2],KLB:[2],YJ18:[2],P800:[2.5],BRH:[2.5],ZRC:[6],YJ21:[35,1e9],DF21:[50],SLBM:[25],BRK:[4]};
+ HP:[2.5],GV:[2.5],AT:[2.5],EXO:[2.5],NSM:[2],LRASM:[2],TLAM:[2],TLC:[2],GZN:[2],KLB:[2],YJ18:[2],P800:[2.5],BRH:[2.5],ZRC:[6],YJ21:[35,1e9],DF21:[50],SLBM:[5,1e9],BRK:[4]};
 /* ballistic rounds stage by how far along their arc they are: the YJ-21 drops its booster at burnout and
    lets the glide vehicle go a little past apogee, which then flies the rest of the way on its own */
 Object.assign(STG,{PNT:[1.4],YJ83:[2.5],KH35:[2],KSH:[1.2],T17:[2.5],HSG:[2.5],NOOR:[2.5]});
-const STGF={YJ21:.3};
+const STGF={YJ21:.3,SLBM:.3};
 const bmFr=m=>{if(m.cls!=='bm'||!ASM[m.w])return 0;const fl=Math.max(0,ASM[m.w].rng-m.left),g=m.tgt||(m.ax!=null?{x:m.ax,y:m.ay}:null);if(!g)return 0;return fl/Math.max(1,fl+Math.hypot(m.x-g.x,m.y-g.y));};
 function stageOf(w,fl,sprint,fr){const st=STG[w];if(!st)return 0;if(sprint&&WX[w]&&WX[w].fwd)return 'sprint';let k=0;for(const d of st)if((fl||0)>=d)k++;
   if(STGF[w]!=null&&(fr||0)>=STGF[w]&&k>=1)k=st.length;return k;}
@@ -7991,10 +8118,38 @@ function drawSubUnit(v,TR){const pos=toWorld(v.x,v.y,v.z||0),col=subColor(v);
   const sp=drawBody('sub',pos,v.h||0,col,(LEN_SUB[v.cls]?LEN_SUB[v.cls][0]:70)/1000,
     d=>subMeshOf(v.cls,d),{dim:!v.al,roll:v.al?0:0.4,hideUW:(v.z||0)>-0.004&&!CAM._under});
   if(!sp)return;
+  {const sid=v.obj?v.obj.id:v.rec?v.rec.id:null;if(v.al&&sid!=null&&_subLB&&_subLB[sid])drawSubVLSFx(v,pos,_subLB[sid],(LEN_SUB[v.cls]?LEN_SUB[v.cls][0]:70)/1000);}
   PICKLIST.push({x:sp.x,y:sp.y,z:pos.y,kind:'sub',obj:v.obj,rec:v.rec,draggable:!!(v.al&&v.obj)});
   const isSel=isSelV(v);if(isSel)selectionScreen=sp;
   labelQueue.push({x:sp.x,y:sp.y,text:v.n,sub:(SUBC[v.cls]&&SUBC[v.cls].n.replace(' submarine',''))||'',col:v.sd==='IL'?'#9ccbff':'#ff9d95',dim:!v.al,pri:isSel?2:0,force:isSel});
   if(v.det&&v.al)strokeGroundRing(v.x,v.y,0.9,'rgba(255,255,255,.35)',[2,3]);}
+/* the sail tubes: a hatch swings up on its aft hinge, the ejection gas boils up through the water as the round is thrown
+   out, and the lid shuts again about nine seconds later */
+let _subLB=null;
+function drawSubVLSFx(v,pos,list,Lk){const dep=vDot(vSub(pos,CAM.eye),CAM.fwd);if(dep<CAM.near||Lk*CAM.focal/dep<45)return;
+  const C=subMeshOf(v.cls,1).vls;if(!C||!C.length)return;const h=v.h||0,now=performance.now()/1000;
+  const W=p=>localToWorld(p,pos,h,0,0),poly=(pts,fill)=>{const q=pts.map(p=>proj(W(p)));if(q.some(p=>!p||p.depth<CAM.near))return;ctx.fillStyle=fill;ctx.beginPath();q.forEach((p,k)=>k?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill();};
+  for(const L of list){const a=L.ag;if(a<0||a>SUBL.close+1.3)continue;const c=C[((L.vc||1)-1)%C.length],r=c.s,y=c.y+.00002,hx=c.x-r,ring=[];
+    const op=a<SUBL.open?a/SUBL.open:a<SUBL.close?1:Math.max(0,1-(a-SUBL.close)/1.2),th=op*1.9;
+    for(let k=0;k<14;k++){const f=k/14*TAU;ring.push([c.x+Math.cos(f)*r,y,c.z+Math.sin(f)*r]);}
+    if(op>0){poly(ring,'rgba(6,9,12,.96)');   /* the open tube */
+      poly(ring.map(p=>{const u=p[0]-hx;return[hx+u*Math.cos(th),y+u*Math.sin(th),p[2]];}),'rgba(58,68,76,.97)');}   /* the lid */
+    if(a>SUBL.open*.6&&a<SUBL.broach+2.4){const P0=W([c.x,y,c.z]),fade=Math.min(1,(SUBL.broach+2.4-a)/1.2),q0=proj(P0);if(!q0)continue;
+      const px=Math.max(1,.004*CAM.focal/Math.max(CAM.near,q0.depth));
+      for(let i=0;i<9;i++){const f=(i/9+a*.9+i*.37)%1,Q=proj({x:P0.x+Math.sin(i*2.3+now*.7)*.0012*f,y:P0.y*(1-f),z:P0.z+Math.cos(i*1.7)*.0012*f});if(!Q)continue;
+        ctx.fillStyle='rgba(225,238,244,'+(.42*(1-f*.6)*fade).toFixed(3)+')';ctx.beginPath();ctx.arc(Q.x,Q.y,px*(.25+f*.7),0,TAU);ctx.fill();}}}}
+/* the round breaking the surface: a dome of spray that collapses into a spreading ring of foam, and the steam of the
+   motor lighting just above the water */
+const _brMem={};
+function drawBroach(v,a){let P=_brMem[v.key];if(!P){if(Object.keys(_brMem).length>200)for(const k in _brMem)delete _brMem[k];P=_brMem[v.key]={x:v.x,y:v.y};}
+  if(a<0)return;const c=proj(toWorld(P.x,P.y,0));if(!c||c.depth<CAM.near)return;const px=CAM.focal/c.depth,al=Math.max(0,1-a/5);
+  const R=.005+.014*Math.min(1,a/3),q=[];for(let k=0;k<18;k++){const f=k/18*TAU,p=proj(toWorld(P.x+Math.cos(f)*R,P.y+Math.sin(f)*R,0));if(!p)return;q.push(p);}
+  ctx.fillStyle='rgba(232,240,244,'+(.42*al).toFixed(3)+')';ctx.beginPath();q.forEach((p,k)=>k?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill();
+  if(a<2.4){const top=proj(toWorld(P.x,P.y,.02*Math.min(1,a/.45)));if(top){const k=1-a/2.4,g=ctx.createLinearGradient(c.x,c.y,top.x,top.y);
+    g.addColorStop(0,'rgba(245,248,250,'+(.85*k).toFixed(3)+')');g.addColorStop(1,'rgba(245,248,250,0)');ctx.strokeStyle=g;ctx.lineWidth=Math.max(2,.009*px);ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(top.x,top.y);ctx.stroke();ctx.lineCap='butt';}}
+  if(a>SUBL.ign-SUBL.broach){const b=a-(SUBL.ign-SUBL.broach),k=Math.max(0,1-b/6);for(let i=0;i<5;i++){const Q=proj(toWorld(P.x+Math.cos(i*1.26)*.004*b/3,P.y+Math.sin(i*1.26)*.004*b/3,.002+.003*i*Math.min(1,b)));if(!Q)continue;
+    ctx.fillStyle='rgba(236,236,232,'+(.3*k).toFixed(3)+')';ctx.beginPath();ctx.arc(Q.x,Q.y,Math.max(1.5,(.004+.003*b)*px),0,TAU);ctx.fill();}}}
 function drawAirUnit(v,TR){const pos=toWorld(v.x,v.y,v.z||0),col=airColor(v);
   const tr=TR['a'+v.key];if(tr)drawTrail(tr,col,0.5,1.5,false,SIM&&SIM.land?2:0);
   /* countermeasure flares: a string of burning pellets falling away behind the jet */
@@ -8110,9 +8265,11 @@ function drawFlame(pos,h,p,Lkm,scale,tail){const cx=Math.cos(p)*Math.cos(h),cy=M
 function drawMslUnit(v,TR){const pos=toWorld(v.x,v.y,v.z||0),col=mslColor(v);
   const tr=TR['m'+v.key];if(tr)drawTrail(tr,col,0.62,1.7,true,SIM&&SIM.land);
   if(v.al===0)return;   /* a round that has hit or been killed leaves only its fading trail; the blast is drawn by the effects */
+  const subL=!!(v.ls&&SUB_VLS_W[v.w]&&isSubV(v));   /* an SLBM leaving a sail tube */
+  if(subL){const a=v.ag||0;if(a<SUBL.open)return;if(a>SUBL.broach-.15&&a<SUBL.broach+6)drawBroach(v,a-SUBL.broach);}
   const vcell=v.ls&&!v.cn&&VLS_ASM[v.w],coldM=COLD_L[v.w]&&v.ls&&!v.cn,hlM=vcell&&!coldM?vlsLead(v.w,lsCls(v)):0;
   if(vcell&&(v.ag||0)<hlM)return;   /* still down in its cell while the hatch (UKSK: the armoured cover) opens */
-  if(v.cls==='bm'||v.cls==='uav')drawDropLine(pos,0.1);
+  if((v.cls==='bm'||v.cls==='uav')&&(v.z||0)>0)drawDropLine(pos,0.1);
   const len=v.cls==='uav'?LEN_AIR.TB3A[0]/1000:v.cls==='drone'?0.0026:(v.cls==='bm'?0.0066:0.0046);
   const guided=v.cls==='aam'||v.cls==='bm';
   /* far away it is only an icon: skip the attitude, staging and mesh work */
@@ -8125,13 +8282,18 @@ function drawMslUnit(v,TR){const pos=toWorld(v.x,v.y,v.z||0),col=mslColor(v);
   else if(!cold&&v.ls&&!v.cn&&VLS_ASM[v.w]&&ag-hlM<3.3){const c=coldTip(guided?'m'+v.key:null,v,ag-hlM,3);pit=c.p;hd=c.h;if(!guided&&_pitMem['m'+v.key])_pitMem['m'+v.key].p=pit;}
   if(v.cn){if(ag<CAN_OPEN)return;   /* still in the canister while the cover opens */
     const A=ag<CAN_OPEN+2.6?canAtt(v):null;if(A){const k=Math.max(0,Math.min(1,(ag-CAN_OPEN-2)/.6));pit=A.p+(pit-A.p)*k;hd=A.h+wrap(hd-A.h)*k;if(_pitMem['m'+v.key])_pitMem['m'+v.key].p=pit;}}
+  /* upright out of the tube and through the first seconds of the climb, then pitched over onto the arc as the path leans */
+  if(subL&&ag<SUBL.ign+SUBL.tpo){const tp=tgtPos(v),b=ag-SUBL.ign,k0=Math.max(0,Math.min(1,(b-2.7)/(SUBL.tpo-2.7))),k=k0*k0*(3-2*k0);
+    const pT=att&&isFinite(att.p)&&att.p>.05?att.p:.9,hT=tp?Math.atan2(tp[1]-v.y,tp[0]-v.x):hd;
+    pit=Math.PI/2-.002+(pT-Math.PI/2)*k;hd=att&&k>0?hT+wrap(att.h-hT)*k:hT;
+    const M=_attMem['m'+v.key];if(M&&k<1){M.res={h:hd,p:pit};M.d=[Math.cos(pit)*Math.cos(hd),Math.cos(pit)*Math.sin(hd),Math.sin(pit)];}}
   let stg=v.cls==='uav'||v.cls==='drone'?0:stageOf(v.w,v.fl,v.sp,v.fr);
   if(v.air&&stg===0&&STG[v.w])stg=1;   /* dropped from a jet: air-launched versions carry no rocket booster */
   stageCheck('m'+v.key,Object.assign({},v,{h:hd}),stg,pit);
   const sp=drawBody(v.cls==='uav'?'air':'msl',pos,hd,col,len,d=>mslMeshOf(v.w,v.cls,d,stg),{pitch:pit});
   if(sp&&v.al!==0){const W=ASM[v.w]||{},Lr=WSPEC[v.w]?WSPEC[v.w].L/1000:len;
     const burn=v.cls==='aam'?(v.ag||0)<(W.rng>150?12:8):(stg===0&&(STG[v.w]||v.sp))||(v.sp&&stg==='sprint')||(stg===1&&STG[v.w]&&STG[v.w].length>1);
-    const mt=mslMeshOf(v.w,v.cls,1,stg);if(burn&&!(cold&&ag<tI))drawFlame(pos,hd,pit,Lr,v.cls==='bm'?1.6:1,mt&&mt.tailX!=null?-mt.tailX:undefined);}
+    const mt=mslMeshOf(v.w,v.cls,1,stg);if(burn&&!(cold&&ag<tI)&&!(subL&&ag<SUBL.ign))drawFlame(pos,hd,pit,Lr,v.cls==='bm'?1.6:1,mt&&mt.tailX!=null?-mt.tailX:undefined);}
   if(!sp)return;
   PICKLIST.push({x:sp.x,y:sp.y,z:pos.y,kind:'msl',obj:v.obj,rec:v.rec,draggable:false});
   const isSel=isSelV(v);if(isSel){selectionScreen=sp;labelQueue.push({x:sp.x,y:sp.y,text:v.n,col,pri:2,force:true});}}
@@ -8447,7 +8609,7 @@ const SND={
  BRH:{L:'ukskc',ej:1.3,turn:'jets',low:1,M:[[7,.6,1.5]],ml:1.6,C:['rj','BRJ'],pr:'al',wh:250,wk:'sap',len:8.4},
  ZRC:{L:'uksk',M:[[6,.6,1.8]],ml:2,C:['sj','SCR'],pr:'al',wh:100,wk:'kin',len:9},   /* ~100 kg warhead; the rest is kinetic energy */
  TLC:{L:'sub',M:[[5,.53,.6]],ml:.9,sep:[0],C:['tj','PPT'],pr:'al',wh:200,wk:'he',len:6.25},
- SLBM:{L:'sub',M:[[20,1,2.2]],ml:5,C:['gl'],pr:'al',wh:500,wk:'kin',len:10},
+ SLBM:{L:'sub',ej:1.7,turn:'vane',M:[[8,.85,2.2],[10,.6,1.2]],ml:[3,2.4],sep:[0],C:['gl'],pr:'al',tv:'jv',wh:300,wk:'kin',len:8.3},
  DF21:{L:'cold',ej:2,turn:'vane',M:[[40,1.4,2.2]],ml:5,C:['gl'],pr:'al',wh:600,wk:'kin',len:10.7},
  /* air-launched */
  YJ83K:{L:'air',C:['tj','CTJ2'],wh:165,wk:'sap',len:4.9},JSM:{L:'air',C:['tj','TRI40'],wh:120,wk:'sap',len:4},
@@ -9009,7 +9171,10 @@ function render3D(){ctx.setTransform(DPR,0,0,DPR,0,0);BAT.on=false;BAT.m.clear()
   /* underwater contacts go down first so the translucent sea reads over them */
   const under=[],above=[];
   const enq=(arr,v,fn)=>{const rel=vSub(toWorld(v.x,v.y,v.z||0),CAM.eye);arr.push({d:vDot(rel,CAM.fwd),fn});};
+  _subLB={};for(const v of mslV)if(v.ls&&SUB_VLS_W[v.w]&&(v.ag||0)<SUBL.close+1.3&&isSubV(v))(_subLB[v.ls]=_subLB[v.ls]||[]).push({vc:v.vc,ag:v.ag||0});
   for(const v of subsV)enq((v.z||0)<-0.004&&!eyeUnder?under:above,v,()=>drawSubUnit(v,TR));
+  const mUW=v=>(v.z||0)<-0.001&&!eyeUnder;   /* a round still under water is drawn beneath the sea surface, like the boats */
+  for(const v of mslV)if(mUW(v))enq(under,v,()=>drawMslUnit(v,TR));
   for(const v of trpV)enq(eyeUnder?above:under,v,()=>drawTorpUnit(v,TR));
   /* the backdrop (sky, sea, grid, land, borders, place names) depends only on the camera: while the camera holds still it is
      copied from the last frame's picture instead of being drawn again, which is most of the drawing work over a big map */
@@ -9038,7 +9203,7 @@ function render3D(){ctx.setTransform(DPR,0,0,DPR,0,0);BAT.on=false;BAT.m.clear()
   for(const v of shipsV)enq(above,v,()=>drawShipUnit(v,TR,deckBy[v.id],t));
   for(const v of heloV)enq(above,v,()=>drawHeloUnit(v));
   for(const v of airV){if(v.dk)continue;enq(above,v,()=>drawAirUnit(v,TR));}
-  for(const v of mslV)enq(above,v,()=>drawMslUnit(v,TR));
+  for(const v of mslV)if(!mUW(v))enq(above,v,()=>drawMslUnit(v,TR));
   for(const v of icpV)enq(above,v,()=>drawIcpUnit(v,TR));
   above.sort((a,b)=>b.d-a.d);
   for(const it of above)it.fn();
