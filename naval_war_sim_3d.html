@@ -4090,7 +4090,7 @@ function infoCard(o){if(o.gk)return gndCard(o);const S=SIM;let kind,name,col,row
     const mg=Object.keys(o.mag0).map(k=>((SAM[k]&&SAM[k].n)||(ASM[k]&&ASM[k].n)||k)+' '+(o.mags[k]||0)+'/'+o.mag0[k]);
     rows=[['Class',C.n],['Side',sideName(o.side)],
       ['Speed now',isSub?'—':(Math.round(Math.hypot(o.vx,o.vy)*1944)+' knots')],
-      ['Hull',Math.round((o.hp/(o.maxHp||1))*100)+'%'],['Status',!o.alive?'Sunk':o.pros?'Under ASW attack':o.det?'Detected':o.radarOk===false?'Radar out':o.dmg?'Damaged':'Operational'],
+      ['Hull',o.sub?(o.alive?'Intact':'Lost'):Math.round((o.hp/(o.maxHp||1))*100)+'%'],['Status',!o.alive?'Sunk':o.pros?'Under ASW attack':o.det?'Detected':o.radarOk===false?'Radar out':o.dmg?'Damaged':'Operational'],
       ['Magazines',mg.length?mg.join(', '):'None']];
     return card(kind,name,col,rows,o);}
   if(o.air){const A=AIRC[o.type];kind=o.type==='TB3A'?'drone':'jet';name=o.name;col=o.side==='IL'?'#7fe3ff':'#ff8a80';
@@ -4124,16 +4124,22 @@ const SUB_FITS={OHIO:[['Tomahawk Block V: 154 (7 per tube)',{TORP:12,TLAM:154}],
   ['Mixed: 112 Tomahawk + 18 CPS',{TORP:12,TLAM:112,CPS:18}],['Trident II D5, conventional warheads: 22 (1 per tube, hypothetical CTM)',{TORP:12,TRD:22}]]};
 /* the tube-by-tube editor: each of the 22 missile tubes takes one kind of round (7 Tomahawks, 3 CPS or 1 Trident) */
 const SUB_TUBES={OHIO:{n:22,w:[['TLAM',7],['CPS',3],['TRD',1]]}};
+/* the loadout editor for a missile submarine, laid out like the ships': each row picks a round and how many; each tube
+   takes one kind (7 Tomahawks, 3 CPS or 1 Trident), so the tubes used are counted per row */
+const subTubesOf=(T,w,n)=>{const q=T.w.find(x=>x[0]===w);return q?Math.ceil(n/q[1]):0;};
 function subFitPanel(o){const F=o&&o.sub&&SUB_FITS[o.cls],T=o&&SUB_TUBES[o.cls];if(!F)return '';const live=!!(SIM&&SIM.t>0);
-  const nm=w=>(ASM[w]&&ASM[w].n)||w,inp='background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px;font-size:12px';
-  const rows=T.w.map(([w,per])=>{const tubes=Math.round((o.mag0[w]||0)/per);return '<div style="display:grid;grid-template-columns:1fr 54px 60px;gap:5px;align-items:center;margin-bottom:4px;font-size:12px">'+
-    '<span>'+nm(w)+'<span style="color:var(--dim)"> · '+per+' per tube</span></span><input class="stN" data-w="'+w+'" type="number" min="0" max="'+T.n+'" value="'+tubes+'"'+(live?' disabled':'')+' style="'+inp+'">'+
-    '<span style="color:var(--dim);text-align:right">'+(live?(o.mags[w]||0)+'/':'')+(o.mag0[w]||0)+' rds</span></div>';}).join('');
-  const used=T.w.reduce((a,[w,per])=>a+Math.round((o.mag0[w]||0)/per),0);
-  return '<div class="grp" style="border:0"><b style="font-size:13px">Weapons</b><div style="color:var(--dim);margin:2px 0 6px;font-size:11.5px">'+
-    (live?'Locked while the battle runs.':'Missile tubes '+used+' of '+T.n+'. Set how many tubes carry each round; anything over '+T.n+' is trimmed on apply.')+'</div>'+rows+
-    (live?'':'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 8px"><button id="stApply" class="primary">Apply</button><button id="stReset">Reset boat</button></div>'+
-    '<div style="color:var(--dim);margin:0 0 4px;font-size:11.5px">Quick fits</div>'+F.map(([lab,L],i)=>'<button class="subFit" data-i="'+i+'" style="display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px">'+lab+'</button>').join(''))+'</div>';}
+  const nm=w=>(ASM[w]&&ASM[w].n)||w,box='border:1px dashed var(--line);border-radius:4px;padding:3px 6px;font-size:12px',inp='background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px;font-size:12px';
+  const have=T.w.map(q=>q[0]).filter(w=>(o.mag0[w]||0)>0),slots=have.concat(T.w.map(q=>q[0]).filter(w=>!have.includes(w)));
+  if(live){const rows=have.map(w=>'<div style="display:grid;grid-template-columns:1fr 62px;gap:5px;margin-bottom:4px"><div style="'+box+';color:var(--ink)">'+nm(w)+'</div><div style="'+box+';text-align:right;color:var(--dim)">'+(o.mags[w]||0)+'/'+o.mag0[w]+'</div></div>').join('');
+    return '<div class="grp" style="border:0"><b style="font-size:13px">Loadout</b><div style="color:var(--dim);margin:2px 0 6px;font-size:11.5px">Locked while the battle runs. Rounds left of each type are shown; change the loadout before you press Start battle.</div>'+rows+'</div>';}
+  const used=have.reduce((a,w)=>a+subTubesOf(T,w,o.mag0[w]),0);
+  const rows=slots.map((w,i)=>'<div style="display:grid;grid-template-columns:1fr 62px;gap:5px;margin-bottom:4px"><select class="stW" data-slot="'+i+'" style="'+inp+'">'+
+    T.w.map(([a,per])=>'<option value="'+a+'"'+(a===w?' selected':'')+'>'+nm(a)+' ('+per+'/tube)</option>').join('')+'</select>'+
+    '<input class="stN" data-slot="'+i+'" type="number" min="0" max="200" value="'+(o.mag0[w]||0)+'" style="'+inp+'"></div>').join('');
+  return '<div class="grp" style="border:0"><b style="font-size:13px">Loadout</b><div style="color:'+(used>T.n?'#ff7a70':'var(--dim)')+';margin:2px 0 6px;font-size:11.5px">Missile tubes '+used+' of '+T.n+
+    '. Each tube holds one kind of round: 7 Tomahawks, 3 CPS or 1 Trident; anything over capacity is trimmed on apply.</div>'+rows+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 8px"><button id="stApply" class="primary">Apply</button><button id="stReset">Reset boat</button></div>'+
+    '<div style="color:var(--dim);margin:0 0 4px;font-size:11.5px">Quick fits</div>'+F.map(([lab,L],i)=>'<button class="subFit" data-i="'+i+'" style="display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px">'+lab+'</button>').join('')+'</div>';}
 function loadPanel(o){if(!o||o.air||o.w||!CLS[o.cls]||!CLS[o.cls].big||CLS[o.cls].fixed||o.side==='N')return '';
   const live=!!(SIM&&SIM.t>0),fixedW=Object.keys(o.mag0).filter(w=>FIXED_W[w]),nmW=w=>(SAM[w]&&SAM[w].n)||(ASM[w]&&ASM[w].n)||w;
   const lock=(w,tag)=>'<div style="display:grid;grid-template-columns:1fr 62px;gap:5px;margin-bottom:4px"><div style="border:1px dashed var(--line);border-radius:4px;padding:3px 6px;font-size:12px;color:var(--ink)">'+nmW(w)+(tag?' <span style="color:var(--dim)">· '+tag+'</span>':'')+'</div>'+
@@ -4314,7 +4320,9 @@ $('selinfo').addEventListener('click',e=>{
   if((e.target.closest('#ldReset')||e.target.closest('#ldApply')||e.target.closest('.subFit')||e.target.closest('#stApply')||e.target.closest('#stReset'))&&SIM&&SIM.t>0)return;   /* no rearming mid-battle */
   if(e.target.closest('#stReset')&&sel&&sel.sub){delete roster.load[sel.name];const nm=sel.name;editing=false;build(seed,true);sel=SIM.subs.find(s=>s.name===nm)||null;lastSel='';renderPanels(true);return;}
   if(e.target.closest('#stApply')&&sel&&sel.sub&&SUB_TUBES[sel.cls]){const T=SUB_TUBES[sel.cls],load={TORP:sel.mag0.TORP||12};let left=T.n;
-    for(const el of $('selinfo').querySelectorAll('.stN')){const w=el.dataset.w,per=T.w.find(q=>q[0]===w)[1],n=Math.max(0,Math.min(left,Math.round(+el.value||0)));left-=n;if(n)load[w]=n*per;}
+    const sw=$('selinfo').querySelectorAll('.stW'),sn=$('selinfo').querySelectorAll('.stN');
+    sw.forEach((el,i)=>{const w=el.value,per=T.w.find(q=>q[0]===w)[1],want=Math.max(0,Math.round(+sn[i].value||0)),tubes=Math.min(left,Math.ceil(want/per));left-=tubes;
+      const n=Math.min(want,tubes*per);if(n>0)load[w]=(load[w]||0)+n;});
     roster.load[sel.name]=load;const nm=sel.name;editing=false;build(seed,true);sel=SIM.subs.find(s=>s.name===nm)||null;lastSel='';renderPanels(true);return;}
   {const b=e.target.closest('.subFit');if(b&&sel&&sel.sub&&SUB_FITS[sel.cls]){roster.load[sel.name]=Object.assign({},SUB_FITS[sel.cls][+b.dataset.i][1]);const nm=sel.name;build(seed,true);sel=SIM.subs.find(s=>s.name===nm)||null;lastSel='';renderPanels(true);return;}}
   if(e.target.closest('#ramFit')&&sel&&!(SIM&&SIM.t>0)){const load=Object.assign({},roster.load[sel.name]||sel.mag0);if(e.target.checked)load.RAM=11;else delete load.RAM;
