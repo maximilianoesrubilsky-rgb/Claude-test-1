@@ -5271,9 +5271,9 @@ const SHIPX={
  S6:[['gun',{t:.87,type:'oto76'}],
    ['vls',{t:.44,base:5.5,cols:4,rows:2,p:.56,gx:4,gz:2}],['vls',{t:.34,base:5.5,cols:4,rows:2,p:.56,gx:4,gz:2}],
    ['vls',{t:.765,cols:4,rows:10,p:.5,gx:4,gz:5}],
-   ['house',{id:'f',t0:.57,t1:.72,w:11.5,h:7.5,plan:'oct',ch:2.4,top:.82,rake:1.6,win:.86}],['mast',{t:.63,type:'tower',yb:'f',h:13,w:6,tp:.55,arrays:1.7,ahv:.55}],
+   ['house',{id:'f',t0:.57,t1:.72,w:11.5,h:7.5,plan:'oct',ch:2.4,top:.82,rake:1.6,win:.86}],['mast',{t:.63,type:'tower',yb:'f',h:12,w:6.4,tp:.66,arrays:1.9,ahv:.5}],
    ['can',{t:.54,y:.6,z:2.2,n:4,yaw:75,ty:'gv',pairs:2,step:5}],['house',{id:'a',t0:.3,t1:.47,w:11,h:5.5,plan:'rect',top:.86}],
-   ['mast',{t:.39,type:'quad',yb:'a',h:9,w:2.4,rk:1,yard:6}],['hangar',{t0:.17,t1:.29,w:11,h:5.5,fd:.09}]],
+   ['mast',{t:.375,type:'pyr',yb:'a',h:7,w:4.2,tp:.7}],['dome',{t:.38,yr:'a+6.1',z:1.1,r:1}],['dome',{t:.37,yr:'a+6.1',z:-1.1,r:1}],['hangar',{t0:.17,t1:.29,w:11,h:5.5,fd:.09}]],
  S5:[['gun',{t:.86,type:'oto76'}],['vls',{t:.77,cols:4,rows:8,p:.56,gx:4,gz:4}],['house',{id:'f',t0:.54,t1:.7,w:10,h:7,plan:'rect',top:.88,rake:1.2,win:.84}],
    ['mast',{t:.6,type:'quad',yb:'f',h:12,w:2.6,rk:1.5,yard:8}],['can',{t:.49,y:.6,z:2.2,n:4,yaw:75,ty:'gv'}],['house',{id:'a',t0:.32,t1:.5,w:9.5,h:5,plan:'rect',top:.88}],
    ['funnel',{t:.43,w:4.5,l:5,h:4,y:5}],['ciws',{t:.36,type:'phalanx',y:5}],['hangar',{t0:.18,t1:.3,w:10,h:5.5,fd:.1}]],
@@ -5500,7 +5500,7 @@ const XPLANE_SUB={T214:1,D2:1,DRK:1,DKR:1,AST_S:1,COL:1,SOR:1};
    well forward are the quickest way to tell submarines apart on the surface. */
 const SAILSPEC={
  D1:{x:.64,l:.125,h:1.9,w:.22}, D2:{x:.64,l:.125,h:1.9,w:.22}, DRK:{x:.63,l:.13,h:1.9,w:.23},
- DKR:{x:.48,l:.24,h:1.7,w:.25}, T209:{x:.68,l:.10,h:2.2,w:.20}, T214:{x:.68,l:.10,h:2.1,w:.20},
+ DKR:{x:.48,l:.26,h:1.6,w:.25,lt:.8,dx:.024}, T209:{x:.68,l:.10,h:2.2,w:.20}, T214:{x:.68,l:.10,h:2.1,w:.20},
  VA:{x:.72,l:.13,h:1.6,w:.28},  AST_S:{x:.70,l:.11,h:2.3,w:.22}, SUF:{x:.71,l:.11,h:2.1,w:.22},
  YAS:{x:.74,l:.12,h:1.7,w:.24}, KILO:{x:.66,l:.15,h:1.8,w:.24},  T093:{x:.71,l:.12,h:2.0,w:.23},
  T039:{x:.67,l:.13,h:2.0,w:.23}, SOR:{x:.67,l:.12,h:2.1,w:.22},  SCOR:{x:.69,l:.10,h:2.1,w:.20},
@@ -5518,7 +5518,7 @@ function buildSubMesh(cls,dt){const [Lm,Bm]=subDims(cls),L=Lm/1000,B=Bm/1000,r=B
   /* sail */
   const sp=SAILSPEC[cls]||{x:.66,l:.115,h:2.0,w:.22};
   const sx=(sp.x-0.5)*L,sh=r*sp.h;
-  mBlock(m,{x:sx,z:0,y0:r*0.75,h:sh,l:L*sp.l,w:B*sp.w,lt:0.78,wt:0.85,dx:-L*0.008,sf:1.08});
+  mBlock(m,{x:sx,z:0,y0:r*0.75,h:sh,l:L*sp.l,w:B*sp.w,lt:sp.lt??0.78,wt:0.85,dx:L*(sp.dx??-0.008),sf:1.08});
   if(dt){for(const s of[-1,1])mPlate(m,[[sx-L*0.012,r*0.75+sh*0.62,s*B*sp.w*0.5],[sx+L*0.022,r*0.75+sh*0.62,s*B*sp.w*0.5],
       [sx+L*0.016,r*0.75+sh*0.66,s*B*0.58],[sx-L*0.006,r*0.75+sh*0.66,s*B*0.58]],0.98);
     const pa=mAdd(m,sx-L*0.03,r*0.75+sh,0),pb=mAdd(m,sx-L*0.03,r*0.75+sh+r*1.1,0);mLine(m,pa,pb,1.2,1.35);}
@@ -5531,12 +5531,12 @@ function buildSubMesh(cls,dt){const [Lm,Bm]=subDims(cls),L=Lm/1000,B=Bm/1000,r=B
   if(dt){const h0=mAdd(m,-L*0.5,0,0),h1=mAdd(m,-L*0.5-L*0.02,0,0);mLine(m,h0,h1,2,1.1);}
   if(cls==='DKR'){
     /* shrouded propulsor: a ring around the screw */
-    const px=-L*0.5-L*0.01,pr=r*0.7;mLoft(m,[{x:px-L*0.012,pts:ringPtsYZ(10,pr,pr,0)},{x:px+L*0.012,pts:ringPtsYZ(10,pr*1.04,pr*1.04,0)}],0.9,false,false);
+    const px=-L*0.5+L*0.004,pr=r*0.42;mLoft(m,[{x:px-L*0.012,pts:ringPtsYZ(10,pr,pr,0)},{x:px+L*0.012,pts:ringPtsYZ(10,pr*1.04,pr*1.04,0)}],0.9,false,false);
     /* bow dive planes on the upper hull with the Type 214 style end-caps */
     const bx=(0.8-0.5)*L;for(const s of[-1,1]){mPlate(m,[[bx-L*0.02,r*0.7,s*r*0.6],[bx+L*0.02,r*0.7,s*r*0.6],[bx+L*0.015,r*0.72,s*r*1.35],[bx-L*0.015,r*0.72,s*r*1.35]],0.95);
       mPlate(m,[[bx-L*0.015,r*0.72,s*r*1.35],[bx+L*0.015,r*0.72,s*r*1.35],[bx+L*0.015,r*1.0,s*r*1.35],[bx-L*0.015,r*1.0,s*r*1.35]],0.95);}
     /* enlarged under-casing along the keel (AIP section) */
-    mBlock(m,{x:-L*0.05,z:0,y0:-r*1.05,h:r*0.22,l:L*0.45,w:B*0.35,lt:0.8,wt:0.9,sf:0.9});}
+    mBlock(m,{x:-L*0.04,z:0,y0:-r*0.99,h:r*0.3,l:L*0.46,w:B*0.44,lt:0.9,wt:0.8,sf:0.9});}
   m.length=L;m.beam=B;return m;}
 
 /* ================= aircraft =================
