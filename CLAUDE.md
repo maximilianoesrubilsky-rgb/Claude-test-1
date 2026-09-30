@@ -30,7 +30,7 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
   Launch: hatch opens, underwater ejection, broach at 1.25 s, ignition 1.6 s (engine holds it via EJECT like the
   YJ-21's cold launch), then the standard 'bm' arc. Sound = the YJ-21 profile. Boat rides at 35 m while it has SLBMs.
 - No nuclear weapons anywhere in the sim (no Trident). Ohio = SSGN (buildOhio): 24 tubes, 2 lock-out + 22 missile,
-  smooth turtleback, no DDS; fits via SUB_FITS: 154 Tomahawk, 66 CPS (hypothetical), mixed, or 22 conventional
+  smooth turtleback, no DDS; tube editor (SUB_TUBES: tubes per round type, 22 max) plus quick fits via SUB_FITS: 154 Tomahawk, 66 CPS (hypothetical), mixed, or 22 conventional
   Trident D5 (key TRD — CTM is taken by the CTM-290 land missile). No nuclear warheads anywhere.
   In naval world (US), land modes, and the add menu. Tube hatches open at launch (SUB_VLS per-tube counts).
 - Aircraft: F-35I Adir (not F-35A) with 6 Sky Sting + 2 Python-5; F-15I with Air LORA. Turkey: TF-2000 with
