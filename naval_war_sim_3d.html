@@ -1554,7 +1554,9 @@ function fighterFly(S,a,dt,C,K){const A=AIRC[a.type];let t=a.foe;
         const ux=Math.cos(ld.h),uy=Math.sin(ld.h),qx=-uy,qy=ux,sd=(a.id%2)?1:-1;
         const fx=ld.x-ux*2+qx*3*sd,fy=ld.y-uy*2+qy*3*sd,df=dist(a.x,a.y,fx,fy),toF=Math.atan2(fy-a.y,fx-a.x);
         const ea=(a.x-fx)*ux+(a.y-fy)*uy,el=(a.x-fx)*qx+(a.y-fy)*qy;   /* how far ahead of / beside the slot, along the lead's course */
-        if(df<=1.5){want=ld.h+Math.max(-.3,Math.min(.3,wrap(toF-ld.h)*df*.4));vt=Math.min(A.spd,ld.spd+(Math.cos(wrap(toF-ld.h))>0?Math.min(.04,df*.02):0));}
+        /* in the slot: hold the lead's heading, ease sideways onto the slot line and close up or drop back with power —
+           steering by the bearing to the slot flips it from ahead to behind as the jet passes it, and the jet shakes */
+        if(df<=1.5){want=ld.h-Math.max(-.25,Math.min(.25,Math.atan2(el,4)));vt=Math.max(.1,Math.min(A.spd,ld.spd-Math.max(-.04,Math.min(.04,ea*.03))));}
         /* level with or ahead of the slot (the lead has just turned in its racetrack): never turn back for it, which
            only chases a point that keeps swinging behind — hold the lead's heading, slide across onto the slot line
            and ease off until the slot comes up */
@@ -1569,10 +1571,14 @@ function fighterFly(S,a,dt,C,K){const A=AIRC[a.type];let t=a.foe;
           want=Math.atan2(wp[1]-a.y,wp[0]-a.x);vt=vL;st2='station';}}}}
   if(st2!=='pump'&&st2!=='extend'&&st2!=='merge')want=samAvoid(S,a,want,C.en);
   /* spacing: a few km between jets on station so squadrons don't stack on one point (the wingman excepted) */
-  if((st2==='station'||st2==='sweep')&&S.land&&S.t<(a.spT||0)){if(a.spV){const [av,wg]=a.spV;want=Math.atan2(Math.sin(want)*(1-wg)+Math.sin(av)*wg,Math.cos(want)*(1-wg)+Math.cos(av)*wg);}}
-  else if(st2==='station'||st2==='sweep'){a.spT=S.t+1;a.spV=null;let sx=0,sy=0,n=0;for(const f of (S.land?enemyAir(S,a.side==='IL'?'TR':'IL'):S.air)){if(f===a||!f.alive||f.deck||f===a.lead||f===a.wing||f.side!==a.side)continue;const dd=dist(a.x,a.y,f.x,f.y);
-      if(dd<6){const w=(6-dd)/6;sx+=(a.x-f.x)/(dd||1)*w;sy+=(a.y-f.y)/(dd||1)*w;n++;}}
-    if(n){const av=Math.atan2(sy,sx),wg=Math.min(.35,n*.12);a.spV=[av,wg];want=Math.atan2(Math.sin(want)*(1-wg)+Math.sin(av)*wg,Math.cos(want)*(1-wg)+Math.cos(av)*wg);}}
+  /* spacing: a few km between jets on station so squadrons don't stack on one point (the wingman excepted). The push
+     away is measured once a second and smoothed, so it fades in and out instead of switching at the edge and shaking
+     the jet's heading */
+  if(st2==='station'||st2==='sweep'){if(S.t>=(a.spT||0)){a.spT=S.t+1;let sx=0,sy=0;for(const f of (S.land?enemyAir(S,a.side==='IL'?'TR':'IL'):S.air)){if(f===a||!f.alive||f.deck||f===a.lead||f===a.wing||f.side!==a.side)continue;
+        const dd=dist(a.x,a.y,f.x,f.y);if(dd<8){const w=(8-dd)/8;sx+=(a.x-f.x)/(dd||1)*w*w;sy+=(a.y-f.y)/(dd||1)*w*w;}}
+      a.spX=(a.spX||0)*.6+sx*.4;a.spY=(a.spY||0)*.6+sy*.4;}
+    const m=Math.hypot(a.spX||0,a.spY||0);if(m>.02){const av=Math.atan2(a.spY,a.spX),wg=Math.min(.35,m*.25);want=Math.atan2(Math.sin(want)*(1-wg)+Math.sin(av)*wg,Math.cos(want)*(1-wg)+Math.cos(av)*wg);}}
+  else{a.spX=0;a.spY=0;}
   a.want=want;a.vt=vt;a.st2=st2;mv(a,dt);}
 function fighterAI(S,a,dt,K,en){let C;if(S.land){if(a._C&&S.t<a._Ct)C=a._C;else{C=a._C=airCtxL(S,a,en);a._Ct=S.t+.5;}}else C=airCtx(S,a,en);
   if(!a.fs)setFs(S,a,'cap');
@@ -1704,6 +1710,9 @@ function stepAir(S,a,dt){
   const fromBase=dist(a.x,a.y,a.base[0],a.base[1]);
   if(a.role!=='awacs'&&a.st!=='rtb'&&((a.role==='strike'?!strikeK.length:!K.bvr.length&&(!S.land||!K.wvr.length))||fromBase>(a.role==='strike'?(S.land?2600:900):(S.land?1200:700)))){
     if(!S.hl&&!a.winLog){a.winLog=1;log(S,a.name+': winchester, returning to '+(a.host?a.host.name:'base'),'');}a.st='rtb';}
+  /* forward deployment: airborne on the ferry flight, the jet now belongs to the forward base and lands there */
+  if(a.ferry&&a.gab){const b=a.ferry,u=a.host;a.ferry=null;if(u){const i=u.ac.indexOf(a);if(i>=0)u.ac.splice(i,1);}b.ac.push(a);a.spot=b.ac.length-1;a.host=b;a.base=[b.x,b.y];
+    a.st='rtb';a.stgt=null;a.pkgId=0;a.pk=null;a.capP=null;a.sweep=0;}
   if(a.st==='rtb'){(a.gab?abRTB:rtbAI)(S,a,dt,K);return;}
   if(a.role==='strike'){(S.land&&!a.asuw?strikeAIL:strikeAI)(S,a,dt,K,strikeK);return;}
   fighterAI(S,a,dt,K,en);}
@@ -1713,7 +1722,13 @@ function turnTo(a,dt){if(a.want===undefined)return;const dh=wrap(a.want-a.h);let
   if(a.rph==='final')w=.6;   /* small line-up corrections on the glideslope at approach speed */
   else{const A=AIRC[a.type],J=JCAPS[a.type];let n=a.gl||GLOAD[a.st2]||2.5;if(HEAVY_AIR[a.type])n=Math.min(n,1.3);
     w=G_KM*Math.sqrt(n*n-1)/Math.max(.1,a.spd)*(J&&J.ag?Math.min(1.2,J.ag):1);w=Math.min(w,A.spd<.3?.14:.35);}
-  a.h+=Math.max(-w*dt,Math.min(w*dt,dh));a.gl=0;a.hard=false;}
+  /* the jet has to roll into a turn and out of it: the turn rate eases toward what the heading error asks for (in
+     proportion near the heading, so it settles instead of snapping across it) and reverses only as fast as the jet
+     can roll, about a second from a full turn one way to a full turn the other — no step-to-step shaking */
+  if(a.rph==='final'||a.dph){a.tr=0;a.h+=Math.max(-w*dt,Math.min(w*dt,dh));}
+  else{const des=Math.max(-w,Math.min(w,dh*1.6)),cur=a.tr||0,rr=w*2.2;let tr=cur+Math.max(-rr*dt,Math.min(rr*dt,des-cur));
+    if(Math.abs(dh)<.002&&Math.abs(tr)<w*.05)tr=0;a.tr=tr;a.h+=Math.abs(tr*dt)>Math.abs(dh)&&Math.sign(tr)===Math.sign(dh)?dh:tr*dt;}
+  a.gl=0;a.hard=false;}
 /* is an air contact in the picture of one of this side's early-warning aircraft (scaled by its RCS) */
 function awacsHint(S,side,o){return awacsR(S,side,o);}
 function killAir(S,a,by){if(!a.alive)return;a.alive=false;a.sunkT=S.t;a.dieT=S.t;S.st.airLost[a.side]++;S.st.cost[a.side]+=COST[a.type]||0;
@@ -2219,6 +2234,7 @@ Object.assign(ASM,{
  ATC:LW({n:'ATACMS',tr:'qb',spd:1.1,rng:300,wh:227,cepm:10,ap:50,clu:1,cls:'bm',col:'#9fd0ff'}),
  PRS:LW({n:'PrSM',tr:'qb',spd:1.3,rng:500,wh:91,cepm:5,ap:55,mv:.2,cls:'bm',col:'#8fc8ff'}),
  LRHW:LW({n:'Dark Eagle (LRHW)',tr:'hgv',spd:2.3,rng:2775,wh:30,cepm:5,ap:48,mv:.6,cls:'bm',col:'#7fc0ff'}),
+ JSML:LW({n:'Joint Strike Missile (land attack)',tr:'cm',spd:.31,rng:275,wh:120,cepm:3,lo:.6,air:1,cls:'modern',col:'#a8e0d0',turn:24}),
  JAS:LW({n:'JASSM-ER',tr:'cm',spd:.24,rng:925,wh:450,cepm:3,lo:.3,air:1,cls:'modern',col:'#9ed0ff',turn:16}),
  SDB:LW({n:'GBU-39 SDB',tr:'cm',spd:.2,rng:110,wh:17,cepm:3,air:1,gb:1,cls:'modern',col:'#e8f2ff',turn:25}),
  /* Russia and Belarus */
@@ -2270,7 +2286,7 @@ for(const k in ASM)if(ASM[k].la&&ASM[k].tr==='bal'&&!ASM[k].tb)ASM[k].tb=60;
 Object.assign(COST,{AR3:4,AR2:1.5,DSL:1,TAM:.1,LAS:.00001,THD:12.7,PAC3:4.2,PAC2:3.5,NAS:1.2,IRT:.45,CAM:1,SPY:.8,S4L:2.5,S4X:3,S4M:.8,S5:10,S3V:3,BUK:1,TOR:.4,TOR1:.3,
  HQ22:1,HQ19:8,HQ17:.3,C03:1.5,CG2:1.5,TK3:2,CK:4,AKS:.4,BAV:1.5,S3P:1.5,K15:.8,K3:.5,MRS:.3,SPR2:3,
  SH3:1,GDR:1.2,EMD:1.5,SJL:2,KRM:3,KHS:1.2,HJQ:1.2,FTH:2,ZLF:.6,DZF:.8,F110:.4,F313:.5,QYM:.6,PAV:.8,HVZ:.6,SHD:.035,SH238:.1,
- ALORA:1.6,RCK:1.5,RMP:.8,SPW:3,DEL:.3,HRP:.15,SPC:.25,GB31:.03,PHK:.3,ATC:1.5,PRS:1.6,LRHW:40,JAS:1.8,SDB:.04,ISK:3,ISKK:1.5,S729:2,KNZ:10,ORS:60,KH101:13,KH32:3,KH59:1,
+ ALORA:1.6,RCK:1.5,RMP:.8,SPW:3,DEL:.3,HRP:.15,SPC:.25,GB31:.03,PHK:.3,ATC:1.5,PRS:1.6,LRHW:40,JAS:1.8,JSML:2.2,SDB:.04,ISK:3,ISKK:1.5,S729:2,KNZ:10,ORS:60,KH101:13,KH32:3,KH59:1,
  KLBL:1.5,GER:.05,GER3:.08,ZRCL:10,P8L:2.5,DF11:1,DF15:1.5,DF16:2,DF17:5,D21C:4,DF26:8,CJ10:1.5,CJ100:5,CJ20:2,KD88:.8,HM2C:1.5,HM4:3,HM3:1.2,T25S:3,T25H:5,
  HF2E:1.5,YFN:3,CTM:1,SCALP:2.5,TAUR:1.5,MDCN:3,PRL:3,PR2:1,TYF:2,BORA:1,SCUD:.5,BRHL:3});
 
@@ -2336,7 +2352,7 @@ const STRIKE_LAND={F35:{GB31:2,SKY:2},F15:{RCK:2,AMR:2},F16I:{RMP:2,AMR:2,PY5:2}
  F16:{GB31:2,AMR:2,AIM9:2},FA18:{JAS:2,AMR:2,AIM9:2},TYP:{SCALP:2,MTR:2},RAF:{SCALP:2,MTR:2},GRIP:{GB31:2,AMR:2,IRTA:2},M2K:{GB31:2,MICA:2},
  SU30:{KH59:2,R77:2,R73:2},SU34:{KH59:2,R77:2,R73:2},J16:{KD88:2,PL15:2,PL10:2},TU22:{KH32:2},H6:{CJ20:4},F2:{GB31:2,AMR:2},
  F4:{MK84:4,AIM7:2},MIG29:{MK84:2,R73:2},J10C:{KD88:2,PL15:2,PL10:2},SU35:{KH59:2,R77:4,R73:2},J35:{KD88:2,PL15:2}};
-const SL_NAT={KR:{F15E:{TAUR:2,AMR:2,AIM9:2}},NO:{F35A:{JSM:2,AMR:2}},JP:{F35A:{JSM:2,AMR:2}},AU:{F35A:{JSM:2,AMR:2}},PL:{F16:{JAS:1,AMR:2,AIM9:2}},
+const SL_NAT={KR:{F15E:{TAUR:2,AMR:2,AIM9:2}},NO:{F35A:{JSML:2,AMR:2}},JP:{F35A:{JSML:2,AMR:2}},AU:{F35A:{JSML:2,AMR:2}},PL:{F16:{JAS:1,AMR:2,AIM9:2}},
  TR:{F16:{SOM:2,AMR:2,AIM9:2}},IN:{SU30:{BRHL:1,R77:2,R73:2},M2K:{SPC:2,MICA:2},RAF:{SCALP:2,MTR:2}},DE:{TYP:{GB31:2,MTR:2}},GCC:{F15E:{GB31:4,AMR:2}},SG:{F15E:{GB31:4,AMR:2}}};
 /* air-to-air loads differ by air force */
 const CAP_NAT={IR:{MIG29:{R27:2,R73:2}},IN:{MIG29:{R77:4,R73:2},RAF:{MTR:2,MICA:4}},EG:{RAF:{MICA:4},MIG29:{R77:4,R73:2},M2K:{MICA:4}},GR:{RAF:{MTR:2,MICA:4},M2K:{MICA:4}},
@@ -3316,6 +3332,7 @@ function samAvoidL(S,a,want,skip){let h=want;const mem=a.samLM||(a.samLM={});
     const half=Math.asin(Math.min(1,eff/d));if(Math.abs(off)<half){if(!side)side=off>=0?1:-1;mem[s.id]=[side,S.t];h=bs+side*half;}}
   return h;}
 function strikeAIL(S,a,dt,K){const A=AIRC[a.type],vC=Math.min(A.spd*.85,.26),ws=strikeWs(a);
+
   if(!ws.length){a.st='rtb';(a.gab?abRTB:rtbAI)(S,a,dt,K);return;}
   /* a launcher that has driven back into hiding is still attacked if the jet is nearly in reach of where it was seen */
   if(a.stel&&(a.stel.dead||a.stel.st!=='fired')&&a.stgt&&dist(a.x,a.y,a.stel.x,a.stel.y)>ASM[a.sw||strikeWs(a)[0]].rng*(a.stel.dead?.85:2.2)){a.stel=null;a.stgt=null;}
@@ -3345,10 +3362,12 @@ function landAirMgr(S,side){const M=S.am[side];if(S.t<M.next)return;M.next=S.t+5
   const en=side==='IL'?'TR':'IL',threatAir=S.air.filter(q=>q.alive&&q.side===en&&!q.deck),threatMsl=S.msl.filter(m=>m.alive&&m.side===en&&m.land&&(m.cls==='drone'||m.cls==='modern')&&seenBySide(side,m));
   for(const u of bases){const ac=u.ac.filter(a=>a.alive);if(!ac.length)continue;const open=abOpen(S,u);
     const [ux,uy,dT]=threatDir(S,side,u.x,u.y),fwd=Math.min(160,Math.max(40,dT*.3));
-    const cap=ac.filter(a=>a.role==='cap'),up=cap.filter(a=>!a.deck&&a.st!=='rtb'&&!a.escort).length,ready=cap.filter(a=>a.deck&&a.dph==='park'&&!a.go&&S.t>=a.readyT);
+    /* ready jets in rotation order: the one that has flown least goes next, so the whole squadron shares the patrols */
+    const cap=ac.filter(a=>a.role==='cap'),up=cap.filter(a=>!a.deck&&a.st!=='rtb'&&!a.escort).length,ready=cap.filter(a=>a.deck&&a.dph==='park'&&!a.go&&S.t>=a.readyT).sort((p,q)=>(p.sorties||1)-(q.sorties||1)||p.readyT-q.readyT);
     /* raids and incoming aircraft near this base call for more fighters */
     let hot=0;for(const q of threatAir)if(dist(q.x,q.y,u.x,u.y)<320&&seenBySide(side,q))hot++;for(const m of threatMsl)if(dist(m.x,m.y,u.x,u.y)<250)hot+=.2;
-    const want=Math.min(cap.length,Math.max(2,Math.round(cap.length*.2))+Math.min(Math.ceil(hot*.5),Math.round(cap.length*.25)));
+    /* a front-line base keeps about a third of its fighters up; one far back about a sixth */
+    const want=Math.min(cap.length,Math.max(2,Math.round(cap.length*(dT<700?.33:.17)))+Math.min(Math.ceil(hot*.5),Math.round(cap.length*.25)));
     let need=want-up-cap.filter(a=>a.go&&a.deck).length;
     /* the patrol station: out toward the threat, but pulled back until it is clear of the enemy's long-range batteries */
     let cf=fwd;while(cf>-60&&inSAM(S,en,u.x+ux*cf,u.y+uy*cf,1.05))cf-=20;
@@ -3363,16 +3382,36 @@ function landAirMgr(S,side){const M=S.am[side];if(S.t<M.next)return;M.next=S.t+5
       const stup=vec?55+30*S.R():180+120*S.R();
       for(const q of el){q.go=1;q.readyT=Math.max(q.readyT,S.t);q.stup=stup;q.capP=cp.slice();q.capU=[ux,uy];q.capH=[u.x,u.y];need--;nScr++;}}
     if(nScr&&vec&&!S.hl&&S.t>=(u.scrLog||0)){u.scrLog=S.t+300;log(S,'Scramble: '+nScr+' '+AIRC[ready[0].type].n.split(' ')[0]+(nScr>1?'s':'')+' from '+u.name+' vectored onto a raid '+Math.round(dist(vec.x,vec.y,u.x,u.y))+' km out',side==='IL'?'':'warn');}
+    /* a base far behind the front keeps a pair on alert for home defence and sends its other fighters forward to a base
+       near the fight, a pair at a time */
+    if(open&&dT>1300&&S.t>600&&S.t>=(u.fwdC||0)){u.fwdC=S.t+1200;const spare=ready.filter(a=>!a.go);
+      if(cap.length>2&&spare.length>=2&&spare.length>cap.length-ready.length>=0){let best=null,bd=1e9;
+        for(const b of S.ships){if(b===u||b.gk!=='ab'||b.side!==side||!abOpen(S,b)||b.gone)continue;const d=dist(u.x,u.y,b.x,b.y);if(d>2600)continue;
+          const t2=threatDir(S,side,b.x,b.y)[2];if(t2>900||b.ac.length>=(b.spots?b.spots.length:30))continue;if(d<bd){bd=d;best=b;}}
+        if(best){const grp=spare.slice(0,Math.min(2,spare.length-2>=0?2:0));if(cap.length-grp.length>=2&&grp.length){grp.forEach((a,i)=>{a.go=1;a.ferry=best;a.readyT=S.t+i*8;a.stup=null;});
+          if(!S.hl)log(S,grp.length+' '+AIRC[grp[0].type].n.split(' ')[0]+'s from '+u.name+' deploying forward to '+best.name,side==='IL'?'':'warn');}}}}
+    /* offensive counter-air: every half hour or so a front-line base sends a pair forward on a fighter sweep to hunt the
+       enemy's fighters, short of his long-range batteries */
+    if(open&&dT<900&&S.t>=(u.swT||(u.swT=600+(u.id%5)*240))){const rs2=ready.filter(a=>!a.go);u.swT=S.t+1500+S.R()*900;
+      if(rs2.length>=4){let f=Math.min(dT*.55,260);while(f>40&&inSAM(S,en,u.x+ux*f,u.y+uy*f,1.05))f-=20;const el=[rs2[0]];const m2=rs2[0].lead||rs2[0].wing;el.push(m2&&rs2.includes(m2)?m2:rs2[1]);
+        for(const q of el){q.go=1;q.sweep=1;q.stup=null;q.capP=[u.x+ux*f,u.y+uy*f];q.capU=[ux,uy];q.capH=[u.x,u.y];}
+        if(!S.hl)log(S,(side==='IL'?'Blue':'Red')+' fighter sweep: a pair from '+u.name+' pushing out '+Math.round(f)+' km',side==='IL'?'':'warn');}}
     /* early warning: keep one up */
     const aew=ac.filter(a=>a.role==='awacs');if(aew.length&&!aew.some(a=>!a.deck&&a.st!=='rtb'||a.go)){const a=aew.find(q=>q.deck&&q.dph==='park'&&S.t>=q.readyT);if(a&&open)a.go=1;}
     /* strike package */
     const pkUp=S.air.reduce((n,f)=>n+(f.alive&&f.side===side&&f.role==='strike'&&!f.deck&&f.st!=='rtb'?1:0),0);
-    if(S.t>=(u.pkT||60+(u.id%7)*90)&&open&&pkUp<24){const rs=ac.filter(a=>a.role==='strike'&&a.deck&&a.dph==='park'&&!a.go&&S.t>=a.readyT&&strikeWs(a).length);
+    if(S.t>=(u.pkT||60+(u.id%7)*90)&&open&&pkUp<40){const rs=ac.filter(a=>a.role==='strike'&&a.deck&&a.dph==='park'&&!a.go&&S.t>=a.readyT&&strikeWs(a).length);
       const tot=ac.filter(a=>a.role==='strike').length;
-      if(rs.length&&rs.length>=Math.min(4,tot)){const tg=pickStrikeTgt(S,rs[0],strikeWs(rs[0]));
+      if(rs.length&&rs.length>=Math.min(2,tot)){const tg=pickStrikeTgt(S,rs[0],strikeWs(rs[0]));
         if(tg){const pk=rs.slice(0,8),id=S.nid++;pk.forEach((a,i)=>{a.go=1;a.pkgId=id;a.pk='form';a.pkT=0;a.stgt=tg;a.readyT=S.t+i*10;a.st='ingress';});
           const esc=ready.filter(a=>!a.go).slice(0,pk.length>=6?4:2);esc.forEach(a=>{a.go=1;a.escort=1;a.pkgId=id;a.capU=[ux,uy];a.capH=[u.x,u.y];});
-          u.pkT=S.t+1200+S.R()*600;}else u.pkT=S.t+300;}}}
+          u.pkT=S.t+1200+S.R()*600;}else{u.pkT=S.t+300;
+          /* nothing in reach from here: the strike jets deploy forward to a base that has targets in reach */
+          if(S.t>600&&S.t>=(u.fwdT||0)){u.fwdT=S.t+1800;let best=null,bd=1e9;
+            for(const b of S.ships){if(b===u||b.gk!=='ab'||b.side!==side||!abOpen(S,b)||b.gone)continue;const d=dist(u.x,u.y,b.x,b.y);if(d>2500||d>=bd)continue;
+              const sv=rs[0].base;rs[0].base=[b.x,b.y];const ok=pickStrikeTgt(S,rs[0],strikeWs(rs[0]));rs[0].base=sv;if(ok){bd=d;best=b;}}
+            if(best){const grp=rs.slice(0,6);grp.forEach((a,i)=>{a.go=1;a.ferry=best;a.readyT=S.t+i*10;a.st='ingress';});
+              if(!S.hl)log(S,grp.length+' strike jets from '+u.name+' deploying forward to '+best.name,side==='IL'?'':'warn');}}}}}}
   /* launchers caught in the open after a launch: the nearest armed striker in the air goes for it */
   if(S.lf.ew[side]||S.air.some(q=>q.alive&&q.side===side&&AIRC[q.type].awacs&&!q.deck))for(const u of S.ships){if(!u.alive||u.side!==en||u.gk!=='ssm'||!u.tels)continue;if(CLS[u.cls].gs.air)continue;
     for(const T of u.tels){if(T.dead||T.st!=='fired'||T.hunted)continue;let best=null,bd=1e9;
@@ -6396,7 +6435,7 @@ const WX={
 /* a set of fins: root leading edge at xLE, sweep = tip set-back as a fraction of root chord */
 /* 9M311 (Kashtan/Kortik): a fat booster with four big fins drops after ~1.2 km, leaving the slim 76 mm
    sustainer dart with its nose canards. Type 17 / Haeseong / Noor (C-802) are Harpoon-class boosted sea-skimmers. */
-Object.assign(WSPEC,{PNT:{L:3.2,d:.09,k:'boost'},YJ83:{L:6.4,d:.36,k:'asm'},YJ15:{L:6.5,d:.5,k:'ramjet'},JSM:{L:4.0,d:.7,k:'stealth'},MRT:{L:4.8,d:.32,k:'asm'},KSH:{L:2.56,d:.076,k:'boost'},SHTL:{L:5.55,d:.4,k:'sam'},KSAAM:{L:3.08,d:.2,k:'sam'},
+Object.assign(WSPEC,{PNT:{L:3.2,d:.09,k:'boost'},YJ83:{L:6.4,d:.36,k:'asm'},YJ15:{L:6.5,d:.5,k:'ramjet'},JSM:{L:4.0,d:.7,k:'stealth'},JSML:{L:4.0,d:.7,k:'stealth'},MRT:{L:4.8,d:.32,k:'asm'},KSH:{L:2.56,d:.076,k:'boost'},SHTL:{L:5.55,d:.4,k:'sam'},KSAAM:{L:3.08,d:.2,k:'sam'},
   T17:{L:5.0,d:.35,k:'asm'},HSG:{L:5.46,d:.34,k:'asm'},NOOR:{L:6.39,d:.36,k:'asm'}});
 Object.assign(WX,{KSH:{nose:'cone',nl:.2,bst:[2,.36],bf:[.16,2.2],tf:[.3,.06,1.5,.3,.5],tfr:0,noz:1},PNT:{nose:'cone',nl:.2,bst:[1.9,.38],bf:[.16,2.2],tf:[.3,.06,1.5,.3,.5],tfr:0,noz:1},
   T17:WX.HP,HSG:WX.HP,NOOR:{rb:[.18,1,2.4],nose:'ogive',nl:.12,mw:[.05,.2,2.9,.4,.4],mwr:Q4,tf:[-.38,.1,2.4,.35,.4],tfr:Q4,inl:1,noz:1}});
@@ -8739,7 +8778,7 @@ const SND={
  SLBM:{L:'sub',ej:1.7,turn:'vane',M:[[8,.85,2.2],[10,.6,1.2]],ml:[3,2.4],sep:[0],C:['gl'],pr:'al',tv:'jv',wh:300,wk:'kin',len:8.3},
  DF21:{L:'cold',ej:2,turn:'vane',M:[[40,1.4,2.2]],ml:5,C:['gl'],pr:'al',wh:600,wk:'kin',len:10.7},
  /* air-launched */
- YJ83K:{L:'air',C:['tj','CTJ2'],wh:165,wk:'sap',len:4.9},JSM:{L:'air',C:['tj','TRI40'],wh:120,wk:'sap',len:4},
+ YJ83K:{L:'air',C:['tj','CTJ2'],wh:165,wk:'sap',len:4.9},JSM:{L:'air',C:['tj','TRI40'],wh:120,wk:'sap',len:4},JSML:{L:'air',C:['tj','TRI40'],wh:120,wk:'sap',len:4},
  MRT:{L:'air',C:['tj','TRI40'],wh:70,wk:'he',len:4.8},
  ASM3:{L:'air',M:[[4,.35,.9]],ml:1.2,C:['rj','IRR3'],pr:'al',wh:150,wk:'sap',len:6},YJ15:{L:'air',M:[[4,.5,.9]],ml:1.4,C:['rj','YJ15R'],pr:'al',wh:150,wk:'sap',len:6.5},
  LORA:{L:'air',M:[[12,.62,1.5]],ml:3,C:['gl'],pr:'al',wh:570,wk:'kin',len:5.2},

@@ -44,6 +44,12 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
 - samAvoidL remembers the side it chose per battery (90 s) — no orbiting SAM envelopes.
 - Scrambles: engine start before taxi (alert ~1 min when a raid is coming, 3-5 min routine), pairs launch and roll
   together, scramble vectored at the raid (GCI). Diag: count >360° turns per 2 min outside station/marshal states.
+- Every jet has a job: CAP rotation by fewest sorties (front bases ~1/3 up, rear ~1/6), fighter sweeps (pairs, every
+  25-40 min from front bases), 2-ship strike flights allowed, rear-area fighters and out-of-reach strikers ferry
+  forward (a.ferry), JP/AU/NO F-35A carry JSML (JSM land attack). After 4 h ~94% of blue fighters had flown.
+- turnTo is roll-rate limited and proportional (a.tr): no step-to-step heading reversals. Wingmen in the slot hold
+  the lead's heading and correct sideways (never steer by bearing-to-slot). Station spacing is smoothed (spX/spY).
+  Jitter diag: count turn-direction reversals >1.5° per step; was 479/30 min in land-sea, now ~60 (small wiggles).
 
 ## Code map (grep these)
 - `CLS` ship classes, `SUBC` subs, `SAM` / `ASM` / `GUN` weapons, `WCLS` world catalogue, `NAVY` rosters.
