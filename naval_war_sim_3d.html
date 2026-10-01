@@ -1415,10 +1415,19 @@ function foeOk(S,a,q,C,cur){if(!q.alive||q.deck||q.side===a.side||q.dph==='climb
   return true;}
 /* the other side's aircraft in the air, listed once per step */
 function enemyAir(S,side){let c=S._eaL;if(!c||c.t!==S.t){c=S._eaL={t:S.t,IL:[],TR:[],N:[]};for(const q of S.air)if(q.alive&&!q.deck){if(q.side!=='IL')c.IL.push(q);if(q.side!=='TR')c.TR.push(q);}}return c[side]||[];}
-function pickFoe(S,a,C,f){const fc=foeCount(S,a.side);let best=null,bs=-1e9,curS=-1e9,bu=false;
+function pickFoe(S,a,C,f){const fc=foeCount(S,a.side),hold=!f&&S.t<(a.reT||0);let best=null,bs=-1e9,curS=-1e9,bu=false;
   for(const q of enemyAir(S,a.side)){if(q.side===a.side||!q.alive||q.deck)continue;const cur=q===f;if(S.land&&!cur&&(Math.abs(q.x-a.x)>350||Math.abs(q.y-a.y)>350))continue;if(!foeOk(S,a,q,C,cur))continue;
     const d=dist(a.x,a.y,q.x,q.y);if(d>220||!seesAir(S,a,q,d))continue;
     const armed=q.role==='strike'&&armedASM(q),dH=dist(q.x,q.y,C.home[0],C.home[1]);
+    /* just broke off a bandit: only something about to shoot at us, or a striker bound for what we defend, starts a new
+       commit straight away — a fighter doesn't swing from bandit to bandit across the sky */
+    if(hold&&!cur&&!armed&&!(aspectTo(q,a)>.6&&threatR(q,a)>d))continue;
+    /* the commit range: a new commit starts inside about 130 km (a sweep looks further); beyond it bandits are sorted and
+       watched, not chased — only a striker that has to be caught before it can launch is gone after from further out */
+    if(!cur&&d>(C.sw?160:130)&&!(armed&&canCatch(a,q,d,dH)))continue;
+    /* commit on what is coming, not on a bandit holding its own patrol line far off: beyond about 90 km a new commit
+       needs the bandit pointed toward us or what we defend (a fighter sweep, sent to hunt fighters, takes beam ones too) */
+    if(!cur&&!armed&&d>90&&dH>150){const asp=aspectTo(q,a),toH=Math.cos(wrap(q.h-Math.atan2(C.home[1]-q.y,C.home[0]-q.x)));if(asp<(C.sw?-.3:.25)&&toH<.3)continue;}
     /* commit criteria: inside our own bubble, near the CAP station, closing on the fleet, the package or the AWACS */
     if(!cur&&!(d<(C.sw?140:100)||dist(q.x,q.y,C.capX,C.capY)<(C.sw?170:140)||dH<190||(armed&&dH<300&&canCatch(a,q,d,dH))||(C.pkgC&&dist(q.x,q.y,C.pkgC[0],C.pkgC[1])<110)||(C.awx&&dist(q.x,q.y,C.awx.x,C.awx.y)<130)))continue;
     let v=-d;if(armed)v+=150;
@@ -1427,6 +1436,8 @@ function pickFoe(S,a,C,f){const fc=foeCount(S,a.side);let best=null,bs=-1e9,curS
     if(C.awx){const dw=dist(q.x,q.y,C.awx.x,C.awx.y);if(dw<220)v+=(220-dw)*.45;}
     if(C.pkgC){const dp=dist(q.x,q.y,C.pkgC[0],C.pkgC[1]);if(dp<130)v+=(130-dp)*.8;}
     if(q.foe===a)v+=50;
+    /* a distant bandit behind us costs a course reversal: prefer the ones already ahead */
+    if(!cur&&d>60)v-=Math.abs(wrap(Math.atan2(q.y-a.y,q.x-a.x)-a.h))*35;
     /* pointing at us from inside its own launch range: the most dangerous bandit in the sky */
     let urg=false;if(q.role!=='awacs'&&aspectTo(q,a)>.6){const th=threatR(q,a);if(th>d){v+=60+(th-d)*.5;urg=d<60;}}
     /* sort: two jets to a bandit, and the wingman takes a bandit beside the lead's rather than the same one */
@@ -1436,7 +1447,7 @@ function pickFoe(S,a,C,f){const fc=foeCount(S,a.side);let best=null,bs=-1e9,curS
     if(v>bs){bs=v;best=q;bu=urg;}}
   /* switching hysteresis: a new bandit has to be clearly better, and — unless it is about to shoot us — not
      before we have worked this one a while */
-  if(f&&curS>-1e9&&best!==f&&!(bs>curS+80&&(bu||S.t-(a.foeT??0)>30)))best=f;
+  if(f&&curS>-1e9&&best!==f&&!(bs>curS+80&&((bu&&dist(a.x,a.y,best.x,best.y)<80)||S.t-(a.foeT??0)>60)))best=f;
   return best;}
 /* can we get within ~80 km of an inbound striker before it reaches its own release range from the fleet? */
 function canCatch(a,q,d,dH){let rr=0;for(const k in q.mags)if(ASM[k]&&!ASM[k].aam&&q.mags[k]>0)rr=Math.max(rr,ASM[k].rng*.85);
@@ -1465,8 +1476,9 @@ function fighterThink(S,a,C,K){let f=a.foe;
       else if(S.t-(a.foeSeen??S.t)>30)drop=true;}   /* contact lost: we fly to where it was heading for half a minute, then give up */
     /* a bandit running away faster than we close: given up after ninety seconds */
     if(!drop&&a.fs==='commit'&&!liveSalvo(a,f)){if(a.chT==null||S.t-a.chT>45){if(a.chT!=null&&d>a.chD-6&&aspectTo(f,a)<0)drop=true;a.chT=S.t;a.chD=d;}
-      if(aspectTo(f,a)<-.5&&d>80&&!(f.role==='strike'&&armedASM(f)))drop=true;}
-    if(drop){if(f.alive)(a.noChase||(a.noChase={}))[f.id]=S.t+240;f=null;}}
+      /* gone cold far off: let go once it has stayed cold for twenty seconds, not the moment it turns on a racetrack */
+      if(aspectTo(f,a)<-.5&&d>80&&!(f.role==='strike'&&armedASM(f))){if(a.coldT==null)a.coldT=S.t;if(S.t-a.coldT>20)drop=true;}else a.coldT=null;}
+    if(drop){if(f.alive)(a.noChase||(a.noChase={}))[f.id]=S.t+240;f=null;a.reT=S.t+25;}}   /* reT: hold course a while before committing again */
   /* free, or committed without a round in the air: look for the right bandit (never a new one at joker
      fuel, unless it is coming for us or carries anti-ship weapons) */
   if(a.fs==='cap'||!a.fs||(a.fs==='commit'&&!liveSalvo(a,f))){const p=pickFoe(S,a,C,f);
@@ -3188,10 +3200,15 @@ function abOpen(S,u){return u&&u.alive&&!u.gone&&S.t>=u.rwOpen;}
 function abStep(S,a,dt){const u=a.host;if(!u){a.alive=false;return;}const sp=u.spots&&u.spots[a.spot%u.spots.length]||{x:u.x,y:u.y,h:0};
   const put=(x,y,h)=>{a.x=x;a.y=y;a.h=h;a.vx=0;a.vy=0;a.spd=0;a.alt=0;};
   if(a.dph==='park'){put(sp.x,sp.y,sp.h);
-    if(a.go&&S.t>=a.readyT&&abOpen(S,u)){a.dph='taxi';a.dT=S.t;a.tx0=[sp.x,sp.y];}return;}
+    if(a.go&&S.t>=a.readyT&&abOpen(S,u)){a.dph='start';a.dT=S.t;if(a.stup==null)a.stup=180+120*S.R();}return;}
+  /* engines started, systems aligned, weapons armed: about a minute for a jet on quick-reaction alert, several for a
+     planned sortie */
+  if(a.dph==='start'){put(sp.x,sp.y,sp.h);if(S.t-a.dT>=a.stup){a.stup=null;a.dph='taxi';a.dT=S.t;a.tx0=[sp.x,sp.y];}return;}
   if(a.dph==='taxi'){const th=[u.rw[0],u.rw[1]],k=Math.min(1,(S.t-a.dT)/45),f=k*k*(3-2*k);
     put(a.tx0[0]+(th[0]-a.tx0[0])*f,a.tx0[1]+(th[1]-a.tx0[1])*f,k<.9?Math.atan2(th[1]-a.tx0[1],th[0]-a.tx0[0]):u.rwH);
-    if(k>=1&&S.t>=u.rwBusy&&abOpen(S,u)){a.dph='roll';a.dT=S.t;u.rwBusy=S.t+14;}return;}
+    /* a pair takes off together: the wingman rolls a few seconds behind its lead, the next element waits its turn */
+    const pm=a.lead||a.wing,pair=pm&&pm.alive&&pm.host===u&&pm.dph==='roll'&&S.t-pm.dT<8&&!pm._pairRoll;
+    if(k>=1&&(S.t>=u.rwBusy||pair)&&abOpen(S,u)){a.dph='roll';a.dT=S.t;a._pairRoll=pair?1:0;u.rwBusy=Math.max(u.rwBusy,S.t+(pair?16:20));}return;}
   if(a.dph==='roll'){const acc=.0028,tau=S.t-a.dT,s=Math.min(u.rwL*.7,.5*acc*tau*tau);
     put(u.rw[0]+u.rwU[0]*s,u.rw[1]+u.rwU[1]*s,u.rwH);a.spd=acc*tau;a.st2='launch';
     if(a.spd>=.085||s>=u.rwL*.7){a.deck=0;a.dph='climb';a.dT=S.t;a.alt=.01;a.launchH=u.rwH;a.spd=.085;a.airT0=S.t;a.go=0;a.x=u.rw[0]+u.rwU[0]*s;a.y=u.rw[1]+u.rwU[1]*s;}
@@ -3289,12 +3306,14 @@ function pickStrikeTgt(S,a,ws){const en=a.side==='IL'?'TR':'IL';if(!ws.length)re
     if(t.gk==='ssm'&&late)v+=2;
     v*=(.9+.2*S.R())/(1+.2*(t.hitN||0)+.3*((t.strk||0)));if(v>bs){bs=v;best=t;}}
   return bs>1?best:null;}
-function samAvoidL(S,a,want,skip){let h=want;
+function samAvoidL(S,a,want,skip){let h=want;const mem=a.samLM||(a.samLM={});
   for(const [s,R,ra] of samAirList(S,a.side==='IL'?'TR':'IL')){if(s===skip||!s.alive)continue;const dx=s.x-a.x,dy=s.y-a.y;if(Math.abs(dx)>R+46||Math.abs(dy)>R+46)continue;const d=Math.hypot(dx,dy);if(d>R+46)continue;
     const eff=Math.min(R,ra*visTo(a,s.x,s.y))+6;if(d>eff+40)continue;
-    const bs=Math.atan2(dy,dx),off=wrap(h-bs);
-    if(d<eff){const side=off>=0?1:-1,k=Math.min(1,(eff-d)/eff*2),tg=bs+side*Math.PI/2,out=bs+Math.PI;h=Math.atan2(Math.sin(tg)*(1-k)+Math.sin(out)*k,Math.cos(tg)*(1-k)+Math.cos(out)*k);continue;}
-    const half=Math.asin(Math.min(1,eff/d));if(Math.abs(off)<half)h=bs+(off>=0?1:-1)*half;}
+    /* the side of the battery it goes round is chosen once and kept for a minute and a half, so the jet never flips
+       from one tangent to the other and orbits the envelope's edge */
+    const bs=Math.atan2(dy,dx),off=wrap(h-bs),m0=mem[s.id];let side=m0&&S.t-m0[1]<90?m0[0]:0;
+    if(d<eff){if(!side)side=off>=0?1:-1;mem[s.id]=[side,S.t];const k=Math.min(1,(eff-d)/eff*2),tg=bs+side*Math.PI/2,out=bs+Math.PI;h=Math.atan2(Math.sin(tg)*(1-k)+Math.sin(out)*k,Math.cos(tg)*(1-k)+Math.cos(out)*k);continue;}
+    const half=Math.asin(Math.min(1,eff/d));if(Math.abs(off)<half){if(!side)side=off>=0?1:-1;mem[s.id]=[side,S.t];h=bs+side*half;}}
   return h;}
 function strikeAIL(S,a,dt,K){const A=AIRC[a.type],vC=Math.min(A.spd*.85,.26),ws=strikeWs(a);
   if(!ws.length){a.st='rtb';(a.gab?abRTB:rtbAI)(S,a,dt,K);return;}
@@ -3333,7 +3352,17 @@ function landAirMgr(S,side){const M=S.am[side];if(S.t<M.next)return;M.next=S.t+5
     let need=want-up-cap.filter(a=>a.go&&a.deck).length;
     /* the patrol station: out toward the threat, but pulled back until it is clear of the enemy's long-range batteries */
     let cf=fwd;while(cf>-60&&inSAM(S,en,u.x+ux*cf,u.y+uy*cf,1.05))cf-=20;
-    if(open)for(const a of ready){if(need<=0)break;a.go=1;a.readyT=Math.max(a.readyT,S.t);a.capP=[u.x+ux*cf,u.y+uy*cf];a.capU=[ux,uy];a.capH=[u.x,u.y];need--;}
+    /* a raid coming in: the scramble is vectored at it (ground-controlled intercept) rather than to the routine station */
+    let cp=[u.x+ux*cf,u.y+uy*cf],vec=null;
+    if(hot>=1){let bq=null,bd=320;for(const q of threatAir){const d=dist(q.x,q.y,u.x,u.y);if(d<bd&&seenBySide(side,q)){bd=d;bq=q;}}
+      if(bq){let f=Math.min(bd*.55,Math.max(cf,30));while(f>20&&inSAM(S,en,u.x+(bq.x-u.x)/bd*f,u.y+(bq.y-u.y)/bd*f,1.05))f-=15;cp=[u.x+(bq.x-u.x)/bd*f,u.y+(bq.y-u.y)/bd*f];vec=bq;}}
+    let nScr=0;
+    if(open)for(const a of ready){if(need<=0)break;if(a.go)continue;
+      /* launch as a pair: the jet and its element mate if it is ready too, sharing a start-up time */
+      const mate=a.lead||a.wing,el=[a];if(mate&&mate.alive&&!mate.go&&ready.includes(mate))el.push(mate);
+      const stup=vec?55+30*S.R():180+120*S.R();
+      for(const q of el){q.go=1;q.readyT=Math.max(q.readyT,S.t);q.stup=stup;q.capP=cp.slice();q.capU=[ux,uy];q.capH=[u.x,u.y];need--;nScr++;}}
+    if(nScr&&vec&&!S.hl&&S.t>=(u.scrLog||0)){u.scrLog=S.t+300;log(S,'Scramble: '+nScr+' '+AIRC[ready[0].type].n.split(' ')[0]+(nScr>1?'s':'')+' from '+u.name+' vectored onto a raid '+Math.round(dist(vec.x,vec.y,u.x,u.y))+' km out',side==='IL'?'':'warn');}
     /* early warning: keep one up */
     const aew=ac.filter(a=>a.role==='awacs');if(aew.length&&!aew.some(a=>!a.deck&&a.st!=='rtb'||a.go)){const a=aew.find(q=>q.deck&&q.dph==='park'&&S.t>=q.readyT);if(a&&open)a.go=1;}
     /* strike package */
@@ -4076,7 +4105,7 @@ function drawUnitPreview(el,o){
     g.strokeStyle=shade(col,ln.sf*0.9);g.lineWidth=1;
     g.beginPath();g.moveTo(p1.x,p1.y);g.lineTo(p2.x,p2.y);g.stroke();}
 }
-const AIR_ST={park:'Parked on deck',taxi:'Taxiing',launch:'On the catapult',climb:'Climbing out after launch',marshal:'Holding in the marshal stack',
+const AIR_ST={start:'Starting engines',park:'Parked on deck',taxi:'Taxiing',launch:'On the catapult',climb:'Climbing out after launch',marshal:'Holding in the marshal stack',
   approach:'Approaching the carrier',final:'On final, 3.5° glideslope',trap:'Trapped, arresting wire',vl:'Vertical landing',form:'Forming up the strike package',
   ingress:'Strike ingress',egress:'Egressing',intercept:'Intercepting',crank:'Cranking to support a missile',extend:'Extending for a re-attack',merge:'Dogfight (merge)',
   defend:'Defending, notching',cmd:'Cruise-missile defence',formation:'Flying wing on lead',station:'On CAP station',sweep:'Sweeping to station',reposition:'Repositioning out of SAM cover',

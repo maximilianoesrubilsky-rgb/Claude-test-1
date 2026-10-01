@@ -38,6 +38,13 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
 - World mode: realistic theatres per matchup (US vs China in the Philippine Sea, etc.), per-ship loadout editor
   with missile variants, carrier squadrons with roles and launch order, AWACS extending detection.
 
+## Air AI (land / land-air-sea) — measured, keep it that way
+- Fighter commits are sticky: new commits only inside ~130 km (sweeps 160), on bandits pointed at us / what we
+  defend; 60 s target-switch lock; 25 s hold after dropping a bandit; a bandit is dropped only after 20 s cold.
+- samAvoidL remembers the side it chose per battery (90 s) — no orbiting SAM envelopes.
+- Scrambles: engine start before taxi (alert ~1 min when a raid is coming, 3-5 min routine), pairs launch and roll
+  together, scramble vectored at the raid (GCI). Diag: count >360° turns per 2 min outside station/marshal states.
+
 ## Code map (grep these)
 - `CLS` ship classes, `SUBC` subs, `SAM` / `ASM` / `GUN` weapons, `WCLS` world catalogue, `NAVY` rosters.
 - `buildAddable()` — the add-unit menu and each unit's default loadout.
