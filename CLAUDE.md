@@ -50,6 +50,9 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
 - foeReach ignores land-attack rounds (else Chinese groups think they're out-ranged by Burke TLAMs and never close).
 - Subs get anti-ship fire plans; attack boats start forward at .97 x their missile reach of the enemy fleet (150 km if
   torpedo-only), hunt at .008; Ohio stays back. Virginia: 8 TLAM + 4 MST. Groups close at .014 (~27 kn).
+- Turkish fleet anchors at Aksaz (Aegean) unless the enemy is Russia (Black Sea).
+- "Battle ends: When I end it" (opts.endless, land modes): landDone never ends it; #endBtn ends it and shows the AAR.
+  Verified: ran to 10 h, End battle -> AAR.
 - Idle-shooter diag: idle.js (ships/subs whose anti-ship mags never dropped). Israel-Iran fleets are 2,500 km apart.
 
 ## Air AI (land / land-air-sea) — measured, keep it that way

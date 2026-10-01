@@ -101,6 +101,7 @@ canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
     <button data-sp="1">1×</button><button data-sp="4">4×</button><button data-sp="16" aria-pressed="true">16×</button><button data-sp="64">64×</button><button data-sp="256">256×</button>
   </div>
   <button id="pause">Pause</button>
+  <button id="endBtn" hidden title="End the battle now and show the after-action report">End battle</button>
   <div class="seg" id="camGroup" role="group" aria-label="Camera">
     <button id="camOrbit" aria-pressed="true">Orbit</button><button id="camChase">Chase</button><button id="camTop">Top-down</button>
   </div>
@@ -122,6 +123,7 @@ canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
     <div class="opt"><span>Blue navy</span><select id="blueSel" style="width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px"></select></div>
     <div class="opt"><span>Red navy</span><select id="redSel" style="width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px"></select></div>
     <div class="opt" id="alliesRow" hidden><span>Allies fight alongside (NATO, the Pacific allies, the Gulf coalition)</span><div class="seg" data-opt="allies"><button data-v="1">On</button><button data-v="0">Off</button></div></div>
+    <div class="opt" id="endRow" hidden><span>Battle ends</span><div class="seg" data-opt="endless"><button data-v="0">Automatically</button><button data-v="1">When I end it</button></div></div>
     <div class="opt"><span>Force size</span><div class="seg" data-opt="size"><button data-v="sm">Small</button><button data-v="md">Medium</button><button data-v="lg">Full</button></div></div>
     <div class="opt"><span>Starting distance</span><div class="seg" data-opt="range"><button data-v="near">150 km</button><button data-v="mid">400 km</button><button data-v="far">800 km</button></div></div>
     <div class="opt"><span>Theatre</span><select id="thSel" style="width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px"></select></div>
@@ -2795,7 +2797,9 @@ function buildLand(S){const o=S.opts,R=S.R;S.land=1;S.world=1;S.sea=o.wmode==='l
   for(const s of S.ships)if(isGnd(s))gndLayout(S,s);
   /* the two navies (and a US task group fighting beside an ally), each on its own coast */
   if(S.sea){const fl=new Set();for(const side of ['IL','TR'])for(const [nat,reg] of F[side]){if(!NAVY[nat]||fl.has(side+nat))continue;if(nat!==F[side][0][0]&&nat!=='US')continue;fl.add(side+nat);
-      const an=SEA_ANCHOR[nat+'@'+reg]||SEA_ANCHOR[nat];if(!an)continue;landFleet(S,side,nat,an);}
+      let an=SEA_ANCHOR[nat+'@'+reg]||SEA_ANCHOR[nat];if(!an)continue;
+      /* the Turkish fleet's Black Sea anchorage is only for a war with Russia: against anyone else it sails from Aksaz, in the Aegean */
+      if(nat==='TR'&&F[side==='IL'?'TR':'IL'][0][0]!=='RU')an=[27.9,36.6];landFleet(S,side,nat,an);}
     /* attack submarines are already on patrol in the enemy's approaches when the war starts (an SSGN stays back with its
        Tomahawks): just outside their own missiles' reach of the enemy fleet, or 150 km out for a torpedo-only boat */
     for(const sb of S.subs){if(sb.cls==='OHIO')continue;let n=0,cx=0,cy=0;for(const o of S.ships)if(o.alive&&o.side!==sb.side&&o.ai===aiTG){n++;cx+=o.x;cy+=o.y;}if(!n)continue;cx/=n;cy/=n;
@@ -3463,7 +3467,7 @@ function landTick(S,dt){const sec=Math.floor(S.t)!==Math.floor(S.t-dt);
   for(const u of S.ships)if(u.alive&&u.ld)samReload(S,u);
   for(const side of ['IL','TR']){raidPlan(S,side);landAirMgr(S,side);}
   for(const u of S.ships)if(u.gk==='ssm'&&u.tels)for(const T of u.tels)if(T.st!=='fired')T.hunted=0;}
-function landDone(S){if(S.done)return;
+function landDone(S){if(S.done||S.opts.endless)return;   /* 'When I end it': only the End battle button finishes it */
   if(S.msl.some(m=>m.alive&&m.land)||S.air.some(a=>a.alive&&!a.deck&&a.role==='strike'&&a.st!=='rtb'))S.lastAct=S.t;
   const flying=S.msl.some(m=>m.alive)||S.icp.some(i=>i.alive);
   if((S.t>1800&&!flying&&S.t-(S.lastAct||0)>3600)||S.t>(S.tMax||28800)){S.done=true;log(S,'Engagement complete','sel');}}
@@ -3791,11 +3795,11 @@ function subLaunchDisplay(m,t,z){const s=m.sh,C=subMeshOf(s.cls,1).vls;if(!C||!C
   return{x:lx+(m.x-lx)*hx,y:ly+(m.y-ly)*hx,z:zUp*(1-hs)+z*hs};}
 function estTorpZ(){return -0.018;}
 function estHeloZ(){return 0.16;}
-let opts={wmode:'naval',allies:'1',coord:'two',ilc:'tot',tq:'uav',doc:'ss',link:'1',helo:'1',land:'1',air:'1',mag:'100',mag2:'100',size:'md',range:'mid',blue:'US',red:'CN',theatre:'emed',addSide:'IL'};
+let opts={endless:'0',wmode:'naval',allies:'1',coord:'two',ilc:'tot',tq:'uav',doc:'ss',link:'1',helo:'1',land:'1',air:'1',mag:'100',mag2:'100',size:'md',range:'mid',blue:'US',red:'CN',theatre:'emed',addSide:'IL'};
 let scn='off',SIM=null,running=false,speed=16,sel=null,seed=0,dirty=false,fitted=false;
 const nTrials=()=>12;
 const newSeed=()=>(Math.random()*1e9)|0;
-const simOpts=()=>({theatre:opts.theatre,size:opts.size,range:opts.range,blue:opts.blue,red:opts.red,coord:opts.coord,ilc:opts.ilc,tq:opts.tq,doc:opts.doc,link:opts.link==='1',helo:opts.helo==='1',land:opts.land==='1',air:opts.air==='1',mag2:+opts.mag2,mag:+opts.mag,wmode:opts.wmode||'naval',allies:opts.allies!=='0'});
+const simOpts=()=>({theatre:opts.theatre,size:opts.size,range:opts.range,blue:opts.blue,red:opts.red,coord:opts.coord,ilc:opts.ilc,tq:opts.tq,doc:opts.doc,link:opts.link==='1',helo:opts.helo==='1',land:opts.land==='1',air:opts.air==='1',mag2:+opts.mag2,mag:+opts.mag,wmode:opts.wmode||'naval',allies:opts.allies!=='0',endless:opts.endless==='1'});
 function resize(){const r=cv.getBoundingClientRect();DPR=window.devicePixelRatio||1;CW=r.width;CH=r.height;cv.width=Math.round(CW*DPR);cv.height=Math.round(CH*DPR);if(!fitted&&SIM&&CW){defaultView(true);fitted=true;}}
 new ResizeObserver(resize).observe(cv);
 /* frame the whole engagement; snap=true jumps there instead of easing (used on first layout) */
@@ -3953,17 +3957,20 @@ function syncControls(){fillNav();
   const started=SIM&&SIM.t>0,live=started||!!(SIM&&running);   /* Pause works from the moment Start is pressed, not only once the clock has moved */
   $('start').textContent=!started?'Start battle':dirty?'Restart with new settings':'Restart battle';
   $('pause').textContent=running?'Pause':'Resume';$('pause').disabled=!live||SIM.done;
+  {const e=$('endBtn');if(e)e.hidden=!(SIM&&SIM.land&&SIM.opts.endless&&!SIM.done);}
   $('trials').textContent='Run '+nTrials()+' trials';
   const wo=$('worldOpts');if(wo){$('blueSel').value=opts.blue;$('redSel').value=opts.red;}}
 
 document.querySelectorAll('.scn').forEach(b=>b.addEventListener('click',()=>{scn=b.dataset.scn;build();}));
 document.querySelectorAll('[data-opt]').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;opts[g.dataset.opt]=b.dataset.v;
+  if(g.dataset.opt==='endless'&&SIM&&SIM.land){SIM.opts.endless=b.dataset.v==='1';syncControls();if(SIM.t>0)return;}
   if(g.dataset.opt==='wmode'){if(b.dataset.v!=='naval'&&!opts._landInit){opts._landInit=1;opts.blue='IL';opts.red='IR';}running=false;dirty=false;build();return;}if(!SIM||SIM.t===0)build(seed);else{dirty=true;syncControls();}}));
 document.querySelectorAll('#speeds button').forEach(b=>b.addEventListener('click',()=>{speed=+b.dataset.sp;syncControls();}));
 $('start').addEventListener('click',()=>{if(SIM&&SIM.t===0&&!dirty){running=true;}
   /* restart: a fresh battle held at T+0 so loadouts, units and settings can be changed before it runs */
   else{const k=sel&&sel.name;build(undefined,true);running=false;if(k){sel=SIM.ships.concat(SIM.subs).find(s=>s.name===k)||null;lastSel='';renderPanels(true);}
     $('editNote').textContent='Battle reset to T+0. Change loadouts or units, then press Start battle.';}syncControls();});
+$('endBtn').addEventListener('click',()=>{if(!SIM||SIM.done)return;SIM.done=true;log(SIM,'Engagement ended by the commander','sel');running=false;syncControls();renderPanels(true);showAAR();});
 $('pause').addEventListener('click',()=>{if(!SIM||SIM.done)return;running=!running;syncControls();});
 $('trials').addEventListener('click',()=>runTrials(nTrials()));
 /* ---- picking: PICKLIST is rebuilt every rendered frame (see render3D) as {obj,kind,x,y} for every drawn unit ---- */
@@ -7649,7 +7656,7 @@ function syncLandUI(){const L=isLandO(),w=scn==='world';
     el.value=opts[key];const lab=el.parentElement&&el.parentElement.querySelector('span');if(lab)lab.textContent=(key==='blue'?'Blue ':'Red ')+(L?'side':'navy');}
   const row=sel0=>{const e=document.querySelector(sel0);return e?e.closest('.opt'):null;};
   for(const q of ['[data-opt="range"]','#thSel']){const r=row(q);if(r)r.hidden=L;}
-  {const r=$('alliesRow');if(r)r.hidden=!L;}
+  {const r=$('alliesRow');if(r)r.hidden=!L;}{const r=$('endRow');if(r)r.hidden=!L;}
   for(const k of ['coord','ilc','doc','link','helo','air']){const r=row('[data-opt="'+k+'"]');if(r)r.hidden=L;}
   for(const k of ['tq','land']){const r=row('[data-opt="'+k+'"]');if(r)r.hidden=w;}
   /* units can be added to land battles too, to either side */
