@@ -1753,7 +1753,11 @@ function subAI(S,s){let best=null,bd=1e9;
   if(!best){s.vx=s.vy=0;return;}
   if(s.det||S.t-s.datum<120){const L=bd||1;s.vx=(s.x-best.x)/L*.005;s.vy=(s.y-best.y)/L*.005;return;}
   if((s.mags.TORP||0)>0&&s.torpIn<2&&bd<25&&S.t-(s.last.T??-99)>60){fireTorp(S,s,best);return;}
-  if(bd>18&&bd<90&&(s.mags.TORP||0)>0&&s.cls!=='DRK'&&s.cls!=='DKR'){const L=bd;s.vx=(best.x-s.x)/L*.005;s.vy=(best.y-s.y)/L*.005;}else{s.vx=s.vy=0;}}
+  if(bd>18&&bd<90&&(s.mags.TORP||0)>0&&s.cls!=='DRK'&&s.cls!=='DKR'){const L=bd;s.vx=(best.x-s.x)/L*.005;s.vy=(best.y-s.y)/L*.005;}
+  else if(S.sea&&bd>=90){   /* land, air and sea: an attack boat goes hunting, to its missiles' reach (or torpedo range) of the enemy fleet */
+    let R=0;for(const p of (s.plan||[]))if((s.mags[p.w]||0)>0&&ASM[p.w])R=Math.max(R,ASM[p.w].rng*.8);
+    if(s.cls!=='OHIO'&&R<bd&&(R>0||(s.mags.TORP||0)>0)){const L=bd;s.vx=(best.x-s.x)/L*.008;s.vy=(best.y-s.y)/L*.008;}else{s.vx=s.vy=0;}}
+  else{s.vx=s.vy=0;}}
 function asw(S){for(const sb of S.subs){if(!sb.alive)continue;
     if(sb.pros){if(S.t>=sb.pros.t){const by=sb.pros.by;sb.pros=null;if(!S.hl)S.fx.push({x:sb.x,y:sb.y,t:performance.now(),k:'asw'});
         if(S.R()<SUBC[sb.cls].kp){sb.alive=false;sb.sunkT=S.t;S.st.subLost[sb.side]++;S.st.cost[sb.side]+=COST[sb.cls]||0;log(S,sb.name+' sunk by '+by,sb.side==='IL'?'bad':'good');}
@@ -1861,7 +1865,7 @@ function fleetGuide(S,side){const c=S._fg||(S._fg={});if(c.t!==S.t){c.t=S.t;c.IL
   return c[side];}
 /* the longest anti-ship reach the enemy's surface ships still have (known from their classes), for keeping out of it */
 function foeReach(S,side){const c=S._fr||(S._fr={});if(c.t===S.t&&c[side]!=null)return c[side];if(c.t!==S.t){c.t=S.t;c.IL=null;c.TR=null;}
-  let r=0;for(const o of S.ships){if(!o.alive||o.side===side||o.side==='N')continue;for(const w in o.mags)if(o.mags[w]>0&&ASM[w]&&!ASM[w].aam&&ASM[w].cls!=='spike'&&ASM[w].rng>r)r=ASM[w].rng;}
+  let r=0;for(const o of S.ships){if(!o.alive||o.side===side||o.side==='N')continue;for(const w in o.mags)if(o.mags[w]>0&&ASM[w]&&!ASM[w].aam&&!ASM[w].la&&ASM[w].cls!=='spike'&&ASM[w].rng>r)r=ASM[w].rng;}   /* land-attack rounds are no threat to a fleet */
   return c[side]=r;}
 /* the nearest enemy round in its terminal run at this ship, if one is close */
 function inboundOn(S,s){let best=null,bd=32;for(const m of S.msl){if(!m.alive||m.tgt!==s||m.side===s.side||m.cls==='aam'||m.cls==='uav')continue;const d=dist(s.x,s.y,m.x,m.y);if(d<bd){bd=d;best=m;}}return best;}
@@ -2791,7 +2795,12 @@ function buildLand(S){const o=S.opts,R=S.R;S.land=1;S.world=1;S.sea=o.wmode==='l
   for(const s of S.ships)if(isGnd(s))gndLayout(S,s);
   /* the two navies (and a US task group fighting beside an ally), each on its own coast */
   if(S.sea){const fl=new Set();for(const side of ['IL','TR'])for(const [nat,reg] of F[side]){if(!NAVY[nat]||fl.has(side+nat))continue;if(nat!==F[side][0][0]&&nat!=='US')continue;fl.add(side+nat);
-      const an=SEA_ANCHOR[nat+'@'+reg]||SEA_ANCHOR[nat];if(!an)continue;landFleet(S,side,nat,an);}}
+      const an=SEA_ANCHOR[nat+'@'+reg]||SEA_ANCHOR[nat];if(!an)continue;landFleet(S,side,nat,an);}
+    /* attack submarines are already on patrol in the enemy's approaches when the war starts (an SSGN stays back with its
+       Tomahawks): just outside their own missiles' reach of the enemy fleet, or 150 km out for a torpedo-only boat */
+    for(const sb of S.subs){if(sb.cls==='OHIO')continue;let n=0,cx=0,cy=0;for(const o of S.ships)if(o.alive&&o.side!==sb.side&&o.ai===aiTG){n++;cx+=o.x;cy+=o.y;}if(!n)continue;cx/=n;cy/=n;
+      let R=0;for(const q of (sb.plan||[]))R=Math.max(R,ASM[q.w].rng);const D=R?R*.97:150,d=dist(sb.x,sb.y,cx,cy);if(d<=D)continue;
+      const f=D/d,pt=toWater(cx+(sb.x-cx)*f,cy+(sb.y-cy)*f,4);sb.x=pt[0];sb.y=pt[1];sb.home=[sb.x,sb.y];}}
   pairUp(S);S._paired=1;
   /* the opening view: between the two main forces, wide enough to hold both (distant allies, such as Australia in a Pacific
      war, are left to the edges) */
@@ -2854,7 +2863,9 @@ function landFleet(S,side,nat,an){const nav=NAVY[nat],sz={sm:.4,md:.7,lg:1}[S.op
   /* the navy's attack submarines (and, for the US, an Ohio-class SSGN with 154 Tomahawks) sail with the group */
   for(const [cls,cnt,wq] of (nav.subs||[])){if(!SUBC[cls])continue;const n=Math.max(1,Math.round(cnt*sz*.7));
     for(let k=0;k<n;k++){const p2=toWater(w[0]+Math.cos(k*2.1)*25,w[1]+Math.sin(k*2.1)*25,4);const q=wq&&ASM[wq]&&!ASM[wq].aam?wq:null;
-      const sb=mkSub(S,side,cls,SUBC[cls].n+' '+(k+1),p2[0],p2[1],Object.assign({TORP:12},q?{[q]:qq(12)}:{}),{group:grp});sb.nat=nat;sb.home=[sb.x,sb.y];}}
+      /* a US attack boat splits its 12 VLS between land-attack Tomahawks for the strike campaign and Maritime Strike */
+      const L=Object.assign({TORP:12},q==='MST'?{TLAM:qq(8),MST:qq(4)}:q?{[q]:qq(12)}:{}),aw=Object.keys(L).filter(x=>ASM[x]&&!ASM[x].la);
+      const sb=mkSub(S,side,cls,SUBC[cls].n+' '+(k+1),p2[0],p2[1],L,{group:grp,plan:aw.length?aw.map(x=>({w:x,grp:side==='IL'?'Red fleet':'Blue fleet',n:L[x],tot:1,wv:0,exp:S.tMax||28800})):null});sb.nat=nat;sb.home=[sb.x,sb.y];}}
   if(nat==='US'){const p2=toWater(w[0]-40,w[1]+30,4);const sb=mkSub(S,side,'OHIO','USS Ohio (SSGN-726)',p2[0],p2[1],{TORP:12,TLAM:qq(154)},{group:grp});sb.nat=nat;sb.home=[sb.x,sb.y];}
   if(S.opts.air!==false&&cv){const dk=[];for(const [ty,cnt] of nav.air){if(!CV_AIR[ty])continue;const n=Math.max(1,Math.round(cnt*sz));
       for(let k=0;k<n;k++){const A=AIRC[ty],multi=A.role==='cap'&&STRIKE_LAND[ty]&&!A.awacs,role=A.awacs?'awacs':multi&&k%2?'strike':A.role;
@@ -2884,7 +2895,7 @@ function tgPlan(S,s){const k=s.side+s.nat,T=S._tg||(S._tg={}),g=T[k]||(T[k]={t:-
   return g;}
 function aiTG(S,s){if(s.usrPos||!s.anc||!s.fo){aiStation(S,s);return;}const g=tgPlan(S,s),c=g.c||s.anc;
   const h=g.mode==='close'?[c[0]+s.fo[0],c[1]+s.fo[1]]:toWater(c[0]+s.fo[0],c[1]+s.fo[1],3);if(g.mode!=='close')s.home=h;const d=dist(s.x,s.y,h[0],h[1]);
-  if(d>6){const w=d>25||!seaClear(s.x,s.y,h[0],h[1],1.5)?seaNext(S,s,h[0],h[1]):h,a=Math.atan2(w[1]-s.y,w[0]-s.x),sp=g.mode==='close'||g.mode==='home'?.0095:s.spd0;s.vx=Math.cos(a)*sp;s.vy=Math.sin(a)*sp;}
+  if(d>6){const w=d>25||!seaClear(s.x,s.y,h[0],h[1],1.5)?seaNext(S,s,h[0],h[1]):h,a=Math.atan2(w[1]-s.y,w[0]-s.x),sp=g.mode==='close'?.014:g.mode==='home'?.0095:s.spd0;   /* closing to missile range: a surface action group sprints at ~27 kn */s.vx=Math.cos(a)*sp;s.vy=Math.sin(a)*sp;}
   else aiStation(S,s);}
 /* a ship on station: hold the anchorage, weaving slowly, and keep off the coast */
 function aiStation(S,s){const h=s.home;if(!h)return;const d=dist(s.x,s.y,h[0],h[1]);

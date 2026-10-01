@@ -46,6 +46,12 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
   ~6 km/s re-entry body), rt:1 re-aims at the nearest live ship when its target is already sunk.
   Measured (US vs CN naval, 22 TRD): 8 hits, 4 intercepted, 0 terminal misses, the rest left with no live target.
 
+## Land-air-sea fleets
+- foeReach ignores land-attack rounds (else Chinese groups think they're out-ranged by Burke TLAMs and never close).
+- Subs get anti-ship fire plans; attack boats start forward at .97 x their missile reach of the enemy fleet (150 km if
+  torpedo-only), hunt at .008; Ohio stays back. Virginia: 8 TLAM + 4 MST. Groups close at .014 (~27 kn).
+- Idle-shooter diag: idle.js (ships/subs whose anti-ship mags never dropped). Israel-Iran fleets are 2,500 km apart.
+
 ## Air AI (land / land-air-sea) — measured, keep it that way
 - Fighter commits are sticky: new commits only inside ~130 km (sweeps 160), on bandits pointed at us / what we
   defend; 60 s target-switch lock; 25 s hold after dropping a bandit; a bandit is dropped only after 20 s cold.
