@@ -38,6 +38,14 @@ and a Cowork session (3D/Tacview view, Sept 17–30). Read this before changing 
 - World mode: realistic theatres per matchup (US vs China in the Philippine Sea, etc.), per-ship loadout editor
   with missile variants, carrier squadrons with roles and launch order, AWACS extending detection.
 
+## Weapon-target rules
+- Land-attack rounds (ASM[w].la, incl. TLAM = Block Vb, FREMM MdCN) never get anti-ship plans (filtered in the
+  fleet builders, roster loadouts, and planFire). Ships are attacked with MST = Tomahawk Block Va Maritime Strike
+  (Burke 16 TLAM + 8 MST, Tico 18 + 8, Virginia MST, naval-mode Ohio 154 MST). Target priority: carrier > AD ships > big.
+- Trident D5 (TRD, conventional): cep .3 / cepm 3 m, rv:.2 (theatre SAMs like HQ-9B get 1/5 of their BM Pk vs a
+  ~6 km/s re-entry body), rt:1 re-aims at the nearest live ship when its target is already sunk.
+  Measured (US vs CN naval, 22 TRD): 8 hits, 4 intercepted, 0 terminal misses, the rest left with no live target.
+
 ## Air AI (land / land-air-sea) — measured, keep it that way
 - Fighter commits are sticky: new commits only inside ~130 km (sweeps 160), on bandits pointed at us / what we
   defend; 60 s target-switch lock; 25 s hold after dropping a bandit; a bandit is dropped only after 20 s cold.
